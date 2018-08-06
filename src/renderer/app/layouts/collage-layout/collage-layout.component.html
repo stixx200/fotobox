@@ -1,0 +1,14 @@
+<app-photo-view *ngIf="currentPhoto"
+                [config]="photoviewConfiguration"
+                [photoUrl]="currentPhoto">
+</app-photo-view>
+
+<app-collage-image
+  *ngIf="!currentPhoto"
+  [collageTexts]="(collageState | async).text"
+  [photos]="photos"
+  [templateId]="(collageState | async).templateId">
+</app-collage-image>
+
+<app-message-stripe *ngIf="!currentPhoto" class="bottom-message" [message]="bottomMessage | translate" (action)="exit()">
+</app-message-stripe>

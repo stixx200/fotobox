@@ -1,0 +1,25 @@
+.setup-container {
+  padding: 15px;
+  margin: 15px;
+  background-color: white;
+  width: 80%;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container * {
+  width: 100%;
+}
+
+.titlewrap {
+}
+
+.titlewrap > .left {
+  float: left;
+}
+.titlewrap > .right {
+  float: right;
+}

@@ -1,0 +1,20 @@
+h1 {
+  text-align: center;
+  color: brown;
+  font: italic bold 1.8em 'trebuchet MS', Arial, helvetica;
+  font-size: 54px;
+}
+.tile-container {
+  padding: 10px 25px;
+  background-color: #b9bbbe;
+
+  border-radius: 25px;
+}
+.photo-container {
+  height: 400px;
+  width: 100%;
+  -webkit-background-size: contain;
+  background-size: contain !important;
+
+  background-color: #3c763d;
+}

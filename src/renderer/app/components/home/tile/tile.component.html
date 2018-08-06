@@ -1,0 +1,13 @@
+<!--<div class="tile-container" [routerLink]="[target.route]">-->
+  <!--<h1>{{target.title | translate }}</h1>-->
+  <!--<div class="photo-container" #photo>-->
+  <!--</div>-->
+<!--</div>-->
+
+
+<mat-card [routerLink]="[target.route]">
+  <mat-card-header>
+    <mat-card-title>{{ target.title | translate }}</mat-card-title>
+  </mat-card-header>
+  <img mat-card-image src="{{ target.previewUrl }}" alt="{{ target.title | translate }} Preview">
+</mat-card>

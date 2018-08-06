@@ -1,0 +1,16 @@
+{
+  "PAGES": {
+    "HOME": {
+      "TITLE": "otobox"
+    },
+    "SETUP": {
+      "TITLE": "fotobox setup",
+      "BUTTON": {
+        "NEXT": "next"
+      }
+    }
+  },
+  "TITLES": {
+    "FOTOBOX": "Fotobox"
+  }
+}

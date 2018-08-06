@@ -1,0 +1,9 @@
+<div #page class="h-100">
+  <div class="panel first" *ngIf="(singleLayoutState | async).active">
+    <app-tile [target]="(singleLayoutState | async)"></app-tile>
+  </div>
+
+  <div class="panel second" *ngIf="(collageLayoutState | async).active">
+    <app-tile [target]="(collageLayoutState | async)"></app-tile>
+  </div>
+</div>

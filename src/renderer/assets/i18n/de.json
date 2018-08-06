@@ -1,0 +1,49 @@
+{
+  "PAGES": {
+    "SETUP": {
+      "TITLE": "Einstellungen",
+      "BUTTON": {
+        "NEXT": "speichern & Fotobox starten"
+      },
+      "EXTENDED": "erweiterte Ansicht",
+      "SYSTEM": {
+        "TITLE": "System",
+        "CAMERA_DRIVERS": {
+          "TITLE": "verwendete Kamera",
+          "sony": "Sony"
+        },
+        "IRFANVIEW_PATH": "Pfad zur IrfanView.exe",
+        "PHOTO_DIRECTORY": "Speicherort Fotos"
+      },
+      "FOTOBOX": {
+        "TITLE": "Fotobox",
+        "LAYOUTS": {
+          "TITLE": "verwendete Layouts",
+          "SINGLE": "Einzelbild",
+          "COLLAGE": "Collage",
+          "COLLAGE-TEXT": "Collage-Text"
+        },
+        "MODAL": {
+          "TITLE": "Anwendung wird gestarted...",
+          "MESSAGE": "Bitte warten, während die Anwendung gestartet wird.",
+          "STATUS_INITIALIZING": "Anwendung wird initialisiert",
+          "STATUS_PREPARING_FOLDERS": "Ordnerstruktur wird erstellt",
+          "STATUS_CONNECTING_CAMERA": "WLAN Verbindung wird aufgebaut. Bitte stellen Sie sicher, dass die Kamera im Smart-Fernbedienungsmodus ist. Um die Kamera in den Smart-Fernbedienungsmodus zu versetzen wählen Sie im Menü: 'Applikation' -> 'Applikationsliste' -> 'Smart-Fernbedienung'.",
+          "STATUS_SEARCHING_CAMERA": "Kamera wird verbunden",
+          "STATUS_INITIALIZING_CAMERA": "Kamera wird initialisiert",
+          "ABORT": "Abbruch"
+        }
+      }
+    }
+  },
+  "TITLES": {
+    "HEADER": "Fotobox"
+  },
+  "YES": "ja",
+  "NO": "nein",
+  "PRINT_QUESTION": "Ausdrucken?",
+  "LAYOUTS": {
+    "READY": "Bitte den Auslöser betätigen!",
+    "ABORT": "zurück"
+  }
+}

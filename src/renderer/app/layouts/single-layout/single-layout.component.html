@@ -1,0 +1,12 @@
+<div class="w-100 h-100" #background>
+  <app-message-stripe *ngIf="!photo" class="top-message" [message]="'LAYOUTS.READY' | translate">
+  </app-message-stripe>
+
+  <app-photo-view *ngIf="photo"
+                  [config]="photoviewConfiguration"
+                  [photoUrl]="photo">
+  </app-photo-view>
+
+  <app-message-stripe *ngIf="!photo" class="bottom-message" [message]="'LAYOUTS.ABORT' | translate" (action)="exit()">
+  </app-message-stripe>
+</div>

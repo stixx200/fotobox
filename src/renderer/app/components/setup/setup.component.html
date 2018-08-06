@@ -1,0 +1,103 @@
+<app-header></app-header>
+
+<div class="setup-container mx-auto">
+  <div class="titlewrap">
+    <p class="left mat-headline">{{ 'PAGES.SETUP.TITLE' | translate }}</p>
+    <p class="right">
+      <mat-slide-toggle [(ngModel)]="extendedMode" color="primary">
+        {{ "PAGES.SETUP.EXTENDED" | translate }}
+      </mat-slide-toggle></p>
+    <div style="clear: both;"></div>
+  </div>
+
+  <!-- Settings -->
+  <form class="form-container" (ngSubmit)="modal.show()" #settingsForm="ngForm">
+    <!-- -- System settings -->
+    <div class="form-container" [hidden]="!extendedMode" ngModelGroup="system">
+      <h2 class="mat-title">{{ 'PAGES.SETUP.SYSTEM.TITLE' | translate }}</h2>
+      <!-- -- -- Camera Drivers -->
+      <mat-form-field>
+        <mat-select name="cameraDriver" [ngModel]="(mainConfigurationState | async).cameraDrivers[0]"
+                    placeholder="{{ 'PAGES.SETUP.SYSTEM.CAMERA_DRIVERS.TITLE' | translate}}">
+          <mat-option *ngFor="let driver of (mainConfigurationState | async).cameraDrivers" [value]="driver">
+            {{'PAGES.SETUP.SYSTEM.CAMERA_DRIVERS.' + driver | translate }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- irfanview file -->
+      <mat-form-field>
+      <input matInput type="text" name="irfanViewPath" placeholder="{{ 'PAGES.SETUP.SYSTEM.IRFANVIEW_PATH' | translate}}" #irfanViewPathField
+             (click)="changeIrfanviewPath($event.target.value)"
+             [ngModel]="(mainConfigurationState | async).irfanViewPath">
+      </mat-form-field>
+
+      <!-- photodir directory -->
+      <mat-form-field>
+        <input title="" matInput placeholder="{{ 'PAGES.SETUP.SYSTEM.PHOTO_DIRECTORY' | translate}}" name="photoDir"
+               (click)="changePhotoDirPath($event.target.value)"
+               [ngModel]="(mainConfigurationState | async).photoDir">
+      </mat-form-field>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- -- Fotobox Settings -->
+    <div ngModelGroup="fotobox">
+      <h2 class="mat-title">{{ 'PAGES.SETUP.FOTOBOX.TITLE' | translate }}</h2>
+      <h3 class="mat-subheading-2">{{ 'PAGES.SETUP.FOTOBOX.LAYOUTS.TITLE' | translate }}</h3>
+      <div ngModelGroup="layouts">
+        <!-- -- -- Single-Layout -->
+        <div ngModelGroup="single">
+          <mat-checkbox name="active" color="primary" [ngModel]="(singleLayoutState | async).active">
+            {{ (singleLayoutState | async).title | translate }}
+          </mat-checkbox>
+        </div>
+
+        <!-- -- -- Collage-Layout -->
+        <div ngModelGroup="collage">
+          <mat-checkbox name="active" #collageLayoutActive color="primary" [ngModel]="(collageLayoutState | async).active">
+            {{ (collageLayoutState | async).title | translate }}
+          </mat-checkbox>
+
+          <mat-form-field [hidden]="!collageLayoutActive.checked" *ngFor="let text of (collageLayoutState | async).text">
+            <textarea matInput
+                      [placeholder]="'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEXT' | translate"
+                      name="text"
+                      [ngModel]="text.lines.join('\n')"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <br/>
+
+    <!-- Submit button -->
+    <button type="submit" mat-raised-button color="primary" class="w-100" [routerLink]="['/']">{{ 'PAGES.SETUP.BUTTON.NEXT' | translate }}</button>
+  </form>
+</div>
+
+<!--Wait for application started modal-->
+
+<div class="modal fade" bsModal #modal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-events-name"
+     (onShown)="onModalShown(settingsForm.form.value)" (onHidden)="onModalHidden()" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-events-name" class="modal-title pull-left">
+          {{ "PAGES.SETUP.FOTOBOX.MODAL.TITLE" | translate }}
+        </h4>
+      </div>
+      <div class="modal-body">
+        <p>{{ "PAGES.SETUP.FOTOBOX.MODAL.MESSAGE" | translate }}</p>
+        <p><b>Status:</b> {{ statusMessage | translate }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="abortWaiting()">
+          {{ "PAGES.SETUP.FOTOBOX.MODAL.ABORT" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
