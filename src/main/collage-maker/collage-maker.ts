@@ -1,32 +1,24 @@
 import * as path from 'path';
 import {Photosaver} from '../photosaver';
-import {ShutdownHandler} from '../shutdown.handler';
 import {CollageText} from './template.interface';
 import {TemplateLoader} from './template.loader';
 import templates from './templates';
 
 const placeholderImage = path.resolve(__dirname, './questionmark.png');
 
-const enum CollageMakerState {
-  initial,
-}
-
 export interface CollageMakerInitConfig {
   photoDir: string;
 }
 
 export class Maker {
-  private state: CollageMakerState = CollageMakerState.initial;
   private collageBuffer: Buffer;
 
   private photosaver: Photosaver;
   private photoDir: string;
-  private shutdownHandler: ShutdownHandler;
   private templateLoader: TemplateLoader;
 
-  constructor(config: CollageMakerInitConfig, externals: { shutdownHandler: ShutdownHandler, photosaver: Photosaver }) {
+  constructor(config: CollageMakerInitConfig, externals: { photosaver: Photosaver }) {
     this.photoDir = config.photoDir;
-    this.shutdownHandler = externals.shutdownHandler;
     this.photosaver = externals.photosaver;
   }
 
@@ -34,35 +26,28 @@ export class Maker {
   }
 
   reset() {
-    this.state = CollageMakerState.initial;
     this.collageBuffer = null;
+    this.templateLoader = null;
   }
 
-  async createCollage(texts: CollageText[], photos: string[], templateId: string): Promise<{ data: Buffer, collageDone: string }> {
-    if (this.state !== CollageMakerState.initial && this.templateLoader.getTemplateId() !== templateId) {
-      this.reset();
-    }
-
-    const template = templates[templateId];
-    this.templateLoader = new TemplateLoader(template);
-    const data = await this.templateLoader.getTemplateContent(texts, this.getPictures(photos), '');
-    const done = this.templateLoader.getPhotoCount() <= photos.length;
-    let newCollageName;
-    if (done) {
-      newCollageName = await this.photosaver.saveBinaryCollage(data, '.jpg');
-    }
-    return {data, collageDone: newCollageName};
+  async initCollage(texts: CollageText[], templateId: string): Promise<Buffer> {
+    this.templateLoader = new TemplateLoader(templates[templateId]);
+    this.collageBuffer = await this.templateLoader.getEmptyCollage(texts, placeholderImage);
+    return this.collageBuffer;
   }
 
-  private getPictures(pictures: string[]): string[] {
-    const picturesToDraw: string[] = [];
-    for (let i = 0; i < this.templateLoader.getPhotoCount(); i++) {
-      if (pictures[i]) {
-        picturesToDraw.push(path.resolve(this.photoDir, pictures[i]));
-      } else {
-        picturesToDraw.push(placeholderImage);
-      }
+  async addPhotoToCollage(photo: string, index: number): Promise<{ data: Buffer, collageDone: string }> {
+    if (!this.collageBuffer) {
+      throw new Error('Can\'t add a photo to a collage if there is no collage buffered.');
     }
-    return picturesToDraw;
+    const photoToAdd = path.resolve(this.photoDir, photo);
+    const {buffer, done} = await this.templateLoader.addPhotoToCollage(this.collageBuffer, photoToAdd, index);
+    this.collageBuffer = buffer;
+
+    const collageName = done ? await this.photosaver.saveBinaryCollage(this.collageBuffer, '.jpg') : null;
+    return {
+      data: buffer,
+      collageDone: collageName,
+    };
   }
 }

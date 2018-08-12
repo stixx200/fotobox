@@ -4,9 +4,9 @@
 </app-photo-view>
 
 <app-collage-image
-  *ngIf="!currentPhoto"
+  #imageComponent
+  [hidden]="currentPhoto"
   [collageTexts]="(collageState | async).text"
-  [photos]="photos"
   [templateId]="(collageState | async).templateId">
 </app-collage-image>
 

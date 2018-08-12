@@ -1,8 +1,7 @@
 import {TemplateInterface, TEXT_ALIGN} from '../../template.interface';
-import * as path from 'path';
 
 const template: TemplateInterface = {
-  id: 'Template Default',
+  id: 'Default Template',
   total_width: 1800,
   total_height: 1200,
   // background: path.resolve(__dirname, '../background.jpg'),

@@ -42,6 +42,7 @@
   "YES": "ja",
   "NO": "nein",
   "PRINT_QUESTION": "Ausdrucken?",
+  "USE_QUESTION": "Für collage verwenden?",
   "LAYOUTS": {
     "READY": "Bitte den Auslöser betätigen!",
     "ABORT": "zurück"

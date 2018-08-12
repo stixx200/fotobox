@@ -5,7 +5,6 @@ import {Observable, Observer, Subject} from 'rxjs';
 import {ShutdownHandler} from '../../shutdown.handler';
 import {CameraProxy} from './camera.proxy';
 import {LiveStreamParser} from './liveStream.parser';
-import {globalShortcut} from 'electron';
 
 const request = require('superagent');
 const xml2jsParseString = require('xml2js').parseString;
@@ -14,40 +13,6 @@ const promisify = require('es6-promisify');
 const logger = require('logger-winston').getLogger('camera.sony.communication');
 
 const parseString = promisify(xml2jsParseString);
-
-const availableMethods: { name?: string, method: string, version: string, params?: any[], service: string }[] = [
-  {name: 'getMethodTypesCamera', method: 'getMethodTypes', version: '1.0', service: 'camera'},
-  {name: 'getMethodTypesAccessControl', method: 'getMethodTypes', version: '1.0', service: 'accessControl'},
-  {method: 'takePicture', version: '1.0', service: 'camera'},
-  {method: 'getApplicationInfo', version: '1.0', service: 'camera'},
-  {method: 'startLiveview', version: '1.0', service: 'camera'},
-  {
-    name: 'enableRemoteShooting',
-    method: 'setCameraFunction',
-    params: ['Remote Shooting'],
-    version: '1.0',
-    service: 'camera',
-  },
-  {name: 'getCameraMethodTypes', method: 'getMethodTypes', params: ['1.0'], version: '1.0', service: 'camera'},
-  {method: 'getAvailableCameraFunction', params: ['1.0'], version: '1.0', service: 'camera'},
-  {method: 'getCameraFunction', version: '1.0', service: 'camera'},
-  {method: 'getSupportedCameraFunction', version: '1.0', service: 'camera'},
-  {name: 'takePicture', method: 'actTakePicture', version: '1.0', service: 'camera'},
-  {name: 'halfPressShutter', method: 'actHalfPressShutter', version: '1.0', service: 'camera'},
-  {method: 'awaitTakePicture', version: '1.0', service: 'camera'},
-  {method: 'getAvailableApiList', version: '1.0', service: 'camera'},
-  {method: 'startRecMode', version: '1.0', service: 'camera'},
-  {method: 'stopRecMode', version: '1.0', service: 'camera'},
-  {method: 'getEvent', version: '1.0', params: [true], service: 'camera'},
-  {name: 'getEventImmediately', method: 'getEvent', version: '1.0', params: [false], service: 'camera'},
-  {
-    name: 'setImgSize',
-    method: 'setPostviewImageSize',
-    version: '1.0',
-    params: ['2M'], // 2M
-    service: 'camera',
-  },
-];
 
 export class SonyCameraCommunication {
   public name: string;

@@ -22,10 +22,6 @@ export class TemplateLoader {
     this.fontedText = TextToSVG.loadSync(fontPath);
   }
 
-  getTemplateId(): string {
-    return this.template.id;
-  }
-
   getBrands() {
     const brand = _.find(this.template.spaces, ['type', 'brand']);
     if (brand) {
@@ -34,32 +30,60 @@ export class TemplateLoader {
     return null;
   }
 
-  getPhotoCount() {
-    return this.getPhotos().length;
+  async getEmptyCollage(texts: CollageText[], photoToFill: string): Promise<Buffer> {
+    const collageBuffer = await this.getBackground();
+    const photos = _.fill(Array(this.template.spaces.length), photoToFill);
+    const spaces = await this.getSpaces(texts, photos, null);
+    return this.createCollage(collageBuffer, spaces);
   }
 
-  getTemplateContent(texts: CollageText[], photoUrls: string[], brandUrl: string): Promise<Buffer> {
-    const textsCopy = texts.slice(0);
-    const photoUrlsCopy = photoUrls.slice(0);
+  async addPhotoToCollage(buffer: Buffer, photoToAdd: string, index: number): Promise<{ buffer: Buffer, done: boolean }> {
+    const spaceIndex = this.getAbsoluteIndexForTypeIndex(index, 'photo');
+    const photoImage = await this.getPhoto(spaceIndex, photoToAdd);
+    return {
+      buffer: await this.createCollage(buffer, [photoImage]),
+      done: this.getPhotos().length <= (index + 1),
+    };
+  }
+
+  private getAbsoluteIndexForTypeIndex(index: number, type: string): number {
+    let itemNr = 0;
+    return _.findIndex(this.template.spaces, (space) => {
+      if (space.type !== type) {
+        return false;
+      }
+      if (itemNr === index) {
+        return true;
+      }
+      itemNr += 1;
+    });
+  }
+
+  private getPhotos() {
+    return _.filter(this.template.spaces, ['type', 'photo']);
+  }
+
+  private getSpaces(_texts: CollageText[], _photoUrls: string[], brandUrl: string): Promise<SpaceElement[]> {
+    const texts = _texts.slice(0);
+    const photoUrls = _photoUrls.slice(0);
     const spaces = _.map(this.template.spaces, (space, index: number) => {
       if (space.type === 'text') {
-        const text = textsCopy.shift();
+        const text = texts.shift();
         logger.debug(`Adding text to spaces: ${JSON.stringify(text)}`);
         return this.getText(index, text);
       } else if (space.type === 'photo') {
-        const photoUrl = photoUrlsCopy.shift();
+        const photoUrl = photoUrls.shift();
         logger.debug(`Adding photo to spaces: ${photoUrl}`);
         return this.getPhoto(index, photoUrl);
       } else if (space.type === 'brand') {
         logger.debug(`Adding brand to spaces: ${brandUrl}`);
         return this.getBrand(index, brandUrl);
-      } else {
-        throw new Error(`Got incorrect type: ${space.type}. Only valid: 'text', 'photo'`);
       }
+      return null;
     });
 
-    return Promise.all(_.compact(spaces))
-      .then((spaceElements: any) => this.createCollage(spaceElements));
+    return Promise.resolve(_.compact(spaces))
+      .then((_spaces: SpaceElement[]) => Promise.all(_spaces));
   }
 
   private getBackground(): Promise<Buffer> {
@@ -69,13 +93,7 @@ export class TemplateLoader {
       .then(obj => obj.data);
   }
 
-  private getPhotos() {
-    return _.filter(this.template.spaces, ['type', 'photo']);
-  }
-
-  private async createCollage(spaceElements: SpaceElement[]): Promise<Buffer> {
-    let collage = await this.getBackground();
-
+  private async createCollage(collage: Buffer, spaceElements: SpaceElement[]): Promise<Buffer> {
     for (let i = 0; i < spaceElements.length; ++i) {
       const elem = spaceElements[i];
       collage = await this.overlay(collage, elem.data, elem.info.x, elem.info.y);

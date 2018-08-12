@@ -28,11 +28,10 @@ export class CollageImageComponent implements OnInit, OnDestroy {
     }],
   };
 
+  currentIndex = 0;
   collagePhoto: string | SafeResourceUrl;
   topMessage = 'LAYOUTS.READY';
   collageDone: string;
-
-  @Input() photos: Array<string> = [];
 
   @Input() collageTexts: CollageText[];
   @Input() templateId: string;
@@ -41,16 +40,22 @@ export class CollageImageComponent implements OnInit, OnDestroy {
               private _sanitizer: DomSanitizer,
               private router: Router) {
     this.onCollageRendered = this.onCollageRendered.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
   ngOnInit() {
     this.ipcRenderer.on(TOPICS.CREATE_COLLAGE, this.onCollageRendered);
-    this.triggerPhotoGeneration();
+    this.ipcRenderer.send(TOPICS.INIT_COLLAGE, this.templateId, this.collageTexts);
     this.collagePhoto = collagePhoto;
+  }
+
+  addPhoto(photo: string) {
+    this.ipcRenderer.send(TOPICS.CREATE_COLLAGE, photo, this.currentIndex++);
   }
 
   ngOnDestroy() {
     this.ipcRenderer.removeListener(TOPICS.CREATE_COLLAGE, this.onCollageRendered);
+    this.collageDone = null;
   }
 
   print() {
@@ -62,8 +67,12 @@ export class CollageImageComponent implements OnInit, OnDestroy {
     this.exit();
   }
 
+  reset() {
+    collagePhoto = null;
+    this.collageDone = null;
+  }
+
   exit() {
-    this.reset();
     this.router.navigate(['/home']);
   }
 
@@ -80,24 +89,4 @@ export class CollageImageComponent implements OnInit, OnDestroy {
       this.collageDone = collageDone;
     }
   }
-
-  private triggerPhotoGeneration() {
-    this.ipcRenderer.send(TOPICS.CREATE_COLLAGE, this.collageTexts, this.photos, this.templateId);
-  }
-
-  private reset() {
-    collagePhoto = null;
-    this.collageDone = null;
-  }
-
-  // save() {
-  //   this.photoChild.addPhoto(this.collagePhoto);
-  //   this.reset();
-  // }
-
-  // collageDone(collagePath: string) {
-  //   console.debug(`Got new collage done: ${collagePath}`);
-  //   this.reset();
-  //   this.collagePhoto = collagePath;
-  // }
 }

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
@@ -7,6 +7,7 @@ import {IpcRendererService} from '../../providers/ipc.renderer.service';
 import {PhotoviewConfiguration} from '../../shared/photo-view/photo-view.component';
 
 import * as fromApp from '../../store/app.reducer';
+import {CollageImageComponent} from './collage-image/collage-image.component';
 import * as fromCollage from './store/collage-layout.reducer';
 
 @Component({
@@ -28,6 +29,8 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
     }],
   };
 
+  @ViewChild('imageComponent') collageComponent: CollageImageComponent;
+
   collageState: Observable<fromCollage.State>;
   photos: string[];
   currentPhoto: string;
@@ -47,12 +50,14 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.collageComponent.reset();
     this.ipcRenderer.removeListener('photo', this.onNewPhoto);
   }
 
   reset() {
     this.photos = [];
     this.currentPhoto = null;
+    this.ipcRenderer.send(TOPICS.RESET_COLLAGE);
   }
 
   exit() {
@@ -66,21 +71,7 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   }
 
   private useCurrentPhoto() {
-    this.photos.push(this.currentPhoto);
+    this.collageComponent.addPhoto(this.currentPhoto);
     this.currentPhoto = null;
   }
-
-  // print() {
-  //   const errorMessage = this.ipcRenderer.sendSync(TOPICS.PRINT_SYNC, this.currentPhoto);
-  //   if (errorMessage) {
-  //     console.error(errorMessage);
-  //   } // todo: show toast message with success/fail message
-  //   // exit collage view after printing
-  //   this.exit();
-  // }
-
-  // save() {
-  //   this.photoChild.onNewPhoto(this.currentPhoto);
-  //   this.reset();
-  // }
 }
