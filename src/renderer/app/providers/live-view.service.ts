@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {TOPICS} from '../../../main/constants';
 import {IpcRendererService} from './ipc.renderer.service';
 
@@ -8,7 +8,7 @@ import {IpcRendererService} from './ipc.renderer.service';
 })
 export class LiveViewService {
   isStarted = false;
-  liveViewSubject = new BehaviorSubject<string>('../../../assets/app-background.jpg');
+  liveViewSubject = new Subject<string>();
 
   constructor(private ipcRenderer: IpcRendererService) {
     this.onLiveviewImage = this.onLiveviewImage.bind(this);

@@ -1,0 +1,6 @@
+@import "../styles";
+
+.app-container {
+  background: url("../assets/bg-pattern.png"), $background-color;
+  //background: url("../assets/bg-pattern.png"), linear-gradient(to left, #6f42c1, $background-color);
+}

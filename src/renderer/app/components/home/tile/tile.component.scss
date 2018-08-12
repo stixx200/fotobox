@@ -1,20 +1,17 @@
-h1 {
+@import "../../../../styles";
+
+h3 {
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
   color: brown;
   font: italic bold 1.8em 'trebuchet MS', Arial, helvetica;
-  font-size: 54px;
 }
-.tile-container {
-  padding: 10px 25px;
-  background-color: #b9bbbe;
 
-  border-radius: 25px;
+.container {
+  background-color: $field-background-color;
 }
-.photo-container {
-  height: 400px;
-  width: 100%;
-  -webkit-background-size: contain;
-  background-size: contain !important;
 
-  background-color: #3c763d;
+.image {
+  padding: 5px;
 }

@@ -1,7 +1,9 @@
+@import "../../../styles";
+
 .setup-container {
   padding: 15px;
   margin: 15px;
-  background-color: white;
+  background-color: $field-background-color;
   width: 80%;
 }
 

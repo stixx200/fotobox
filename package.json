@@ -36,7 +36,8 @@
     "electron:windows": "npm run build:prod && npx electron-builder build --windows",
     "electron:mac": "npm run build:prod && npx electron-builder build --mac",
     "test": "npm run postinstall:web && ng test",
-    "e2e": "npm run postinstall:web && ng e2e"
+    "e2e": "npm run postinstall:web && ng e2e",
+    "create_collage": "electron create_collage.js"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.6.3",
