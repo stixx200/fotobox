@@ -2,7 +2,7 @@ import {ipcMain} from 'electron';
 import * as logging from 'logger-winston';
 import {CameraProvider, CameraProviderInitConfig} from './cameras/camera.provider';
 import {CollageMaker} from './collage-maker';
-import {Photosaver} from './photosaver';
+import {PhotoHandler} from './photo.handler';
 import {Printer, PrinterConfiguration} from './printer';
 import {ShortcutHandler} from './shortcut.handler';
 import {ShutdownHandler} from './shutdown.handler';
@@ -38,9 +38,9 @@ export class FotoboxMain {
   private shutdownHandler = new ShutdownHandler(this.clientProxy, this);
   private photoProtocol = new PhotoProtocol();
   private collageMaker = new CollageMaker();
-  private shortcutHandler = new ShortcutHandler(this.window, this.shutdownHandler);
+  private shortcutHandler = new ShortcutHandler(this.window, this.shutdownHandler, this.clientProxy);
   private printer = new Printer();
-  private photosaver = new Photosaver();
+  private photoHandler = new PhotoHandler();
 
   constructor(private window: BrowserWindow) {
     this.deinit = this.deinit.bind(this);
@@ -58,15 +58,15 @@ export class FotoboxMain {
       }
 
       logger.info('Starting application with settings: ', config);
-      this.photosaver.init(config);
-      this.collageMaker.init(config, {shutdownHandler: this.shutdownHandler, photosaver: this.photosaver});
+      this.photoHandler.init(config);
+      this.collageMaker.init(config, {shutdownHandler: this.shutdownHandler, photosaver: this.photoHandler});
       this.photoProtocol.init(config.photoDir, {shutdownHandler: this.shutdownHandler});
       this.printer.init(config);
 
       await this.cameraProvider.init(config, {
         clientProxy: this.clientProxy,
         shutdownHandler: this.shutdownHandler,
-        photosaver: this.photosaver,
+        photosaver: this.photoHandler,
       });
 
       this.isInitialized = true;

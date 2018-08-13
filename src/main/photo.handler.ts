@@ -5,6 +5,9 @@ const path = require('path');
 const thumb = require('node-thumbnail').thumb;
 const download = require('download');
 import * as fs from 'fs-extra';
+import {ClientProxy} from './client.proxy';
+import {ipcMain} from 'electron';
+import {TOPICS} from './constants';
 
 const thumbSettings = {
   width: 400,
@@ -12,16 +15,22 @@ const thumbSettings = {
 };
 const collageName = 'collage';
 
-export interface PhotosaverConfig {
+export interface PhotoHandlerConfig {
   photoDir: string;
 }
 
-export class Photosaver {
+export class PhotoHandler {
   private photoDir: string;
   private thumbDir: string;
   private lastCollageNumber = 0;
 
-  init(config: PhotosaverConfig) {
+  constructor() {
+    this.sendAllPhotos = this.sendAllPhotos.bind(this);
+
+    ipcMain.on(TOPICS.ALL_PHOTOS, this.sendAllPhotos);
+  }
+
+  init(config: PhotoHandlerConfig) {
     this.photoDir = config.photoDir;
     this.thumbDir = path.join(this.photoDir, 'thumbs');
 
@@ -37,6 +46,16 @@ export class Photosaver {
       const lastCollageName = path.basename(lastCollage, path.extname(lastCollage));
       this.lastCollageNumber = (+lastCollageName.replace(collageName, '')) + 1;
     }
+  }
+
+  deinit() {
+    ipcMain.removeListener(TOPICS.ALL_PHOTOS, this.sendAllPhotos);
+  }
+
+  sendAllPhotos(event) {
+    const allFiles = fs.readdirSync(this.photoDir);
+    const allPhotos = allFiles.filter((fileName) => fs.statSync(path.join(this.photoDir, fileName)).isFile());
+    event.sender.send(TOPICS.ALL_PHOTOS, allPhotos);
   }
 
   async downloadAndSave(url: string): Promise<string> {

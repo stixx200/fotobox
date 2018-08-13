@@ -18,12 +18,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   collageLayoutState: Observable<fromCollageLayout.State>;
   singleLayoutState: Observable<fromSingleLayout.State>;
 
-  production = AppConfig.production;
-
   constructor(private store: Store<fromApp.AppState>,
               private ipcRenderer: IpcRendererService,
               private router: Router) {
     this.onNewPhoto = this.onNewPhoto.bind(this);
+    this.gotoPhotolist = this.gotoPhotolist.bind(this);
   }
 
   ngOnInit() {
@@ -31,10 +30,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.singleLayoutState = this.store.select('singleLayout');
 
     this.ipcRenderer.on(TOPICS.PHOTO, this.onNewPhoto);
+    this.ipcRenderer.on(TOPICS.GOTO_PHOTOLIST, this.gotoPhotolist);
   }
 
   ngOnDestroy() {
     this.ipcRenderer.removeListener(TOPICS.PHOTO, this.onNewPhoto);
+  }
+
+  gotoPhotolist() {
+    this.router.navigate(['/photo-list']);
   }
 
   onNewPhoto(event, photo) {

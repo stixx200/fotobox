@@ -1,0 +1,12 @@
+<app-header></app-header>
+
+<app-photo-view class="h-50"
+                *ngIf="selectedPhoto"
+                [config]="photoviewConfiguration"
+                [photoUrl]="selectedPhoto">
+</app-photo-view>
+
+<div id="thumbnailsList" *ngIf="!selectedPhoto">
+    <img *ngFor="let photo of photos" [src]="sanitizer.bypassSecurityTrustResourceUrl('photo://thumbs/' + photo)" class="rounded app-photolist-item"
+         width="191" height="146" (click)=setSelectedPhoto(photo)>
+</div>

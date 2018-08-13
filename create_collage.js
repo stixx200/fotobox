@@ -1,10 +1,10 @@
 const path = require('path');
-const { Photosaver } = require('./src/main/photosaver');
+const { PhotoHandler } = require('./src/main/photo.handler');
 const {Maker} = require('./src/main/collage-maker/collage-maker');
 
 const photoDir = path.join(__dirname, 'photo_store');
 
-const photosaver = new Photosaver();
+const photosaver = new PhotoHandler();
 photosaver.init({ photoDir });
 
 async function run() {

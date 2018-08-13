@@ -3,7 +3,7 @@ import * as wifi from 'node-wifi';
 import {Observable} from 'rxjs';
 import {flatMap} from 'rxjs/operators';
 import {ClientProxy} from '../../client.proxy';
-import {Photosaver} from '../../photosaver';
+import {PhotoHandler} from '../../photo.handler';
 import {CameraInitConfiguration, CameraInterface} from '../camera.interface';
 import {ShutdownHandler} from '../../shutdown.handler';
 import {SonyCameraCommunication} from './camera.2';
@@ -23,7 +23,7 @@ const findSupportedNetwork = (networks) => _.find(networks, network => _.include
 export class SonyCamera implements CameraInterface {
   shutdownHandler: ShutdownHandler = null;
   camera: SonyCameraCommunication;
-  photosaver: Photosaver;
+  photosaver: PhotoHandler;
 
   private isInitialized = false;
 
@@ -38,7 +38,7 @@ export class SonyCamera implements CameraInterface {
    * @returns {Promise<void>}
    */
   async init(config: CameraInitConfiguration,
-             externals: { clientProxy: ClientProxy, shutdownHandler: ShutdownHandler, photosaver: Photosaver }) {
+             externals: { clientProxy: ClientProxy, shutdownHandler: ShutdownHandler, photosaver: PhotoHandler }) {
     this.abortSearching = false;
     this.photosaver = externals.photosaver;
     wifi.init({iface: null}); // network interface, choose a random wifi interface if set to null

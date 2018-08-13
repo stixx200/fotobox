@@ -12,9 +12,10 @@ export const TOPICS = {
   PHOTO: 'photo',
   PRINT_SYNC: 'print-sync',
   FILE_PICKER: 'file-picker',
+  ALL_PHOTOS: 'all_photos',
+  GOTO_PHOTOLIST: 'goto-photolist',
 
   RECEIVING: 'receiving',
-  ALL_PHOTOS: 'all_photos',
   TAKE_PICTURE: 'take-picture',
   PREPARE_PICTURE: 'prepare-picture',
 };

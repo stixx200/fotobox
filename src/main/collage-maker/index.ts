@@ -1,6 +1,6 @@
 import {ipcMain} from 'electron';
 import {TOPICS} from '../constants';
-import {Photosaver} from '../photosaver';
+import {PhotoHandler} from '../photo.handler';
 import {ShutdownHandler} from '../shutdown.handler';
 import {CollageMakerInitConfig, Maker} from './collage-maker';
 import {CollageText} from './template.interface';
@@ -15,7 +15,7 @@ export class CollageMaker {
     this.resetCollage = this.resetCollage.bind(this);
   }
 
-  init(config: CollageMakerInitConfig, externals: { shutdownHandler: ShutdownHandler, photosaver: Photosaver }) {
+  init(config: CollageMakerInitConfig, externals: { shutdownHandler: ShutdownHandler, photosaver: PhotoHandler }) {
     this.maker = new Maker(config, externals);
     ipcMain.on(TOPICS.INIT_COLLAGE, this.initCollage);
     ipcMain.on(TOPICS.CREATE_COLLAGE, this.addPhotoToCollage);
@@ -30,6 +30,11 @@ export class CollageMaker {
     this.maker = null;
   }
 
+  async initCollage(event, template: string, texts: CollageText[]) {
+    const buffer = await this.maker.initCollage(texts, template);
+    event.sender.send(TOPICS.CREATE_COLLAGE, buffer);
+  }
+
   async addPhotoToCollage(event, photo: string, index: number) {
     try {
       const collageInfo = await this.maker.addPhotoToCollage(photo, index);
@@ -37,11 +42,6 @@ export class CollageMaker {
     } catch (error) {
       logger.error(error);
     }
-  }
-
-  async initCollage(event, template: string, texts: CollageText[]) {
-    const buffer = await this.maker.initCollage(texts, template);
-    event.sender.send(TOPICS.CREATE_COLLAGE, buffer);
   }
 
   resetCollage() {

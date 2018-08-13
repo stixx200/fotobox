@@ -21,6 +21,7 @@ import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
 import {HomeComponent} from './components/home/home.component';
 import {TileComponent} from './components/home/tile/tile.component';
+import {PhotoListComponent} from './components/photo-list.ts/photo-list.component';
 import {SetupComponent} from './components/setup/setup.component';
 import {CollageImageComponent} from './layouts/collage-layout/collage-image/collage-image.component';
 
@@ -61,6 +62,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     PhotoViewComponent,
     MessageStripeComponent,
     CollageImageComponent,
+    PhotoListComponent,
   ],
   imports: [
     CommonModule,
