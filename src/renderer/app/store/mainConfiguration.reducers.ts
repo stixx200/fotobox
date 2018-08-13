@@ -2,12 +2,14 @@ import {MainConfigurationActions, MainConfigurationActionTypes} from './mainConf
 
 export interface State {
   cameraDrivers: string[];
+  selectedDriver: string;
   irfanViewPath: string;
   photoDir: string;
 }
 
 const initialState: State = {
   cameraDrivers: [],
+  selectedDriver: null,
   irfanViewPath: '',
   photoDir: '',
 };
@@ -18,6 +20,11 @@ export function mainConfigurationReducer(state = initialState, action: MainConfi
       return {
         ...state,
         cameraDrivers: action.payload,
+      };
+    case MainConfigurationActionTypes.SET_SELECTED_DRIVER:
+      return {
+        ...state,
+        selectedDriver: action.payload,
       };
     case MainConfigurationActionTypes.SET_IRFANVIEW_PATH:
       return {

@@ -63,6 +63,7 @@ export class SetupComponent implements OnInit, OnDestroy {
     this.ipcRenderer.send(TOPICS.START_APPLICATION, applicationSettings.system);
 
     console.log('start application with settings: ', applicationSettings);
+    this.store.dispatch(new mainConfigurationActions.SetSelectedDriver(applicationSettings.system.cameraDriver));
     this.store.dispatch(new collageLayoutActions.SetText([{lines: applicationSettings.fotobox.layouts.collage.text.split('\n')}]));
   }
 

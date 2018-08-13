@@ -10,7 +10,8 @@
         "TITLE": "System",
         "CAMERA_DRIVERS": {
           "TITLE": "verwendete Kamera",
-          "sony": "Sony"
+          "sony": "Sony",
+          "demo": "Demo Kamera"
         },
         "IRFANVIEW_PATH": "Pfad zur IrfanView.exe",
         "PHOTO_DIRECTORY": "Speicherort Fotos"

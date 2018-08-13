@@ -17,7 +17,7 @@
       <h2 class="mat-title">{{ 'PAGES.SETUP.SYSTEM.TITLE' | translate }}</h2>
       <!-- -- -- Camera Drivers -->
       <mat-form-field>
-        <mat-select name="cameraDriver" [ngModel]="(mainConfigurationState | async).cameraDrivers[0]"
+        <mat-select name="cameraDriver" [ngModel]="(mainConfigurationState | async).selectedDriver"
                     placeholder="{{ 'PAGES.SETUP.SYSTEM.CAMERA_DRIVERS.TITLE' | translate}}">
           <mat-option *ngFor="let driver of (mainConfigurationState | async).cameraDrivers" [value]="driver">
             {{'PAGES.SETUP.SYSTEM.CAMERA_DRIVERS.' + driver | translate }}

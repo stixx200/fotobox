@@ -1,14 +1,16 @@
-import {globalShortcut, ipcMain} from 'electron';
+import {ipcMain} from 'electron';
 import {Subscription} from 'rxjs';
 import {ClientProxy} from '../client.proxy';
 import {TOPICS} from '../constants';
-import {Photosaver} from '../photosaver';
+import {PhotoHandler} from '../photo.handler';
 import {CameraInitConfiguration, CameraInterface} from './camera.interface';
 import {ShutdownHandler} from '../shutdown.handler';
+import {DemoCamera} from './demo';
 import {SonyCamera} from './sony';
 
 const cameras = {
   sony: SonyCamera,
+  demo: DemoCamera,
 };
 
 const getCamera = (cameraDriver: string): CameraInterface => {
@@ -36,9 +38,7 @@ export class CameraProvider {
   }
 
   async init(config: CameraProviderInitConfig,
-             externals: { clientProxy: ClientProxy, shutdownHandler: ShutdownHandler, photosaver: Photosaver }) {
-    globalShortcut.register('CmdOrCtrl+N', () => externals.clientProxy.send(TOPICS.PHOTO, 'dummy.jpg'));
-
+             externals: { clientProxy: ClientProxy, shutdownHandler: ShutdownHandler, photosaver: PhotoHandler }) {
     this.camera = getCamera(config.cameraDriver);
     await this.camera.init(config, externals);
 

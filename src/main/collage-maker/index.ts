@@ -26,8 +26,11 @@ export class CollageMaker {
     ipcMain.removeListener(TOPICS.RESET_COLLAGE, this.resetCollage);
     ipcMain.removeListener(TOPICS.CREATE_COLLAGE, this.addPhotoToCollage);
     ipcMain.removeListener(TOPICS.INIT_COLLAGE, this.initCollage);
-    this.maker.deinit();
-    this.maker = null;
+
+    if (this.maker) {
+      this.maker.deinit();
+      this.maker = null;
+    }
   }
 
   async initCollage(event, template: string, texts: CollageText[]) {
