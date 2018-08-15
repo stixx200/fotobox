@@ -1,5 +1,7 @@
+import './initialize-logger';
+
+import * as util from 'util';
 import {ipcMain} from 'electron';
-import * as logging from 'logger-winston';
 import {CameraProvider, CameraProviderInitConfig} from './cameras/camera.provider';
 import {CollageMaker} from './collage-maker';
 import {PhotoHandler} from './photo.handler';
@@ -11,20 +13,8 @@ import {ConfigurationProvider} from './configurationProvider';
 import {TOPICS} from './constants';
 import {PhotoProtocol} from './photo.protocol';
 import BrowserWindow = Electron.BrowserWindow;
-const logger = logging.getLogger('app');
 
-logging.init({
-  'logging': {
-    'default': {
-      'console': {
-        'level': 'debug',
-        'colorize': true,
-        'timestamp': true,
-      },
-    },
-  },
-});
-
+const logger = require('logger-winston').getLogger('app');
 
 type ApplicationInitConfiguration = CameraProviderInitConfig & PrinterConfiguration;
 
@@ -43,23 +33,32 @@ export class FotoboxMain {
   private photoHandler = new PhotoHandler();
 
   constructor(private window: BrowserWindow) {
-    this.deinit = this.deinit.bind(this);
-    this.init = this.init.bind(this);
+    this.initApplication = this.initApplication.bind(this);
+    this.deinitApplication = this.deinitApplication.bind(this);
 
-    ipcMain.on(TOPICS.START_APPLICATION, this.init);
-    ipcMain.on(TOPICS.STOP_APPLICATION, this.deinit);
+    ipcMain.on(TOPICS.START_APPLICATION, this.initApplication);
+    ipcMain.on(TOPICS.STOP_APPLICATION, this.deinitApplication);
+
+    logger.info('Application ready to start.');
   }
 
-  async init(event: any, config: ApplicationInitConfiguration) {
+  async deinit() {
+    await this.deinitApplication();
+    this.shortcutHandler.deinit();
+    this.configurationProvider.deinit();
+    this.shutdownHandler.deinit();
+  }
+
+  async initApplication(event: any, config: ApplicationInitConfiguration) {
     try {
       if (this.isInitialized) {
         this.clientProxy.send(TOPICS.INIT_STATUSMESSAGE, 'Application already running. Restart it...');
-        await this.deinit();
+        await this.deinitApplication();
       }
 
-      logger.info('Starting application with settings: ', config);
+      logger.info('Starting application with settings: \n', util.inspect(config));
       this.photoHandler.init(config);
-      this.collageMaker.init(config, {shutdownHandler: this.shutdownHandler, photosaver: this.photoHandler});
+      this.collageMaker.init(config, {clientProxy: this.clientProxy, photosaver: this.photoHandler});
       this.photoProtocol.init(config.photoDir, {shutdownHandler: this.shutdownHandler});
       this.printer.init(config);
 
@@ -75,23 +74,24 @@ export class FotoboxMain {
       if (error.message.match(/searching for wifi aborted/)) {
         logger.info('Initializing application aborted. ' + error);
       }
-      console.error('Initialization of application failed: ', error);
+      logger.error('Initialization of application failed: ', error);
       this.clientProxy.send(TOPICS.INIT_STATUSMESSAGE, `An error occured. Please try again. Error: ${error}`);
       this.shutdownHandler.publishError(error);
     }
   }
 
-  async deinit() {
+  async deinitApplication() {
     try {
-      console.warn('Deinitialize Application.');
+      logger.warn('Deinitialize Application.');
       await this.cameraProvider.deinit();
       this.photoProtocol.deinit();
       this.collageMaker.deinit();
       this.printer.deinit();
       this.isInitialized = false;
       this.clientProxy.send(TOPICS.STOP_APPLICATION);
+      logger.warn('Deinitialize Application finished.');
     } catch (error) {
-      console.error('Deinitialization of application failed: ', error);
+      logger.error('Deinitialization of application failed: ', error);
     }
   }
 }

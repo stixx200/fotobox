@@ -1,9 +1,25 @@
 <div #page class="h-100">
-  <div class="panel first" *ngIf="(singleLayoutState | async).active">
-    <app-tile [target]="(singleLayoutState | async)"></app-tile>
+  <div class="panel firstpanel" *ngIf="(singleLayoutState | async).active">
+    <mat-card class="container" [routerLink]="[(singleLayoutState | async).route]">
+      <mat-card-header>
+        <mat-card-title><h3>{{ (singleLayoutState | async).title | translate }}</h3></mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="h-100">
+        <div class="image singleimg img-fluid">&nbsp;</div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
-  <div class="panel second" *ngIf="(collageLayoutState | async).active">
-    <app-tile [target]="(collageLayoutState | async)"></app-tile>
+  <div class="panel secondpanel" *ngIf="(collageLayoutState | async).active">
+    <mat-card class="container" [routerLink]="[(collageLayoutState | async).route]">
+      <mat-card-header>
+        <mat-card-title><h3>{{ (collageLayoutState | async).title | translate }}</h3></mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="image collageimg img-fluid">&nbsp;</div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

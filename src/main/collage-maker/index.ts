@@ -1,12 +1,15 @@
 import {ipcMain} from 'electron';
+import {ClientProxy} from '../client.proxy';
 import {TOPICS} from '../constants';
 import {PhotoHandler} from '../photo.handler';
 import {ShutdownHandler} from '../shutdown.handler';
 import {CollageMakerInitConfig, Maker} from './collage-maker';
 import {CollageText} from './template.interface';
+
 const logger = require('logger-winston').getLogger('collage-maker');
 
 export class CollageMaker {
+  private clientProxy: ClientProxy;
   private maker: Maker;
 
   constructor() {
@@ -15,8 +18,10 @@ export class CollageMaker {
     this.resetCollage = this.resetCollage.bind(this);
   }
 
-  init(config: CollageMakerInitConfig, externals: { shutdownHandler: ShutdownHandler, photosaver: PhotoHandler }) {
+  init(config: CollageMakerInitConfig, externals: { photosaver: PhotoHandler, clientProxy: ClientProxy }) {
     this.maker = new Maker(config, externals);
+    this.clientProxy = externals.clientProxy;
+
     ipcMain.on(TOPICS.INIT_COLLAGE, this.initCollage);
     ipcMain.on(TOPICS.CREATE_COLLAGE, this.addPhotoToCollage);
     ipcMain.on(TOPICS.RESET_COLLAGE, this.resetCollage);
@@ -34,8 +39,13 @@ export class CollageMaker {
   }
 
   async initCollage(event, template: string, texts: CollageText[]) {
-    const buffer = await this.maker.initCollage(texts, template);
-    event.sender.send(TOPICS.CREATE_COLLAGE, buffer);
+    try {
+      const buffer = await this.maker.initCollage(texts, template);
+      event.sender.send(TOPICS.CREATE_COLLAGE, buffer);
+    } catch (error) {
+      logger.error('error occured while initializing collage', error);
+      this.clientProxy.sendError(`Error occured while adding photo to collage: ${error.message}`);
+    }
   }
 
   async addPhotoToCollage(event, photo: string, index: number) {
@@ -43,7 +53,8 @@ export class CollageMaker {
       const collageInfo = await this.maker.addPhotoToCollage(photo, index);
       event.sender.send(TOPICS.CREATE_COLLAGE, collageInfo.data, collageInfo.collageDone);
     } catch (error) {
-      logger.error(error);
+      logger.error('error occured while adding photo to collage', error);
+      this.clientProxy.sendError(`Error occured while adding photo to collage: ${error.message}`);
     }
   }
 

@@ -13,6 +13,10 @@ export class ShutdownHandler {
     ipcMain.on(TOPICS.STOP_APPLICATION, this.exitApplication);
   }
 
+  deinit() {
+    ipcMain.removeListener(TOPICS.STOP_APPLICATION, this.exitApplication);
+  }
+
   publishError(error) {
     logger.error('Error occured. Deinit application. Restart required.', error.stack);
     this.exitApplication();
@@ -22,7 +26,7 @@ export class ShutdownHandler {
     Promise.resolve()
       .then(() => {
         logger.warn('Deinitialize Application.');
-        return this.app.deinit();
+        return this.app.deinitApplication();
       })
       .catch((error) => {
         logger.error('Deinitialization of application failed: ', error);

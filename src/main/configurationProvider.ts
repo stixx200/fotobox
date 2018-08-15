@@ -8,7 +8,13 @@ interface ConfigurationProviderExternals {
 
 export class ConfigurationProvider {
   constructor(private externals: ConfigurationProviderExternals) {
-    ipcMain.on(TOPICS.GET_APP_CONFIG_SYNC, (event: { returnValue: MainApplicationConfiguration}) => this.sendConfiguration(event));
+    this.sendConfiguration = this.sendConfiguration.bind(this);
+
+    ipcMain.on(TOPICS.GET_APP_CONFIG_SYNC, this.sendConfiguration);
+  }
+
+  deinit() {
+    ipcMain.removeListener(TOPICS.GET_APP_CONFIG_SYNC, this.sendConfiguration);
   }
 
   sendConfiguration(event: { returnValue: MainApplicationConfiguration }) {

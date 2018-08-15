@@ -1,40 +1,51 @@
 {
   "productName": "fotobox",
   "directories": {
-    "output": "app-builds"
+    "output": "build-output"
   },
-    "files": [
-        "**/*",
-        "!*.ts",
-        "!*.code-workspace",
-        "!LICENSE.md",
-        "!package.json",
-        "!package-lock.json",
-        "!src/",
-        "!e2e/",
-        "!hooks/",
-        "!.angular-cli.json",
-        "!_config.yml",
-        "!karma.conf.js",
-        "!tsconfig.json",
-        "!tslint.json"
-    ],
+  "asarUnpack": [
+    "src/main/**/*.jpg",
+    "src/main/**/*.png"
+  ],
+  "files": [
+    "**/*",
+    "!*.ts",
+    "!*.map",
+    "!*.code-workspace",
+    "!*.idea",
+    "!LICENSE.md",
+    "!package-lock.json",
+    "!src/renderer/*",
+    "!e2e/",
+    "!hooks/",
+    "!.angular-cli.json",
+    "!_config.yml",
+    "!karma.conf.js",
+    "!tsconfig.json",
+    "!tslint.json",
+    "!tools/"
+  ],
   "win": {
-    "icon": "dist",
+    "icon": "renderer_dist/assets/icon",
     "target": [
-      "portable"
+      "nsis"
     ]
   },
   "mac": {
-    "icon": "dist",
+    "icon": "renderer_dist/assets/icon",
     "target": [
       "dmg"
     ]
   },
   "linux": {
-    "icon": "dist",
+    "icon": "renderer_dist/assets/icon",
     "target": [
       "AppImage"
     ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true
   }
 }

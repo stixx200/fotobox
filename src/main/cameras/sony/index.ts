@@ -6,7 +6,7 @@ import {ClientProxy} from '../../client.proxy';
 import {PhotoHandler} from '../../photo.handler';
 import {CameraInitConfiguration, CameraInterface} from '../camera.interface';
 import {ShutdownHandler} from '../../shutdown.handler';
-import {SonyCameraCommunication} from './camera.2';
+import {SonyCameraCommunication} from './camera';
 
 const logger = require('logger-winston').getLogger('camera.sony');
 

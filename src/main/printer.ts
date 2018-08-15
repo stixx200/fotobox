@@ -47,8 +47,6 @@ export class Printer {
       return event.returnValue = msg;
     }
 
-    console.log(this.photoDir);
-    console.log(photo);
     const filePath = path.resolve(this.photoDir, photo);
     if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isFile()) {
       const msg = `Konnte Foto ('${photo}') nicht finden. Druckvorgang abgebrochen.`;

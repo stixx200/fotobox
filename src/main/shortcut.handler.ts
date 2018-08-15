@@ -1,10 +1,11 @@
-import {globalShortcut} from 'electron';
+// import * as localShortcut from 'electron-localshortcut';
+import {globalShortcut, BrowserWindow} from 'electron';
+
 import {ClientProxy} from './client.proxy';
 import {TOPICS} from './constants';
 import {ShutdownHandler} from './shutdown.handler';
-import BrowserWindow = Electron.BrowserWindow;
 
-const logger = require('logger-winston').getLogger('shutdownHandler');
+const logger = require('logger-winston').getLogger('shortcutHandler');
 
 export class ShortcutHandler {
   private developerToolsOpen = false;
@@ -17,6 +18,11 @@ export class ShortcutHandler {
     globalShortcut.register('F1', () => this.toggleDevTools());
     globalShortcut.register('CmdOrCtrl+Q', () => this.exitApplication());
     globalShortcut.register('CmdOrCtrl+F', () => this.gotoPhotolist());
+  }
+
+  deinit() {
+    logger.info('deinitialize shortcut handler. Unregister all shortcuts.');
+    globalShortcut.unregisterAll();
   }
 
   private toggleFullscreen() {

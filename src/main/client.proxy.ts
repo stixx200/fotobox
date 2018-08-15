@@ -6,6 +6,10 @@ export class ClientProxy {
   constructor(private webContents: WebContents) {
   }
 
+  sendError(message) {
+    this.send(TOPICS.ERROR_MESSAGE, message);
+  }
+
   sendStatus(message: string) {
     this.send(TOPICS.INIT_STATUSMESSAGE, message);
   }

@@ -28,7 +28,7 @@ function createWindow() {
     win.loadURL('http://localhost:4200');
   } else {
     win.loadURL(url.format({
-      pathname: path.join(__dirname, '../../dist/index.html'),
+      pathname: path.join(__dirname, '../../renderer_dist/index.html'),
       protocol: 'file:',
       slashes: true
     }));
@@ -37,17 +37,14 @@ function createWindow() {
   fotoboxApplication = new FotoboxMain(win);
 
   // Emitted when the window is closed.
-  win.on('closed', () => {
+  win.on('closed', async () => {
     // Dereference the window object, usually you would store window
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     win = null;
 
-    globalShortcut.unregisterAll();
-    fotoboxApplication.deinit()
-      .then(() => {
-        fotoboxApplication = null;
-      });
+    await fotoboxApplication.deinit();
+    fotoboxApplication = null;
   });
 }
 
