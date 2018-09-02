@@ -43,7 +43,7 @@ export class TemplateLoader {
     const photoImage = await this.getPhoto(spaceIndex, photoToAdd);
     return {
       buffer: await this.createCollage(buffer, [photoImage]),
-      done: this.getPhotos().length <= (index + 1),
+      done: (index >= (this.getPhotos().length - 1)),
     };
   }
 

@@ -160,12 +160,15 @@ export class SonyCamera implements CameraInterface {
         ssdpClient.search(M_SEARCH_CAMERA);
       }, 1000);
 
-      ssdpClient.once('response', (headers: { LOCATION: string }) => {
+      const found = (headers: { LOCATION: string; }) => {
         logger.info(`Found a camera: ${headers.LOCATION}`);
         ssdpClient.stop();
         clearInterval(this.ssdpInterval);
+        ssdpClient.removeListener('response', found);
         resolve(headers.LOCATION);
-      });
+      };
+
+      ssdpClient.on('response', found);
     });
   }
 

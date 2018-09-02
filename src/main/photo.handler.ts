@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
-import {from} from 'rxjs';
 import {URL} from 'url';
 const path = require('path');
 const thumb = require('node-thumbnail').thumb;
 const download = require('download');
 import * as fs from 'fs-extra';
-import {ClientProxy} from './client.proxy';
 import {ipcMain} from 'electron';
+const logger = require('logger-winston').getLogger('photohandler');
+
 import {TOPICS} from './constants';
 
 const thumbSettings = {
@@ -60,7 +60,8 @@ export class PhotoHandler {
 
   async downloadAndSave(url: string): Promise<string> {
     const fileName = _.last(new URL(url).pathname.split('/'));
-    await from(download(url, this.photoDir));
+    logger.info(`Download file ${url} and save as ${path.join(this.photoDir, fileName)}`);
+    await download(url, this.photoDir);
     await thumb({...thumbSettings, source: path.join(this.photoDir, fileName), destination: this.thumbDir});
     return fileName;
   }

@@ -48,7 +48,12 @@ export class Maker {
     const {buffer, done} = await this.templateLoader.addPhotoToCollage(this.collageBuffer, photoToAdd, index);
     this.collageBuffer = buffer;
 
-    const collageName = done ? await this.photosaver.saveBinaryCollage(this.collageBuffer, '.jpg') : null;
+    let collageName = null;
+    if (done) {
+      collageName = await this.photosaver.saveBinaryCollage(this.collageBuffer, '.jpg');
+      this.reset();
+    }
+
     return {
       data: buffer,
       collageDone: collageName,
