@@ -42,10 +42,5 @@
     "target": [
       "AppImage"
     ]
-  },
-  "nsis": {
-    "oneClick": false,
-    "perMachine": true,
-    "allowToChangeInstallationDirectory": true
   }
 }

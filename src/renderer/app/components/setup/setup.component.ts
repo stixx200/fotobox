@@ -5,6 +5,7 @@ import {ModalDirective} from 'ngx-bootstrap/modal';
 import {Observable} from 'rxjs';
 import {TOPICS} from '../../../../main/constants';
 
+import * as singleLayoutActions from '../../layouts/single-layout/store/single-layout.actions';
 import * as collageLayoutActions from '../../layouts/collage-layout/store/collage-layout.actions';
 import * as fromCollageLayout from '../../layouts/collage-layout/store/collage-layout.reducer';
 import * as fromSingleLayout from '../../layouts/single-layout/store/single-layout.reducer';
@@ -65,6 +66,8 @@ export class SetupComponent implements OnInit, OnDestroy {
     console.log('start application with settings: ', applicationSettings);
     this.store.dispatch(new mainConfigurationActions.SetSelectedDriver(applicationSettings.system.cameraDriver));
     this.store.dispatch(new collageLayoutActions.SetText([{lines: applicationSettings.fotobox.layouts.collage.text.split('\n')}]));
+    this.store.dispatch(new collageLayoutActions.SetActive(applicationSettings.fotobox.layouts.collage.active));
+    this.store.dispatch(new singleLayoutActions.SetActive(applicationSettings.fotobox.layouts.single.active));
   }
 
   onModalHidden() {
