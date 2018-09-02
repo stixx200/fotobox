@@ -6,7 +6,8 @@ const logger = require('logger-winston').getLogger('collage-maker.template-loade
 import * as sharp from 'sharp';
 import * as helper from './text.helper';
 
-const DEFAULT_FONT = './SteelworksVintage.otf';
+// const DEFAULT_FONT = './Balqis.otf';
+const DEFAULT_FONT = './blackjack.otf';
 const DEFAULT_BACKGROUND = './background.jpg';
 
 interface SpaceElement {

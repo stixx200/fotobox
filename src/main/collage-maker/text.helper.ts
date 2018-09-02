@@ -60,8 +60,7 @@ export async function getText(text: CollageText, space: any, padding: { paddingL
   const svgLines = text.lines.map((line) => fontedText.getSVG(line, options));
   const sharpLines = svgLines.map((line) => sharp(new Buffer(line)));
 
-  let container = await
-    sharpLines[0].toBuffer({resolveWithObject: true});
+  let container = await sharpLines[0].toBuffer({resolveWithObject: true});
   logger.debug('first');
   logger.debug(container.info);
 

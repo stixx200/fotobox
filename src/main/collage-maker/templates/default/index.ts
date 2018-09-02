@@ -20,7 +20,7 @@ const template: TemplateInterface = {
     x: 0,
     y: 0,
     style: {
-      padding: 50,
+      padding: 0,
       textColor: '#5e2028',
       lineSpacing: 50,
       fontSize: 130,
