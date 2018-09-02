@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {Observable, Subject} from 'rxjs';
 import {flatMap} from 'rxjs/operators';
+const logger = require('logger-winston').getLogger('camera.demo');
+
 import {ClientProxy} from '../../client.proxy';
 import {PhotoHandler} from '../../photo.handler';
 import {ShutdownHandler} from '../../shutdown.handler';
@@ -46,6 +48,7 @@ export class DemoCamera implements CameraInterface {
    * Takes a picture. The new picture is published via picture observer
    */
   takePicture(): void {
+    logger.info('Send new picture!');
     const dummyPictureContent = fs.readFileSync(path.join(__dirname, 'dummy.jpg'));
     this.picturesSubject.next(dummyPictureContent);
   }

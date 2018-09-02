@@ -60,14 +60,9 @@ export class SetupComponent implements OnInit, OnDestroy {
   }
 
   onModalShown(applicationSettings) {
+    console.log('start application with settings: ', applicationSettings);
     this.ipcRenderer.on(TOPICS.START_APPLICATION, this.onApplicationStarted);
     this.ipcRenderer.send(TOPICS.START_APPLICATION, applicationSettings.system);
-
-    console.log('start application with settings: ', applicationSettings);
-    this.store.dispatch(new mainConfigurationActions.SetSelectedDriver(applicationSettings.system.cameraDriver));
-    this.store.dispatch(new collageLayoutActions.SetText([{lines: applicationSettings.fotobox.layouts.collage.text.split('\n')}]));
-    this.store.dispatch(new collageLayoutActions.SetActive(applicationSettings.fotobox.layouts.collage.active));
-    this.store.dispatch(new singleLayoutActions.SetActive(applicationSettings.fotobox.layouts.single.active));
   }
 
   onModalHidden() {
@@ -93,13 +88,33 @@ export class SetupComponent implements OnInit, OnDestroy {
     this.modal.hide();
   }
 
-  changeIrfanviewPath(defaultPath: string) {
-    const filePath = this.filePickerService.filePicker(FilePickerMode.FILE, defaultPath);
+  onDriverChanged(driver) {
+    console.log(driver);
+    this.store.dispatch(new mainConfigurationActions.SetSelectedDriver(driver));
+  }
+
+  onSingleLayoutActivatedChanged(active) {
+    console.log(active);
+    this.store.dispatch(new singleLayoutActions.SetActive(active));
+  }
+
+  onCollageLayoutActivatedChanged(active) {
+    console.log(active);
+    this.store.dispatch(new collageLayoutActions.SetActive(active));
+  }
+
+  onCollageTextChanged(text) {
+    console.log(text);
+    this.store.dispatch(new collageLayoutActions.SetText([{lines: text.split('\n')}]));
+  }
+
+  changeIrfanviewPath(oldPath: string) {
+    const filePath = this.filePickerService.filePicker(FilePickerMode.FILE, oldPath);
     this.store.dispatch(new mainConfigurationActions.SetIrfanViewPath(filePath));
   }
 
-  changePhotoDirPath(defaultPath: string) {
-    const dirPath = this.filePickerService.filePicker(FilePickerMode.DIRECTORY, defaultPath);
+  changePhotoDirPath(oldPath: string) {
+    const dirPath = this.filePickerService.filePicker(FilePickerMode.DIRECTORY, oldPath);
     this.store.dispatch(new mainConfigurationActions.SetPhotoDir(dirPath));
   }
 }

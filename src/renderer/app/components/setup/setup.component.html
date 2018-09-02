@@ -18,7 +18,8 @@
       <!-- -- -- Camera Drivers -->
       <mat-form-field>
         <mat-select name="cameraDriver" [ngModel]="(mainConfigurationState | async).selectedDriver"
-                    placeholder="{{ 'PAGES.SETUP.SYSTEM.CAMERA_DRIVERS.TITLE' | translate}}">
+                    placeholder="{{ 'PAGES.SETUP.SYSTEM.CAMERA_DRIVERS.TITLE' | translate}}"
+                    (valueChange)="onDriverChanged($event)">
           <mat-option *ngFor="let driver of (mainConfigurationState | async).cameraDrivers" [value]="driver">
             {{'PAGES.SETUP.SYSTEM.CAMERA_DRIVERS.' + driver | translate }}
           </mat-option>
@@ -38,7 +39,6 @@
                (click)="changePhotoDirPath($event.target.value)"
                [ngModel]="(mainConfigurationState | async).photoDir">
       </mat-form-field>
-
     </div>
 
     <mat-divider></mat-divider>
@@ -50,14 +50,18 @@
       <div ngModelGroup="layouts">
         <!-- -- -- Single-Layout -->
         <div ngModelGroup="single">
-          <mat-checkbox name="active" color="primary" [ngModel]="(singleLayoutState | async).active">
+          <mat-checkbox name="active" color="primary"
+                        [ngModel]="(singleLayoutState | async).active"
+                        (change)="onSingleLayoutActivatedChanged($event.checked)">
             {{ (singleLayoutState | async).title | translate }}
           </mat-checkbox>
         </div>
 
         <!-- -- -- Collage-Layout -->
         <div ngModelGroup="collage">
-          <mat-checkbox name="active" #collageLayoutActive color="primary" [ngModel]="(collageLayoutState | async).active">
+          <mat-checkbox name="active" #collageLayoutActive color="primary"
+                        [ngModel]="(collageLayoutState | async).active"
+                        (change)="onCollageLayoutActivatedChanged($event.checked)">
             {{ (collageLayoutState | async).title | translate }}
           </mat-checkbox>
 
@@ -65,7 +69,8 @@
             <textarea matInput
                       [placeholder]="'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEXT' | translate"
                       name="text"
-                      [ngModel]="text.lines.join('\n')"></textarea>
+                      [ngModel]="text.lines.join('\n')"
+                      (change)="onCollageTextChanged($event.srcElement.value)"></textarea>
           </mat-form-field>
         </div>
       </div>

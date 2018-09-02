@@ -2,7 +2,7 @@ import {TemplateInterface, TEXT_ALIGN} from '../../template.interface';
 
 const template: TemplateInterface = {
   id: 'Default Template',
-  total_width: 1800,
+  total_width: 1776,
   total_height: 1200,
   // background: path.resolve(__dirname, '../background.jpg'),
   border: {
@@ -31,7 +31,7 @@ const template: TemplateInterface = {
     description: 'Foto Reihe 1 rechts',
     width: 1300,
     height: 800,
-    x: 500,
+    x: 476,
     y: 0,
     style: {
       padding: 30,
@@ -55,7 +55,7 @@ const template: TemplateInterface = {
     description: 'Foto Reihe 2 mitte',
     width: 600,
     height: 400,
-    x: 600,
+    x: 588,
     y: 800,
     style: {
       padding: 30,
@@ -67,7 +67,7 @@ const template: TemplateInterface = {
     description: 'Foto Reihe 2 rechts',
     width: 600,
     height: 400,
-    x: 1200,
+    x: 1176,
     y: 800,
     style: {
       padding: 30,

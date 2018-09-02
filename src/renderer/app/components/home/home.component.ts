@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.ipcRenderer.removeListener(TOPICS.GOTO_PHOTOLIST, this.gotoPhotolist);
     this.ipcRenderer.removeListener(TOPICS.PHOTO, this.onNewPhoto);
   }
 
@@ -42,6 +43,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onNewPhoto(event, photo) {
+    console.debug('Received photo. switch to single layout.');
     this.router.navigate(['/layouts/single', { photo }]);
   }
 }
