@@ -8,3 +8,10 @@
   bottom: 0;
   width: 100%;
 }
+
+.front {
+  z-index: 100;
+}
+.back {
+  z-index: 0;
+}

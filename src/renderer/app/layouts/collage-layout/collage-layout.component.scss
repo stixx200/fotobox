@@ -1,6 +1,19 @@
+.top-message {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
 
 .bottom-message {
   position: absolute;
   bottom: 0;
   width: 100%;
+}
+
+.overlay {
+  position: absolute;
+  z-index: 50;
+}
+.front {
+  z-index: 100;
 }

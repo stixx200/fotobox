@@ -46,6 +46,7 @@
   "USE_QUESTION": "Für collage verwenden?",
   "LAYOUTS": {
     "READY": "Bitte den Auslöser betätigen!",
+    "READY_TAKE_PICTURE": "Bildschirm berühren um Foto aufzunehmen",
     "ABORT": "zurück"
   }
 }

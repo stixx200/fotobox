@@ -30,7 +30,6 @@ export class CollageImageComponent implements OnInit, OnDestroy {
 
   currentIndex = 0;
   collagePhoto: string | SafeResourceUrl;
-  topMessage = 'LAYOUTS.READY';
   collageDone: string;
 
   @Input() collageTexts: CollageText[];
@@ -49,13 +48,13 @@ export class CollageImageComponent implements OnInit, OnDestroy {
     this.collagePhoto = collagePhoto;
   }
 
-  addPhoto(photo: string) {
-    this.ipcRenderer.send(TOPICS.CREATE_COLLAGE, photo, this.currentIndex++);
-  }
-
   ngOnDestroy() {
     this.ipcRenderer.removeListener(TOPICS.CREATE_COLLAGE, this.onCollageRendered);
     this.collageDone = null;
+  }
+
+  addPhoto(photo: string) {
+    this.ipcRenderer.send(TOPICS.CREATE_COLLAGE, photo, this.currentIndex++);
   }
 
   print() {

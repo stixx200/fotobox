@@ -29,6 +29,7 @@ export class CameraProvider {
   private liveViewSubscription: Subscription;
 
   constructor() {
+    this.takePicture = this.takePicture.bind(this);
     this.startLiveViewObserving = this.startLiveViewObserving.bind(this);
     this.stopLiveViewObserving = this.stopLiveViewObserving.bind(this);
   }
@@ -44,6 +45,7 @@ export class CameraProvider {
 
     ipcMain.on(TOPICS.START_LIVEVIEW, this.startLiveViewObserving);
     ipcMain.on(TOPICS.STOP_LIVEVIEW, this.stopLiveViewObserving);
+    ipcMain.on(TOPICS.TAKE_PICTURE, this.takePicture);
 
     this.camera.observePictures()
       .subscribe((fileName: string) => {
@@ -56,6 +58,7 @@ export class CameraProvider {
       await this.camera.deinit();
       this.camera = null;
     }
+    ipcMain.removeListener(TOPICS.TAKE_PICTURE, this.startLiveViewObserving);
     ipcMain.removeListener(TOPICS.START_LIVEVIEW, this.startLiveViewObserving);
     ipcMain.removeListener(TOPICS.STOP_LIVEVIEW, this.stopLiveViewObserving);
   }
@@ -76,5 +79,9 @@ export class CameraProvider {
     this.liveViewSubscription.unsubscribe();
     this.liveViewSubscription = null;
     this.camera.stopLiveView();
+  }
+
+  takePicture() {
+    this.camera.takePicture();
   }
 }

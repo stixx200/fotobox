@@ -1,14 +1,25 @@
+<div class="h-100 w-100 overlay" *ngIf="!currentPhoto" (click)="takePicture()">
+</div>
+
+<app-message-stripe *ngIf="!currentPhoto" class="top-message" [message]="topMessage | translate">
+</app-message-stripe>
+
 <app-photo-view *ngIf="currentPhoto"
                 [config]="photoviewConfiguration"
-                [photoUrl]="currentPhoto">
+                [photoUrl]="currentPhoto"
+                class="front">
 </app-photo-view>
 
 <app-collage-image
   #imageComponent
   [hidden]="currentPhoto"
   [collageTexts]="(collageState | async).text"
-  [templateId]="(collageState | async).templateId">
+  [templateId]="(collageState | async).templateId"
+  class="front">
 </app-collage-image>
 
-<app-message-stripe *ngIf="!currentPhoto" class="bottom-message" [message]="bottomMessage | translate" (action)="exit()">
+<app-message-stripe *ngIf="!currentPhoto" class="bottom-message front" [message]="bottomMessage | translate"
+                    (action)="exit()">
 </app-message-stripe>
+
+<app-countdown *ngIf="!currentPhoto" #countdown class="w-100 h-100"></app-countdown>

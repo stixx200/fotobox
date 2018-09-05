@@ -9,6 +9,7 @@ import {PhotoviewConfiguration} from '../../shared/photo-view/photo-view.compone
 import * as fromApp from '../../store/app.reducer';
 import {CollageImageComponent} from './collage-image/collage-image.component';
 import * as fromCollage from './store/collage-layout.reducer';
+import {CountdownComponent} from '../../app/countdown/countdown.component';
 
 @Component({
   selector: 'app-collage-layout',
@@ -30,10 +31,12 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   };
 
   @ViewChild('imageComponent') collageComponent: CollageImageComponent;
+  @ViewChild('countdown') countdown: CountdownComponent;
 
   collageState: Observable<fromCollage.State>;
   photos: string[];
   currentPhoto: string;
+  topMessage = 'LAYOUTS.READY_TAKE_PICTURE';
   bottomMessage = 'LAYOUTS.ABORT';
 
   constructor(private store: Store<fromApp.AppState>,
@@ -58,11 +61,21 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
     this.photos = [];
     this.currentPhoto = null;
     this.ipcRenderer.send(TOPICS.RESET_COLLAGE);
+    if (this.countdown) {
+      this.countdown.abort();
+    }
   }
 
   exit() {
     this.reset();
     this.router.navigate(['/home']);
+  }
+
+  takePicture() {
+    if (!this.currentPhoto) {
+      console.log('Trigger picture creation');
+      this.countdown.start();
+    }
   }
 
   private onNewPhoto(event: Event, photoUrl: string) {
