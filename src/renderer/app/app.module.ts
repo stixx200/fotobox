@@ -34,7 +34,7 @@ import {IpcRendererService} from './providers/ipc.renderer.service';
 import {MessageStripeComponent} from './shared/message-stripe/message-stripe.component';
 import {PhotoViewComponent} from './shared/photo-view/photo-view.component';
 import {reducers} from './store/app.reducer';
-import { CountdownComponent } from './app/countdown/countdown.component';
+import { CountdownComponent } from './shared/countdown/countdown.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {

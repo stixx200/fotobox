@@ -1,6 +1,2 @@
-<img class="photo img-fluid" *ngIf="collagePhoto && !collageDone" [src]="collagePhoto"/>
+<img class="photo img-fluid" *ngIf="collagePhoto" [src]="collagePhoto"/>
 
-<app-photo-view *ngIf="collageDone"
-                [config]="photoviewConfiguration"
-                [photoUrl]="collageDone">
-</app-photo-view>

@@ -1,11 +1,11 @@
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {CollageText} from '../../../../../main/collage-maker/template.interface';
 import {TOPICS} from '../../../../../main/constants';
 import {IpcRendererService} from '../../../providers/ipc.renderer.service';
-import {PhotoviewConfiguration} from '../../../shared/photo-view/photo-view.component';
 
 let collagePhoto: string | SafeResourceUrl;
 
@@ -15,23 +15,10 @@ let collagePhoto: string | SafeResourceUrl;
   styleUrls: ['./collage-image.component.scss']
 })
 export class CollageImageComponent implements OnInit, OnDestroy {
-  photoviewConfiguration: PhotoviewConfiguration = {
-    title: 'PRINT_QUESTION',
-    buttons: [{
-      text: 'YES',
-      icon: '',
-      callback: () => this.print(),
-    }, {
-      text: 'NO',
-      icon: '',
-      callback: () => this.exit(),
-    }],
-  };
-
   currentIndex = 0;
   collagePhoto: string | SafeResourceUrl;
-  collageDone: string;
 
+  @Output() done = new EventEmitter<string>();
   @Input() collageTexts: CollageText[];
   @Input() templateId: string;
 
@@ -50,25 +37,14 @@ export class CollageImageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.ipcRenderer.removeListener(TOPICS.CREATE_COLLAGE, this.onCollageRendered);
-    this.collageDone = null;
   }
 
   addPhoto(photo: string) {
     this.ipcRenderer.send(TOPICS.CREATE_COLLAGE, photo, this.currentIndex++);
   }
 
-  print() {
-    const errorMessage = this.ipcRenderer.sendSync(TOPICS.PRINT_SYNC, this.collageDone);
-    if (errorMessage) {
-      console.error(errorMessage);
-    } // todo: show toast message with success/fail message
-    // exit collage view after printing
-    this.exit();
-  }
-
   reset() {
     collagePhoto = null;
-    this.collageDone = null;
   }
 
   exit() {
@@ -85,7 +61,7 @@ export class CollageImageComponent implements OnInit, OnDestroy {
 
     if (collageDone) {
       this.reset();
-      this.collageDone = collageDone;
+      this.done.emit(collageDone);
     }
   }
 }

@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TOPICS} from '../../../../main/constants';
 import {IpcRendererService} from '../../providers/ipc.renderer.service';
 import {PhotoviewConfiguration} from '../../shared/photo-view/photo-view.component';
-import {CountdownComponent} from '../../app/countdown/countdown.component';
+import {CountdownComponent} from '../../shared/countdown/countdown.component';
 
 @Component({
   selector: 'app-single-layout',

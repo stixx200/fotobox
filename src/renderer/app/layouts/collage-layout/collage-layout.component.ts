@@ -9,7 +9,7 @@ import {PhotoviewConfiguration} from '../../shared/photo-view/photo-view.compone
 import * as fromApp from '../../store/app.reducer';
 import {CollageImageComponent} from './collage-image/collage-image.component';
 import * as fromCollage from './store/collage-layout.reducer';
-import {CountdownComponent} from '../../app/countdown/countdown.component';
+import {CountdownComponent} from '../../shared/countdown/countdown.component';
 
 @Component({
   selector: 'app-collage-layout',
@@ -17,18 +17,7 @@ import {CountdownComponent} from '../../app/countdown/countdown.component';
   styleUrls: ['./collage-layout.component.scss'],
 })
 export class CollageLayoutComponent implements OnInit, OnDestroy {
-  photoviewConfiguration: PhotoviewConfiguration = {
-    title: 'USE_QUESTION',
-    buttons: [{
-      text: 'YES',
-      icon: '',
-      callback: () => this.useCurrentPhoto(),
-    }, {
-      text: 'NO',
-      icon: '',
-      callback: () => (this.currentPhoto = null),
-    }],
-  };
+  photoviewConfiguration: PhotoviewConfiguration;
 
   @ViewChild('imageComponent') collageComponent: CollageImageComponent;
   @ViewChild('countdown') countdown: CountdownComponent;
@@ -78,8 +67,45 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  print() {
+    const errorMessage = this.ipcRenderer.sendSync(TOPICS.PRINT_SYNC, this.currentPhoto);
+    if (errorMessage) {
+      console.error(errorMessage);
+    } // todo: show toast message with success/fail message
+    // exit collage view after printing
+    this.exit();
+  }
+
+  onCollageDone(collage: string) {
+    this.photoviewConfiguration = {
+      title: 'PRINT_QUESTION',
+      buttons: [{
+        text: 'YES',
+        icon: '',
+        callback: () => this.print(),
+      }, {
+        text: 'NO',
+        icon: '',
+        callback: () => this.exit(),
+      }],
+    };
+    this.currentPhoto = collage;
+  }
+
   private onNewPhoto(event: Event, photoUrl: string) {
     console.info('Show photo and check if it should be added to collage: ' + photoUrl);
+    this.photoviewConfiguration = {
+      title: 'USE_QUESTION',
+      buttons: [{
+        text: 'YES',
+        icon: '',
+        callback: () => this.useCurrentPhoto(),
+      }, {
+        text: 'NO',
+        icon: '',
+        callback: () => (this.currentPhoto = null),
+      }],
+    };
     this.currentPhoto = photoUrl;
   }
 

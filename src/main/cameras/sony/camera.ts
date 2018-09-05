@@ -49,14 +49,16 @@ export class SonyCameraCommunication {
   async deinit() {
     this.statusObservation = false;
     try {
-      // await this.call('stopRecMode');
+      this.stopLiveViewObserving();
+      await this.cameraProxy.call('camera', 'stopRecMode');
     } catch (error) {
       logger.error(`Can't stopRecMode on camera: ${error}`);
     }
   }
 
-  takePicture() {
-    logger.error('Currently not implemented');
+  async takePicture() {
+    const [results] = await this.cameraProxy.call('camera', 'actTakePicture', [], '1.0');
+    this.pictureUrl$.next(results[0]);
   }
 
   observeLiveView(): Observable<Buffer> {
@@ -89,9 +91,13 @@ export class SonyCameraCommunication {
   private async initializeCamera() {
     // start rec mode
     await this.cameraProxy.call('camera', 'startRecMode');
-    // get api list
-    // const apiList = (await this.cameraProxy.call('camera', 'getAvailableApiList'))[0];
+
     this.startCameraStatusObservation();
+
+    // set shoot mode to still pictures (no movies)
+    setTimeout(async () => {
+      await this.cameraProxy.call('camera', 'setShootMode', ['still'], '1.0');
+    }, 1000);
   }
 
   private async startCameraStatusObservation() {

@@ -8,8 +8,10 @@ import {IpcRendererService} from '../../providers/ipc.renderer.service';
   styleUrls: ['./countdown.component.scss']
 })
 export class CountdownComponent implements OnInit {
-  text = '';
-  timeoutHandles: any[] = [];
+  private text = '';
+  private timeoutHandles: any[] = [];
+
+  public running = false;
 
   constructor(private ipcRenderer: IpcRendererService) { }
 
@@ -19,6 +21,7 @@ export class CountdownComponent implements OnInit {
   start() {
     console.log('countdown started');
     this.abort();
+    this.running = true;
     this.text = '3';
     this.timeoutHandles = [
       setTimeout(() => this.text = '2', 1000),
@@ -30,12 +33,13 @@ export class CountdownComponent implements OnInit {
     ];
   }
 
-  takePicture() {
-    this.ipcRenderer.send(TOPICS.TAKE_PICTURE);
-  }
-
   abort() {
     this.timeoutHandles.forEach((handle) => clearTimeout(handle));
     this.text = '';
+    this.running = false;
+  }
+
+  private takePicture() {
+    this.ipcRenderer.send(TOPICS.TAKE_PICTURE);
   }
 }
