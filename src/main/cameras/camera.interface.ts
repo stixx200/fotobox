@@ -3,19 +3,20 @@ import {ClientProxy} from '../client.proxy';
 import {PhotoHandler} from '../photo.handler';
 
 export interface CameraInitConfiguration {
-    photoDir: string;
+  photoDir: string;
+  wifiControl: boolean;
 }
 
 export interface CameraInterface {
-    init(initConfig: CameraInitConfiguration, externals: { clientProxy: ClientProxy, photosaver: PhotoHandler }): Promise<void>;
+  init(initConfig: CameraInitConfiguration, externals: { clientProxy: ClientProxy, photosaver: PhotoHandler }): Promise<void>;
 
-    deinit(): Promise<void>;
+  deinit(): Promise<void>;
 
-    takePicture(): void;
+  takePicture(): void;
 
-    observeLiveView(): Observable<Buffer>;
+  observeLiveView(): Observable<Buffer>;
 
-    stopLiveView();
+  stopLiveView();
 
-    observePictures(): Observable<string>;
+  observePictures(): Observable<string>;
 }

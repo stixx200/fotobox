@@ -56,7 +56,6 @@ export class AppComponent implements OnInit, OnDestroy {
       this.renderer.setStyle(this.page.nativeElement, 'background-size', `cover`);
       this.renderer.setStyle(this.page.nativeElement, 'background-image', `url(${data})`);
     });
-    this.liveViewService.startLiveView();
   }
 
   ngOnDestroy() {

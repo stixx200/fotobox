@@ -58,6 +58,7 @@ export class DemoCamera implements CameraInterface {
    * @returns {Observable<Buffer>}
    */
   observeLiveView(): Observable<Buffer> {
+    logger.info('Observe live view');
     return this.liveViewSubject;
   }
 
@@ -66,6 +67,7 @@ export class DemoCamera implements CameraInterface {
    * @returns {Observable<Buffer>}
    */
   observePictures(): Observable<string> {
+    logger.info('Observe pictures');
     return this.picturesSubject.pipe(
       flatMap((buffer: Buffer) => this.photosaver.saveBinaryCollage(buffer, '.jpg')),
     );
@@ -76,5 +78,6 @@ export class DemoCamera implements CameraInterface {
    * @returns {Observable<string>}
    */
   stopLiveView() {
+    logger.info('Stop live view');
   }
 }

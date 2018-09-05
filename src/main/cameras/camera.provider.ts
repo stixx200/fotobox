@@ -61,6 +61,11 @@ export class CameraProvider {
   }
 
   startLiveViewObserving(event: any) {
+    // don't start live view twice
+    if (this.liveViewSubscription) {
+      return;
+    }
+
     this.liveViewSubscription = this.camera.observeLiveView()
       .subscribe((data: any) => {
         event.sender.send(TOPICS.LIVEVIEW_DATA, data);
@@ -69,6 +74,7 @@ export class CameraProvider {
 
   stopLiveViewObserving() {
     this.liveViewSubscription.unsubscribe();
+    this.liveViewSubscription = null;
     this.camera.stopLiveView();
   }
 }

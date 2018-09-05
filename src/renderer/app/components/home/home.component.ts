@@ -8,6 +8,7 @@ import * as fromCollageLayout from '../../layouts/collage-layout/store/collage-l
 import * as fromSingleLayout from '../../layouts/single-layout/store/single-layout.reducer';
 import {IpcRendererService} from '../../providers/ipc.renderer.service';
 import * as fromApp from '../../store/app.reducer';
+import {LiveViewService} from '../../providers/live-view.service';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<fromApp.AppState>,
               private ipcRenderer: IpcRendererService,
-              private router: Router) {
+              private router: Router,
+              private liveViewService: LiveViewService) {
     this.onNewPhoto = this.onNewPhoto.bind(this);
     this.gotoPhotolist = this.gotoPhotolist.bind(this);
   }
@@ -31,6 +33,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.ipcRenderer.on(TOPICS.PHOTO, this.onNewPhoto);
     this.ipcRenderer.on(TOPICS.GOTO_PHOTOLIST, this.gotoPhotolist);
+
+    this.liveViewService.startLiveView();
   }
 
   ngOnDestroy() {

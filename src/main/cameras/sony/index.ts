@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import * as wifi from 'node-wifi';
+import * as wifi from 'wifi-control';
 import {Observable} from 'rxjs';
 import {flatMap} from 'rxjs/operators';
 import {ClientProxy} from '../../client.proxy';
@@ -7,6 +7,7 @@ import {PhotoHandler} from '../../photo.handler';
 import {CameraInitConfiguration, CameraInterface} from '../camera.interface';
 import {ShutdownHandler} from '../../shutdown.handler';
 import {SonyCameraCommunication} from './camera';
+import { promisify } from 'util';
 
 const logger = require('logger-winston').getLogger('camera.sony');
 
@@ -24,12 +25,15 @@ export class SonyCamera implements CameraInterface {
   shutdownHandler: ShutdownHandler = null;
   camera: SonyCameraCommunication;
   photosaver: PhotoHandler;
+  clientProxy: ClientProxy;
 
   private isInitialized = false;
 
   private ssdpInterval: any;
 
   private abortSearching = false;
+
+  private config: CameraInitConfiguration;
 
   /**
    * Initializes camera
@@ -41,16 +45,20 @@ export class SonyCamera implements CameraInterface {
              externals: { clientProxy: ClientProxy, shutdownHandler: ShutdownHandler, photosaver: PhotoHandler }) {
     this.abortSearching = false;
     this.photosaver = externals.photosaver;
-    wifi.init({iface: null}); // network interface, choose a random wifi interface if set to null
     this.shutdownHandler = externals.shutdownHandler;
+    this.clientProxy = externals.clientProxy;
+    this.config = config;
 
     if (this.isInitialized) {
       await this.deinit();
     }
 
-    await this.connectWifi(externals.clientProxy);
-    const descriptionUrl = await this.findCamera(externals.clientProxy);
-    await this.initializeCamera(externals.clientProxy, descriptionUrl);
+    if (this.config.wifiControl) {
+      await this.connectWifi();
+    }
+
+    const descriptionUrl = await this.findCamera();
+    await this.initializeCamera(descriptionUrl);
   }
 
   /**
@@ -71,10 +79,11 @@ export class SonyCamera implements CameraInterface {
     this.camera = null;
 
     // disconnect from camera
-    const currentConnections = await wifi.getCurrentConnections();
-    const sonyConnection = findSupportedNetwork(currentConnections);
-    if (sonyConnection) {
-      await wifi.disconnect();
+    if (this.config.wifiControl) {
+      const {success, msg} = await promisify(wifi.resetWiFi)();
+      if (!success) {
+        logger.error(msg);
+      }
     }
   }
 
@@ -86,6 +95,7 @@ export class SonyCamera implements CameraInterface {
       this.camera.takePicture();
     } else {
       logger.error('Can\'t take a picture. No camera connected');
+      this.clientProxy.sendError('Can\'t take a picture. No camera connected');
     }
   }
 
@@ -117,12 +127,17 @@ export class SonyCamera implements CameraInterface {
 
   /**
    * connects to cameras wifi
-   * @param {ClientProxy} clientProxy
    * @returns {Promise<void>}
    */
-  private async connectWifi(clientProxy: ClientProxy) {
-    clientProxy.sendStatus('PAGES.SETUP.FOTOBOX.MODAL.STATUS_CONNECTING_CAMERA');
+  private async connectWifi() {
+    this.clientProxy.sendStatus('PAGES.SETUP.FOTOBOX.MODAL.STATUS_CONNECTING_CAMERA');
     logger.info('start connecting to Wifi');
+
+    // initialize wifi interface
+    wifi.init();
+    const { interface: iface } = wifi.findInterface();
+    wifi.configure({ debug: true, iface });
+
 
     // find wifi network to connect
     let sonyWifiInterface = null;
@@ -132,22 +147,34 @@ export class SonyCamera implements CameraInterface {
         throw new Error('searching for wifi aborted');
       }
       logger.debug('Scan for wifi networks');
-      const networks = await wifi.scan();
+      const { success, networks, msg } = await promisify(wifi.scanForWiFi)();
+      if (!success) {
+        logger.error(msg);
+        this.clientProxy.sendStatus(msg);
+      }
+
       logger.debug(`Available networks: ${_.map(networks, network => network.ssid)}`);
       sonyWifiInterface = findSupportedNetwork(networks);
     } while (sonyWifiInterface === null);
 
     // connect to found camera network
-    await wifi.connect({ssid: sonyWifiInterface.ssid, password: 'NYthQVaX'});
+    const {
+      success: connectSuccess,
+      msg: connectMsg,
+    } = await promisify(wifi.connectToAP)({ ssid: sonyWifiInterface.ssid, password: 'NYthQVaX' });
+
+    if (!connectSuccess) {
+      logger.error(connectMsg);
+      throw new Error(connectMsg);
+    }
   }
 
   /**
    * searches in network for a connected camera via ssdp.
-   * @param {ClientProxy} clientProxy
    * @returns {Promise<string>}
    */
-  private findCamera(clientProxy: ClientProxy): Promise<string> {
-    clientProxy.sendStatus('PAGES.SETUP.FOTOBOX.MODAL.STATUS_SEARCHING_CAMERA');
+  private findCamera(): Promise<string> {
+    this.clientProxy.sendStatus('PAGES.SETUP.FOTOBOX.MODAL.STATUS_SEARCHING_CAMERA');
     logger.info('start searching for camera');
 
     return new Promise((resolve) => {
@@ -178,7 +205,7 @@ export class SonyCamera implements CameraInterface {
    * @param {string} descriptionUrl
    * @returns {Promise<void>}
    */
-  private async initializeCamera(clientProxy: ClientProxy, descriptionUrl: string) {
+  private async initializeCamera(descriptionUrl: string) {
     this.camera = new SonyCameraCommunication(descriptionUrl);
     await this.camera.init({shutdownHandler: this.shutdownHandler});
   }

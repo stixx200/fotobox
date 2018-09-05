@@ -21,17 +21,11 @@ export class LiveViewService {
   }
 
   startLiveView() {
-    if (!this.isStarted) {
-      this.ipcRenderer.send(TOPICS.START_LIVEVIEW);
-      this.isStarted = true;
-    }
+    this.ipcRenderer.send(TOPICS.START_LIVEVIEW);
   }
 
   stopLiveView() {
-    if (this.isStarted) {
-      this.ipcRenderer.send(TOPICS.STOP_LIVEVIEW);
-      this.isStarted = false;
-    }
+    this.ipcRenderer.send(TOPICS.STOP_LIVEVIEW);
   }
 
   onLiveviewImage(event, data: Buffer) {
