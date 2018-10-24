@@ -8,9 +8,9 @@ import {IpcRendererService} from '../../providers/ipc.renderer.service';
   styleUrls: ['./countdown.component.scss']
 })
 export class CountdownComponent implements OnInit {
-  private text = '';
   private timeoutHandles: any[] = [];
 
+  public text = '';
   public running = false;
 
   constructor(private ipcRenderer: IpcRendererService) { }
