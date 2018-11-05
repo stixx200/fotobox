@@ -13,6 +13,7 @@
           "sony": "Sony",
           "demo": "Demo Kamera"
         },
+        "USE_PRINTER": "Fotodruck aktivieren",
         "IRFANVIEW_PATH": "Pfad zur IrfanView.exe",
         "PHOTO_DIRECTORY": "Speicherort Fotos"
       },
@@ -42,6 +43,7 @@
   },
   "YES": "ja",
   "NO": "nein",
+  "NEXT": "weiter",
   "PRINT_QUESTION": "Ausdrucken?",
   "USE_QUESTION": "Für collage verwenden?",
   "LAYOUTS": {

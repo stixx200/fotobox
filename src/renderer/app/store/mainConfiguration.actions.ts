@@ -4,6 +4,7 @@ export enum MainConfigurationActionTypes {
   SET_CAMERA_DRIVERS = '[MainConfiguration] SetCameraDrivers',
   SET_SELECTED_DRIVER = '[MainConfiguration] SetSelectedDriver',
   SET_IRFANVIEW_PATH = '[MainConfiguration] SetIrfanViewPath',
+  SET_USE_PRINTER = '[MainConfiguration] SetUsePrinter',
   SET_PHOTO_DIR = '[MainConfiguration] SetPhotoDir',
 }
 
@@ -28,6 +29,13 @@ export class SetIrfanViewPath implements Action {
   }
 }
 
+export class SetUsePrinter implements Action {
+  readonly type = MainConfigurationActionTypes.SET_USE_PRINTER;
+
+  constructor(public payload: boolean) {
+  }
+}
+
 export class SetPhotoDir implements Action {
   readonly type = MainConfigurationActionTypes.SET_PHOTO_DIR;
 
@@ -35,4 +43,9 @@ export class SetPhotoDir implements Action {
   }
 }
 
-export type MainConfigurationActions = SetCameraDrivers | SetSelectedDriver | SetIrfanViewPath | SetPhotoDir;
+export type MainConfigurationActions =
+  SetCameraDrivers |
+  SetSelectedDriver |
+  SetIrfanViewPath |
+  SetUsePrinter |
+  SetPhotoDir;

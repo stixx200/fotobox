@@ -4,6 +4,7 @@ export interface State {
   cameraDrivers: string[];
   selectedDriver: string;
   irfanViewPath: string;
+  usePrinter: boolean;
   photoDir: string;
 }
 
@@ -11,6 +12,7 @@ const initialState: State = {
   cameraDrivers: [],
   selectedDriver: null,
   irfanViewPath: '',
+  usePrinter: true,
   photoDir: '',
 };
 
@@ -30,6 +32,11 @@ export function mainConfigurationReducer(state = initialState, action: MainConfi
       return {
         ...state,
         irfanViewPath: action.payload,
+      };
+    case MainConfigurationActionTypes.SET_USE_PRINTER:
+      return {
+        ...state,
+        usePrinter: action.payload,
       };
     case MainConfigurationActionTypes.SET_PHOTO_DIR:
       return {

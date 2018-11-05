@@ -4,10 +4,10 @@ import {Store} from '@ngrx/store';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import {Observable} from 'rxjs';
 import {TOPICS} from '../../../../main/constants';
-
-import * as singleLayoutActions from '../../layouts/single-layout/store/single-layout.actions';
 import * as collageLayoutActions from '../../layouts/collage-layout/store/collage-layout.actions';
 import * as fromCollageLayout from '../../layouts/collage-layout/store/collage-layout.reducer';
+
+import * as singleLayoutActions from '../../layouts/single-layout/store/single-layout.actions';
 import * as fromSingleLayout from '../../layouts/single-layout/store/single-layout.reducer';
 import {FilePickerMode, FilepickerService} from '../../providers/filepicker.service';
 import {IpcRendererService} from '../../providers/ipc.renderer.service';
@@ -106,6 +106,11 @@ export class SetupComponent implements OnInit, OnDestroy {
   onCollageTextChanged(text) {
     console.log(text);
     this.store.dispatch(new collageLayoutActions.SetText([{lines: text.split('\n')}]));
+  }
+
+  onUsePrinterChanged(usePrinter) {
+    console.log(`UsePrinter changed: ${usePrinter}`);
+    this.store.dispatch(new mainConfigurationActions.SetUsePrinter(usePrinter));
   }
 
   changeIrfanviewPath(oldPath: string) {

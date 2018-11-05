@@ -26,11 +26,19 @@
         </mat-select>
       </mat-form-field>
 
+      <!-- use printer -->
+      <mat-checkbox name="usePrinter" color="primary"
+                    [ngModel]="(mainConfigurationState | async).usePrinter"
+                    (change)="onUsePrinterChanged($event.checked)">
+        {{ 'PAGES.SETUP.SYSTEM.USE_PRINTER' | translate}}
+      </mat-checkbox>
+
       <!-- irfanview file -->
       <mat-form-field>
-      <input matInput type="text" name="irfanViewPath" placeholder="{{ 'PAGES.SETUP.SYSTEM.IRFANVIEW_PATH' | translate}}" #irfanViewPathField
-             (click)="changeIrfanviewPath($event.target.value)"
-             [ngModel]="(mainConfigurationState | async).irfanViewPath">
+        <input matInput type="text" name="irfanViewPath"
+               placeholder="{{ 'PAGES.SETUP.SYSTEM.IRFANVIEW_PATH' | translate}}" #irfanViewPathField
+               (click)="changeIrfanviewPath($event.target.value)"
+               [ngModel]="(mainConfigurationState | async).irfanViewPath">
       </mat-form-field>
 
       <!-- photodir directory -->
