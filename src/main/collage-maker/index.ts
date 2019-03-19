@@ -2,9 +2,9 @@ import {ipcMain} from 'electron';
 import {ClientProxy} from '../client.proxy';
 import {TOPICS} from '../constants';
 import {PhotoHandler} from '../photo.handler';
-import {ShutdownHandler} from '../shutdown.handler';
 import {CollageMakerInitConfig, Maker} from './collage-maker';
 import {CollageText} from './template.interface';
+import templates from './templates';
 
 const logger = require('logger-winston').getLogger('collage-maker');
 
@@ -16,6 +16,7 @@ export class CollageMaker {
     this.addPhotoToCollage = this.addPhotoToCollage.bind(this);
     this.initCollage = this.initCollage.bind(this);
     this.resetCollage = this.resetCollage.bind(this);
+    this.getTemplates = this.getTemplates.bind(this);
   }
 
   init(config: CollageMakerInitConfig, externals: { photosaver: PhotoHandler, clientProxy: ClientProxy }) {
@@ -60,5 +61,9 @@ export class CollageMaker {
 
   resetCollage() {
     this.maker.reset();
+  }
+
+  getTemplates(): string[] {
+    return Object.keys(templates);
   }
 }

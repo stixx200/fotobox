@@ -73,6 +73,16 @@
             {{ (collageLayoutState | async).title | translate }}
           </mat-checkbox>
 
+          <mat-form-field [hidden]="!collageLayoutActive.checked">
+            <mat-select name="collateTemplate" [ngModel]="(collageLayoutState | async).templateId"
+                        placeholder="{{ 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEMPLATE' | translate}}"
+                        (valueChange)="onCollageTemplateChanged($event)">
+              <mat-option *ngFor="let template of (collageLayoutState | async).templates" [value]="template">
+                {{'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEMPLATE-NAMES.' + template | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <mat-form-field [hidden]="!collageLayoutActive.checked" *ngFor="let text of (collageLayoutState | async).text">
             <textarea matInput
                       [placeholder]="'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEXT' | translate"
@@ -80,6 +90,7 @@
                       [ngModel]="text.lines.join('\n')"
                       (change)="onCollageTextChanged($event.srcElement.value)"></textarea>
           </mat-form-field>
+
         </div>
       </div>
     </div>

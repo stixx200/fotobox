@@ -1,4 +1,4 @@
-import {TemplateInterface, TEXT_ALIGN} from '../../template.interface';
+import {TemplateInterface, TEXT_ALIGN} from '../template.interface';
 
 const template: TemplateInterface = {
   id: 'Default Template',

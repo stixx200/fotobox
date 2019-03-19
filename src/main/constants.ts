@@ -23,4 +23,5 @@ export const TOPICS = {
 
 export interface MainApplicationConfiguration {
   cameraDrivers: string[];
+  templates: string[];
 }

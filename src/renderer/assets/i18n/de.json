@@ -23,7 +23,12 @@
           "TITLE": "verwendete Layouts",
           "SINGLE": "Einzelbild",
           "COLLAGE": "Collage",
-          "COLLAGE-TEXT": "Collage-Text"
+          "COLLAGE-TEXT": "Collage-Text",
+          "COLLAGE-TEMPLATE": "Collage Template",
+          "COLLAGE-TEMPLATE-NAMES": {
+            "default": "Standard",
+            "defaultMoreText": "Standard - mehr Text"
+          }
         },
         "MODAL": {
           "TITLE": "Anwendung wird gestarted...",

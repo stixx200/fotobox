@@ -7,17 +7,19 @@ export interface State {
   previewUrl: SafeResourceUrl;
   title: string;
   route: string;
-  templateId: string;
   active: boolean;
+  templateId: string;
+  templates: string[];
 }
 
 const initialState: State = {
-  text: [{lines: ['Example', 'text'] }],
+  text: [{lines: ['Example', 'text']}],
   previewUrl: '../../../assets/collagelayout.preview.jpg',
   title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE',
   route: '/layouts/collage',
   active: true,
   templateId: 'default',
+  templates: ['default'],
 };
 
 export function collageLayoutReducer(state = initialState, action: CollageLayoutActions) {
@@ -32,6 +34,18 @@ export function collageLayoutReducer(state = initialState, action: CollageLayout
       return {
         ...state,
         active: action.payload,
+      };
+
+    case CollageLayoutActionTypes.SET_TEMPLATES:
+      return {
+        ...state,
+        templates: action.payload,
+      };
+
+    case CollageLayoutActionTypes.SET_TEMPLATE:
+      return {
+        ...state,
+        templateId: action.payload,
       };
 
     default:

@@ -103,6 +103,11 @@ export class SetupComponent implements OnInit, OnDestroy {
     this.store.dispatch(new collageLayoutActions.SetActive(active));
   }
 
+  onCollageTemplateChanged(template) {
+    console.log(template);
+    this.store.dispatch(new collageLayoutActions.SetTemplate(template));
+  }
+
   onCollageTextChanged(text) {
     console.log(text);
     this.store.dispatch(new collageLayoutActions.SetText([{lines: text.split('\n')}]));

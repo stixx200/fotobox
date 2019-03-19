@@ -39,7 +39,8 @@
     "electron:mac": "npm run build:prod && npx electron-builder build --mac",
     "test": "npm run postinstall:web && ng test",
     "e2e": "npm run postinstall:web && ng e2e",
-    "create_collage": "electron tools/createCollage/create_collage.js"
+    "create_collage": "electron tools/createCollage/create_collage.js",
+    "create_collage:debug": "electron %NODE_DEBUG_OPTION%  tools/createCollage/create_collage.js"
   },
   "dependencies": {
     "download": "^7.1.0",

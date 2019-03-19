@@ -4,6 +4,8 @@ import {CollageText} from './template.interface';
 import {TemplateLoader} from './template.loader';
 import templates from './templates';
 
+const logger = require('logger-winston').getLogger('collage-maker');
+
 const placeholderImage = path.resolve(__dirname, './questionmark.png');
 
 export interface CollageMakerInitConfig {
@@ -34,6 +36,7 @@ export class Maker {
   }
 
   async initCollage(texts: CollageText[], templateId: string, saveCollage: boolean = true): Promise<Buffer> {
+    logger.info(`Initializing collage: ${templateId}`);
     this.saveCollage = saveCollage;
     this.templateLoader = new TemplateLoader(templates[templateId]);
     this.collageBuffer = await this.templateLoader.getEmptyCollage(texts, placeholderImage);
