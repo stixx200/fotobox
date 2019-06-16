@@ -1,0 +1,12 @@
+<h3 class="mat-subheading-2">{{ config.title | translate }}</h3>
+
+<div class="selection-group">
+  <div *ngFor="let value of (config.selection | async)">
+    <mat-checkbox (change)="selectionChanged(value, $event.checked)"
+                  [ngModel]="isSelected(value)"
+                  color="primary"
+                  name="active">
+      {{ (config.translationBase || "") + value | translate }}
+    </mat-checkbox>
+  </div>
+</div>

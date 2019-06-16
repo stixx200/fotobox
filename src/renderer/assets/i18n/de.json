@@ -2,12 +2,13 @@
   "PAGES": {
     "SETUP": {
       "TITLE": "Einstellungen",
+      "GENERAL": "General",
+      "CAMERA": "Kamera",
+      "ADVANCED": "Erweitert",
       "BUTTON": {
         "NEXT": "Fotobox starten"
       },
-      "EXTENDED": "erweiterte Ansicht",
       "SYSTEM": {
-        "TITLE": "System",
         "CAMERA_DRIVERS": {
           "TITLE": "verwendete Kamera",
           "sony": "Sony",
@@ -15,7 +16,10 @@
         },
         "USE_PRINTER": "Fotodruck aktivieren",
         "IRFANVIEW_PATH": "Pfad zur IrfanView.exe",
-        "PHOTO_DIRECTORY": "Speicherort Fotos"
+        "PHOTO_DIRECTORY": "Speicherort Fotos",
+        "SONY": {
+          "PASSWORD": "Wifi Passwort der Sony Kamera"
+        }
       },
       "FOTOBOX": {
         "TITLE": "Fotobox",

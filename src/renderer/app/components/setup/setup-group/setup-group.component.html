@@ -1,0 +1,14 @@
+<div class="group-container">
+  <div *ngFor="let element of config" [ngSwitch]="element.type">
+    <app-selection-setup *ngSwitchCase="'selection'" [config]="element"></app-selection-setup>
+    <app-directory-setup *ngSwitchCase="'directory'" [config]="element"></app-directory-setup>
+    <app-file-setup *ngSwitchCase="'file'" [config]="element"></app-file-setup>
+    <app-checkbox-setup *ngSwitchCase="'checkbox'" [config]="element"></app-checkbox-setup>
+    <app-multi-selection-setup *ngSwitchCase="'multi-selection'" [config]="element"></app-multi-selection-setup>
+    <app-textsarea-setup *ngSwitchCase="'textsarea'" [config]="element"></app-textsarea-setup>
+    <app-text-setup *ngSwitchCase="'text'" [config]="element"></app-text-setup>
+    <!--default case when there are no matches -->
+    <div *ngSwitchDefault>unknown</div>
+  </div>
+</div>
+

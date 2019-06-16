@@ -1,0 +1,9 @@
+<mat-form-field>
+  <mat-select (valueChange)="config.onChanged($event)" [ngModel]="(config.selected | async)"
+              name="config.title"
+              placeholder="{{ config.title | translate}}">
+    <mat-option *ngFor="let element of (config.selection | async)" [value]="element">
+      {{ (config.translationBase || "") + element | translate }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

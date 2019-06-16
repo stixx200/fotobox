@@ -6,6 +6,7 @@ export interface State {
   irfanViewPath: string;
   usePrinter: boolean;
   photoDir: string;
+  sonyPassword: string;
 }
 
 const initialState: State = {
@@ -14,6 +15,7 @@ const initialState: State = {
   irfanViewPath: '',
   usePrinter: true,
   photoDir: '',
+  sonyPassword: '',
 };
 
 export function mainConfigurationReducer(state = initialState, action: MainConfigurationActions) {
@@ -42,6 +44,11 @@ export function mainConfigurationReducer(state = initialState, action: MainConfi
       return {
         ...state,
         photoDir: action.payload,
+      };
+    case MainConfigurationActionTypes.SET_SONYPASSWORD:
+      return {
+        ...state,
+        sonyPassword: action.payload,
       };
 
     default:

@@ -1,13 +1,13 @@
 import * as _ from 'lodash';
-import * as wifi from 'wifi-control';
 import {Observable} from 'rxjs';
 import {flatMap} from 'rxjs/operators';
+import {promisify} from 'util';
+import * as wifi from 'wifi-control';
 import {ClientProxy} from '../../client.proxy';
 import {PhotoHandler} from '../../photo.handler';
-import {CameraInitConfiguration, CameraInterface} from '../camera.interface';
 import {ShutdownHandler} from '../../shutdown.handler';
+import {CameraInitConfiguration, CameraInterface} from '../camera.interface';
 import {SonyCameraCommunication} from './camera';
-import { promisify } from 'util';
 
 const logger = require('logger-winston').getLogger('camera.sony');
 
@@ -43,6 +43,10 @@ export class SonyCamera implements CameraInterface {
    */
   async init(config: CameraInitConfiguration,
              externals: { clientProxy: ClientProxy, shutdownHandler: ShutdownHandler, photosaver: PhotoHandler }) {
+    if (config.wifiControl && !config.sonyPassword) {
+      throw new Error('Can\'t start application, because WIFI Control is enabled, but no Sony WIFI Password is set.');
+    }
+
     this.abortSearching = false;
     this.photosaver = externals.photosaver;
     this.shutdownHandler = externals.shutdownHandler;
@@ -161,7 +165,7 @@ export class SonyCamera implements CameraInterface {
     const {
       success: connectSuccess,
       msg: connectMsg,
-    } = await promisify(wifi.connectToAP)({ ssid: sonyWifiInterface.ssid, password: 'NYthQVaX' });
+    } = await promisify(wifi.connectToAP)({ssid: sonyWifiInterface.ssid, password: this.config.sonyPassword});
 
     if (!connectSuccess) {
       logger.error(connectMsg);

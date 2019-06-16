@@ -16,7 +16,7 @@ import BrowserWindow = Electron.BrowserWindow;
 
 const logger = require('logger-winston').getLogger('app');
 
-type ApplicationInitConfiguration = CameraProviderInitConfig & PrinterConfiguration;
+export type ApplicationInitConfiguration = CameraProviderInitConfig & PrinterConfiguration;
 
 export class FotoboxMain {
   private isInitialized = false;

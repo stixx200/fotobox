@@ -2,110 +2,49 @@
 
 <div class="setup-container mx-auto">
   <div class="titlewrap">
-    <p class="left mat-headline">{{ 'PAGES.SETUP.TITLE' | translate }}</p>
-    <p class="right">
-      <mat-slide-toggle [(ngModel)]="extendedMode" color="primary">
-        {{ "PAGES.SETUP.EXTENDED" | translate }}
-      </mat-slide-toggle></p>
-    <div style="clear: both;"></div>
+    <p class="mat-headline">{{ 'PAGES.SETUP.TITLE' | translate }}</p>
   </div>
 
-  <!-- Settings -->
-  <form class="form-container" (ngSubmit)="modal.show()" #settingsForm="ngForm">
-    <!-- -- System settings -->
-    <div class="form-container" [hidden]="!extendedMode" ngModelGroup="system">
-      <h2 class="mat-title">{{ 'PAGES.SETUP.SYSTEM.TITLE' | translate }}</h2>
-      <!-- -- -- Camera Drivers -->
-      <mat-form-field>
-        <mat-select name="cameraDriver" [ngModel]="(mainConfigurationState | async).selectedDriver"
-                    placeholder="{{ 'PAGES.SETUP.SYSTEM.CAMERA_DRIVERS.TITLE' | translate}}"
-                    (valueChange)="onDriverChanged($event)">
-          <mat-option *ngFor="let driver of (mainConfigurationState | async).cameraDrivers" [value]="driver">
-            {{'PAGES.SETUP.SYSTEM.CAMERA_DRIVERS.' + driver | translate }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+  <mat-tab-group dynamicHeight>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        {{ 'PAGES.SETUP.GENERAL' | translate }}
+      </ng-template>
+      <app-setup-group [config]="setupConfigs.general"></app-setup-group>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        {{ 'PAGES.SETUP.CAMERA' | translate }}
+      </ng-template>
+      <app-setup-group [config]="setupConfigs.camera"></app-setup-group>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        {{ 'PAGES.SETUP.ADVANCED' | translate }}
+      </ng-template>
+      <app-setup-group [config]="setupConfigs.advanced"></app-setup-group>
+    </mat-tab>
+  </mat-tab-group>
 
-      <!-- use printer -->
-      <mat-checkbox name="usePrinter" color="primary"
-                    [ngModel]="(mainConfigurationState | async).usePrinter"
-                    (change)="onUsePrinterChanged($event.checked)">
-        {{ 'PAGES.SETUP.SYSTEM.USE_PRINTER' | translate}}
-      </mat-checkbox>
-
-      <!-- irfanview file -->
-      <mat-form-field>
-        <input matInput type="text" name="irfanViewPath"
-               placeholder="{{ 'PAGES.SETUP.SYSTEM.IRFANVIEW_PATH' | translate}}" #irfanViewPathField
-               (click)="changeIrfanviewPath($event.target.value)"
-               [ngModel]="(mainConfigurationState | async).irfanViewPath">
-      </mat-form-field>
-
-      <!-- photodir directory -->
-      <mat-form-field>
-        <input title="" matInput placeholder="{{ 'PAGES.SETUP.SYSTEM.PHOTO_DIRECTORY' | translate}}" name="photoDir"
-               (click)="changePhotoDirPath($event.target.value)"
-               [ngModel]="(mainConfigurationState | async).photoDir">
-      </mat-form-field>
-    </div>
-
-    <mat-divider></mat-divider>
-
-    <!-- -- Fotobox Settings -->
-    <div ngModelGroup="fotobox">
-      <h2 class="mat-title">{{ 'PAGES.SETUP.FOTOBOX.TITLE' | translate }}</h2>
-      <h3 class="mat-subheading-2">{{ 'PAGES.SETUP.FOTOBOX.LAYOUTS.TITLE' | translate }}</h3>
-      <div ngModelGroup="layouts">
-        <!-- -- -- Single-Layout -->
-        <div ngModelGroup="single">
-          <mat-checkbox name="active" color="primary"
-                        [ngModel]="(singleLayoutState | async).active"
-                        (change)="onSingleLayoutActivatedChanged($event.checked)">
-            {{ (singleLayoutState | async).title | translate }}
-          </mat-checkbox>
-        </div>
-
-        <!-- -- -- Collage-Layout -->
-        <div ngModelGroup="collage">
-          <mat-checkbox name="active" #collageLayoutActive color="primary"
-                        [ngModel]="(collageLayoutState | async).active"
-                        (change)="onCollageLayoutActivatedChanged($event.checked)">
-            {{ (collageLayoutState | async).title | translate }}
-          </mat-checkbox>
-
-          <mat-form-field [hidden]="!collageLayoutActive.checked">
-            <mat-select name="collateTemplate" [ngModel]="(collageLayoutState | async).templateId"
-                        placeholder="{{ 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEMPLATE' | translate}}"
-                        (valueChange)="onCollageTemplateChanged($event)">
-              <mat-option *ngFor="let template of (collageLayoutState | async).templates" [value]="template">
-                {{'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEMPLATE-NAMES.' + template | translate }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field [hidden]="!collageLayoutActive.checked" *ngFor="let text of (collageLayoutState | async).text">
-            <textarea matInput
-                      [placeholder]="'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEXT' | translate"
-                      name="text"
-                      [ngModel]="text.lines.join('\n')"
-                      (change)="onCollageTextChanged($event.srcElement.value)"></textarea>
-          </mat-form-field>
-
-        </div>
-      </div>
-    </div>
-
-    <br/>
-
-    <!-- Submit button -->
-    <button type="submit" mat-raised-button color="primary" class="w-100" [routerLink]="['/']">{{ 'PAGES.SETUP.BUTTON.NEXT' | translate }}</button>
-  </form>
+  <button (click)="startApplication()"
+          [routerLink]="['/']"
+          class="w-100"
+          color="primary"
+          mat-raised-button>
+    {{ 'PAGES.SETUP.BUTTON.NEXT' | translate }}
+  </button>
 </div>
 
 <!--Wait for application started modal-->
 
-<div class="modal fade" bsModal #modal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-events-name"
-     (onShown)="onModalShown(settingsForm.form.value)" (onHidden)="onModalHidden()" [config]="{backdrop: 'static'}">
+<div #modal="bs-modal"
+     (onHidden)="onModalHidden()"
+     [config]="{backdrop: 'static'}"
+     aria-labelledby="dialog-events-name"
+     bsModal
+     class="modal fade"
+     role="dialog"
+     tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">

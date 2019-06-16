@@ -6,6 +6,7 @@ export enum MainConfigurationActionTypes {
   SET_IRFANVIEW_PATH = '[MainConfiguration] SetIrfanViewPath',
   SET_USE_PRINTER = '[MainConfiguration] SetUsePrinter',
   SET_PHOTO_DIR = '[MainConfiguration] SetPhotoDir',
+  SET_SONYPASSWORD = '[MainConfiguration] SetSonyPassword',
 }
 
 export class SetCameraDrivers implements Action {
@@ -43,9 +44,17 @@ export class SetPhotoDir implements Action {
   }
 }
 
+export class SetSonyPassword implements Action {
+  readonly type = MainConfigurationActionTypes.SET_SONYPASSWORD;
+
+  constructor(public payload: string) {
+  }
+}
+
 export type MainConfigurationActions =
   SetCameraDrivers |
   SetSelectedDriver |
   SetIrfanViewPath |
   SetUsePrinter |
-  SetPhotoDir;
+  SetPhotoDir |
+  SetSonyPassword;
