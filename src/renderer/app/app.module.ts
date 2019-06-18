@@ -21,6 +21,14 @@ import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
 import {HomeComponent} from './components/home/home.component';
 import {PhotoListComponent} from './components/photo-list.ts/photo-list.component';
+import {CheckboxSetupComponent} from './components/setup/setup-group/checkbox-setup/checkbox-setup.component';
+import {DirectorySetupComponent} from './components/setup/setup-group/directory-setup/directory-setup.component';
+import {FileSetupComponent} from './components/setup/setup-group/file-setup/file-setup.component';
+import {MultiSelectionSetupComponent} from './components/setup/setup-group/multi-selection-setup/multi-selection-setup.component';
+import {SelectionSetupComponent} from './components/setup/setup-group/selection-setup/selection-setup.component';
+import {SetupGroupComponent} from './components/setup/setup-group/setup-group.component';
+import {TextSetupComponent} from './components/setup/setup-group/text-setup/text-setup.component';
+import {TextsareaSetupComponent} from './components/setup/setup-group/textsarea-setup/textsarea-setup.component';
 import {SetupComponent} from './components/setup/setup.component';
 import {CollageImageComponent} from './layouts/collage-layout/collage-image/collage-image.component';
 
@@ -31,10 +39,10 @@ import {MaterialModule} from './material/material.module';
 import {ElectronService} from './providers/electron.service';
 import {FilepickerService} from './providers/filepicker.service';
 import {IpcRendererService} from './providers/ipc.renderer.service';
+import {CountdownComponent} from './shared/countdown/countdown.component';
 import {MessageStripeComponent} from './shared/message-stripe/message-stripe.component';
 import {PhotoViewComponent} from './shared/photo-view/photo-view.component';
 import {reducers} from './store/app.reducer';
-import { CountdownComponent } from './shared/countdown/countdown.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -63,6 +71,14 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     CollageImageComponent,
     PhotoListComponent,
     CountdownComponent,
+    SetupGroupComponent,
+    SelectionSetupComponent,
+    DirectorySetupComponent,
+    FileSetupComponent,
+    CheckboxSetupComponent,
+    MultiSelectionSetupComponent,
+    TextsareaSetupComponent,
+    TextSetupComponent,
   ],
   imports: [
     CommonModule,

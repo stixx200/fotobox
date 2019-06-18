@@ -1,49 +1,35 @@
+export interface Color {
+  r: number;
+  g: number;
+  b: number;
+  alpha?: number;
+}
+
 export interface Border {
-  colors: { r: number, g: number, b: number },
+  background: Color;
   top: number;
   bottom: number;
   left: number;
   right: number;
 }
 
-export enum TEXT_ALIGN {
-  CENTER,
-  LEFT,
-}
-
-export interface SpaceStyle {
-  padding?: number;
-  paddingLeft?: number;
-  paddingRight?: number;
-  paddingTop?: number;
-  paddingBottom?: number;
-  'border-radius'?: number;
+export interface PhotoSpace {
+  type: 'photo';
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  border?: Border;
   rotation?: number;
-  textColor?: string;
-  fontSize?: number;
-  lineSpacing?: number;
-  textAlign?: TEXT_ALIGN;
 }
 
-export interface CollageText {
-  lines: string[];
-}
+export type Space = PhotoSpace;
 
 export interface TemplateInterface {
   id: string;
-  total_width: number;
-  total_height: number;
+  width: number;
+  height: number;
+  spaces: Space[];
   background?: string;
-  border: Border;
-  font?: string;
-  spaces: {
-    type: 'text' | 'photo' | 'brand';
-    value?: string;
-    description: string;
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-    style?: SpaceStyle;
-  }[];
+  border?: Border;
 }

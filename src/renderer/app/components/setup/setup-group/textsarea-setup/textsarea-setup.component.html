@@ -1,0 +1,7 @@
+<mat-form-field *ngFor="let text of (config.texts | async); let i = index;">
+  <textarea (change)="onTextChanged(i, $event.srcElement.value)"
+            [ngModel]="text"
+            [placeholder]="config.title | translate"
+            matInput
+            name="text"></textarea>
+</mat-form-field>

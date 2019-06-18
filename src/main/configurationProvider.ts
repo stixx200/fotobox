@@ -1,9 +1,11 @@
 import {ipcMain} from 'electron';
-import {MainApplicationConfiguration, TOPICS} from './constants';
 import {CameraProvider} from './cameras/camera.provider';
+import {CollageMaker} from './collage-maker';
+import {MainApplicationConfiguration, TOPICS} from './constants';
 
-interface ConfigurationProviderExternals {
+export interface ConfigurationProviderExternals {
   cameraProvider: CameraProvider;
+  collageMaker: CollageMaker;
 }
 
 export class ConfigurationProvider {
@@ -20,6 +22,7 @@ export class ConfigurationProvider {
   sendConfiguration(event: { returnValue: MainApplicationConfiguration }) {
     event.returnValue = {
       cameraDrivers: this.externals.cameraProvider.getCameraDriverNames(),
+      templates: this.externals.collageMaker.getTemplates(),
     };
   }
 }

@@ -2,6 +2,7 @@ import {ipcMain} from 'electron';
 import {FotoboxMain} from './app';
 import {ClientProxy} from './client.proxy';
 import {TOPICS} from './constants';
+import {FotoboxError} from './error/fotoboxError';
 
 const logger = require('logger-winston').getLogger('shutdownHandler');
 
@@ -17,25 +18,25 @@ export class ShutdownHandler {
     ipcMain.removeListener(TOPICS.STOP_APPLICATION, this.exitApplication);
   }
 
-  publishError(error) {
+  publishError(error: FotoboxError) {
     logger.error('Error occured. Deinit application. Restart required.', error.stack);
-    this.exitApplication();
+    this.exitApplication(error);
   }
 
-  exitApplication() {
+  exitApplication(error?: FotoboxError) {
     Promise.resolve()
       .then(() => {
         logger.warn('Deinitialize Application.');
         return this.app.deinitApplication();
       })
-      .catch((error) => {
-        logger.error('Deinitialization of application failed: ', error);
+      .catch((err) => {
+        logger.error('Deinitialization of application failed: ', err);
       })
       .then(() => {
-        this.client.send(TOPICS.STOP_APPLICATION);
+        this.client.send(TOPICS.STOP_APPLICATION, error.message);
       })
-      .catch((error) => {
-        logger.error('Sending stop event failed. ', error);
+      .catch((err) => {
+        logger.error('Sending stop event failed. ', err);
       });
   }
 }

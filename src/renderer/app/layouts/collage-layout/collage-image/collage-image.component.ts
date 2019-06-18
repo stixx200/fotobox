@@ -1,9 +1,7 @@
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
-import {EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
-import {Component, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {CollageText} from '../../../../../main/collage-maker/template.interface';
 import {TOPICS} from '../../../../../main/constants';
 import {IpcRendererService} from '../../../providers/ipc.renderer.service';
 
@@ -19,7 +17,6 @@ export class CollageImageComponent implements OnInit, OnDestroy {
   collagePhoto: string | SafeResourceUrl;
 
   @Output() done = new EventEmitter<string>();
-  @Input() collageTexts: CollageText[];
   @Input() templateId: string;
 
   constructor(private ipcRenderer: IpcRendererService,
@@ -30,8 +27,9 @@ export class CollageImageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log(`initializing template: ${this.templateId}`);
     this.ipcRenderer.on(TOPICS.CREATE_COLLAGE, this.onCollageRendered);
-    this.ipcRenderer.send(TOPICS.INIT_COLLAGE, this.templateId, this.collageTexts);
+    this.ipcRenderer.send(TOPICS.INIT_COLLAGE, this.templateId);
     this.collagePhoto = collagePhoto;
   }
 

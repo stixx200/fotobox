@@ -4,14 +4,18 @@ export interface State {
   cameraDrivers: string[];
   selectedDriver: string;
   irfanViewPath: string;
+  usePrinter: boolean;
   photoDir: string;
+  sonyPassword: string;
 }
 
 const initialState: State = {
   cameraDrivers: [],
   selectedDriver: null,
   irfanViewPath: '',
+  usePrinter: true,
   photoDir: '',
+  sonyPassword: '',
 };
 
 export function mainConfigurationReducer(state = initialState, action: MainConfigurationActions) {
@@ -31,10 +35,20 @@ export function mainConfigurationReducer(state = initialState, action: MainConfi
         ...state,
         irfanViewPath: action.payload,
       };
+    case MainConfigurationActionTypes.SET_USE_PRINTER:
+      return {
+        ...state,
+        usePrinter: action.payload,
+      };
     case MainConfigurationActionTypes.SET_PHOTO_DIR:
       return {
         ...state,
         photoDir: action.payload,
+      };
+    case MainConfigurationActionTypes.SET_SONYPASSWORD:
+      return {
+        ...state,
+        sonyPassword: action.payload,
       };
 
     default:

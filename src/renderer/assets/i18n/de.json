@@ -2,19 +2,24 @@
   "PAGES": {
     "SETUP": {
       "TITLE": "Einstellungen",
+      "GENERAL": "General",
+      "CAMERA": "Kamera",
+      "ADVANCED": "Erweitert",
       "BUTTON": {
         "NEXT": "Fotobox starten"
       },
-      "EXTENDED": "erweiterte Ansicht",
       "SYSTEM": {
-        "TITLE": "System",
         "CAMERA_DRIVERS": {
           "TITLE": "verwendete Kamera",
           "sony": "Sony",
           "demo": "Demo Kamera"
         },
+        "USE_PRINTER": "Fotodruck aktivieren",
         "IRFANVIEW_PATH": "Pfad zur IrfanView.exe",
-        "PHOTO_DIRECTORY": "Speicherort Fotos"
+        "PHOTO_DIRECTORY": "Speicherort Fotos",
+        "SONY": {
+          "PASSWORD": "Wifi Passwort der Sony Kamera"
+        }
       },
       "FOTOBOX": {
         "TITLE": "Fotobox",
@@ -22,7 +27,12 @@
           "TITLE": "verwendete Layouts",
           "SINGLE": "Einzelbild",
           "COLLAGE": "Collage",
-          "COLLAGE-TEXT": "Collage-Text"
+          "COLLAGE-TEXT": "Collage-Text",
+          "COLLAGE-TEMPLATE": "Collage Template",
+          "COLLAGE-TEMPLATE-NAMES": {
+            "default": "Standard",
+            "christina_martin_2019": "Christina & Martin"
+          }
         },
         "MODAL": {
           "TITLE": "Anwendung wird gestarted...",
@@ -42,11 +52,13 @@
   },
   "YES": "ja",
   "NO": "nein",
+  "NEXT": "weiter",
   "PRINT_QUESTION": "Ausdrucken?",
   "USE_QUESTION": "Für collage verwenden?",
   "LAYOUTS": {
     "READY": "Bitte den Auslöser betätigen!",
     "READY_TAKE_PICTURE": "Bildschirm berühren um Foto aufzunehmen",
     "ABORT": "zurück"
-  }
+  },
+  "MAIN.CAMERAS.SONY.PASSWORD_MISSING": "Das Starten der Fotobox ist fehlgeschlagen, da kein WIFI Passwort für die Sony Kamera gesetzt ist."
 }

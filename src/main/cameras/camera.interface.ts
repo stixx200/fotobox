@@ -5,6 +5,7 @@ import {PhotoHandler} from '../photo.handler';
 export interface CameraInitConfiguration {
   photoDir: string;
   wifiControl: boolean;
+  sonyPassword: string;
 }
 
 export interface CameraInterface {

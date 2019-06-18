@@ -1,0 +1,9 @@
+<mat-form-field>
+  <input (click)="openPicker($event.target.value)"
+         [name]="config.title"
+         [ngModel]="(config.value | async)"
+         class="input"
+         matInput
+         placeholder="{{ config.title | translate}}"
+         title=""/>
+</mat-form-field>

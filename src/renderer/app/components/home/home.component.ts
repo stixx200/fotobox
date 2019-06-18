@@ -1,14 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NavigationExtras, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
+import {take} from 'rxjs/operators';
 import {TOPICS} from '../../../../main/constants';
-import {AppConfig} from '../../../environments/environment';
 import * as fromCollageLayout from '../../layouts/collage-layout/store/collage-layout.reducer';
 import * as fromSingleLayout from '../../layouts/single-layout/store/single-layout.reducer';
 import {IpcRendererService} from '../../providers/ipc.renderer.service';
-import * as fromApp from '../../store/app.reducer';
 import {LiveViewService} from '../../providers/live-view.service';
+import * as fromApp from '../../store/app.reducer';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +35,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.ipcRenderer.on(TOPICS.GOTO_PHOTOLIST, this.gotoPhotolist);
 
     this.liveViewService.startLiveView();
+
+    this.collageLayoutState.pipe(take(1)).subscribe(({active}) => {
+      if (!active) {
+        this.router.navigate(['/layouts/single']);
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -48,6 +54,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onNewPhoto(event, photo) {
     console.debug('Received photo. switch to single layout.');
-    this.router.navigate(['/layouts/single', { photo }]);
+    this.router.navigate(['/layouts/single', {photo}]);
   }
 }

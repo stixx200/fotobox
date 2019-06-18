@@ -1,29 +1,27 @@
-import './initialize-logger';
+import {ipcMain} from 'electron';
 
 import * as util from 'util';
-import {ipcMain} from 'electron';
 import {CameraProvider, CameraProviderInitConfig} from './cameras/camera.provider';
+import {ClientProxy} from './client.proxy';
 import {CollageMaker} from './collage-maker';
+import {ConfigurationProvider} from './configurationProvider';
+import {TOPICS} from './constants';
+import {FotoboxError} from './error/fotoboxError';
+import './initialize-logger';
 import {PhotoHandler} from './photo.handler';
+import {PhotoProtocol} from './photo.protocol';
 import {Printer, PrinterConfiguration} from './printer';
 import {ShortcutHandler} from './shortcut.handler';
 import {ShutdownHandler} from './shutdown.handler';
-import {ClientProxy} from './client.proxy';
-import {ConfigurationProvider} from './configurationProvider';
-import {TOPICS} from './constants';
-import {PhotoProtocol} from './photo.protocol';
 import BrowserWindow = Electron.BrowserWindow;
 
 const logger = require('logger-winston').getLogger('app');
 
-type ApplicationInitConfiguration = CameraProviderInitConfig & PrinterConfiguration;
+export type ApplicationInitConfiguration = CameraProviderInitConfig & PrinterConfiguration;
 
 export class FotoboxMain {
   private isInitialized = false;
   private cameraProvider = new CameraProvider();
-  private configurationProvider = new ConfigurationProvider({
-    cameraProvider: this.cameraProvider,
-  });
   private clientProxy = new ClientProxy(this.window.webContents);
   private shutdownHandler = new ShutdownHandler(this.clientProxy, this);
   private photoProtocol = new PhotoProtocol();
@@ -31,6 +29,10 @@ export class FotoboxMain {
   private shortcutHandler = new ShortcutHandler(this.window, this.shutdownHandler, this.clientProxy);
   private printer = new Printer();
   private photoHandler = new PhotoHandler();
+  private configurationProvider = new ConfigurationProvider({
+    cameraProvider: this.cameraProvider,
+    collageMaker: this.collageMaker,
+  });
 
   constructor(private window: BrowserWindow) {
     this.initApplication = this.initApplication.bind(this);
@@ -76,7 +78,7 @@ export class FotoboxMain {
       }
       logger.error('Initialization of application failed: ', error);
       this.clientProxy.send(TOPICS.INIT_STATUSMESSAGE, `An error occured. Please try again. Error: ${error}`);
-      this.shutdownHandler.publishError(error);
+      this.shutdownHandler.publishError(new FotoboxError(error));
     }
   }
 

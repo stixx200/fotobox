@@ -1,9 +1,15 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
+import {take} from 'rxjs/operators';
 import {TOPICS} from '../../../../main/constants';
 import {IpcRendererService} from '../../providers/ipc.renderer.service';
-import {PhotoviewConfiguration} from '../../shared/photo-view/photo-view.component';
 import {CountdownComponent} from '../../shared/countdown/countdown.component';
+import {PhotoviewConfiguration} from '../../shared/photo-view/photo-view.component';
+import * as fromApp from '../../store/app.reducer';
+import * as fromMainConfiguration from '../../store/mainConfiguration.reducers';
+import * as fromCollageLayout from '../collage-layout/store/collage-layout.reducer';
 
 @Component({
   selector: 'app-single-layout',
@@ -11,7 +17,16 @@ import {CountdownComponent} from '../../shared/countdown/countdown.component';
   styleUrls: ['./single-layout.component.scss'],
 })
 export class SingleLayoutComponent implements OnInit, OnDestroy {
-  photoviewConfiguration: PhotoviewConfiguration = {
+  photoviewConfiguration: PhotoviewConfiguration;
+  nextDialog: PhotoviewConfiguration = {
+    title: '',
+    buttons: [{
+      text: 'NEXT',
+      icon: '',
+      callback: () => this.exit(),
+    }],
+  };
+  printDialog: PhotoviewConfiguration = {
     title: 'PRINT_QUESTION',
     buttons: [{
       text: 'YES',
@@ -25,12 +40,15 @@ export class SingleLayoutComponent implements OnInit, OnDestroy {
   };
 
   photo: string;
+  mainConfigurationState: Observable<fromMainConfiguration.State> = this.store.select('mainConfiguration');
+  collageLayoutState: Observable<fromCollageLayout.State> = this.store.select('collageLayout');
 
   @ViewChild('countdown') countdown: CountdownComponent;
 
   constructor(private router: Router,
               private ipcRenderer: IpcRendererService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private store: Store<fromApp.AppState>) {
     this.exit = this.exit.bind(this);
     this.print = this.print.bind(this);
     this.onNewPhoto = this.onNewPhoto.bind(this);
@@ -50,7 +68,15 @@ export class SingleLayoutComponent implements OnInit, OnDestroy {
   }
 
   onNewPhoto(event, photo) {
-    this.photo = photo;
+    this.mainConfigurationState.pipe(take(1)).subscribe(({usePrinter}) => {
+      console.log('showing new photo');
+      if (usePrinter) {
+        this.photoviewConfiguration = this.printDialog;
+      } else {
+        this.photoviewConfiguration = this.nextDialog;
+      }
+      this.photo = photo;
+    });
   }
 
   takePicture() {

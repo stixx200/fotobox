@@ -1,0 +1,5 @@
+<mat-checkbox (change)="config.onChanged($event.checked)" [ngModel]="(config.state | async)"
+              color="primary"
+              name="config.title">
+  {{ config.title | translate}}
+</mat-checkbox>

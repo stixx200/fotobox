@@ -1,8 +1,8 @@
-import path = require('path');
-import fs = require('fs');
+const path = require('path');
+const fs = require('fs');
 
-import {ipcMain, Event} from 'electron';
 import {execFile} from 'child_process';
+import {Event, ipcMain} from 'electron';
 import {TOPICS} from './constants';
 
 const logger = require('logger-winston').getLogger('printer');

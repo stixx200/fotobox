@@ -1,15 +1,17 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
+import {take} from 'rxjs/operators';
 import {TOPICS} from '../../../../main/constants';
 import {IpcRendererService} from '../../providers/ipc.renderer.service';
+import {CountdownComponent} from '../../shared/countdown/countdown.component';
 import {PhotoviewConfiguration} from '../../shared/photo-view/photo-view.component';
 
 import * as fromApp from '../../store/app.reducer';
+import * as fromMainConfiguration from '../../store/mainConfiguration.reducers';
 import {CollageImageComponent} from './collage-image/collage-image.component';
 import * as fromCollage from './store/collage-layout.reducer';
-import {CountdownComponent} from '../../shared/countdown/countdown.component';
 
 @Component({
   selector: 'app-collage-layout',
@@ -18,13 +20,44 @@ import {CountdownComponent} from '../../shared/countdown/countdown.component';
 })
 export class CollageLayoutComponent implements OnInit, OnDestroy {
   photoviewConfiguration: PhotoviewConfiguration;
-
+  nextDialog: PhotoviewConfiguration = {
+    title: '',
+    buttons: [{
+      text: 'NEXT',
+      icon: '',
+      callback: () => this.exit(),
+    }],
+  };
+  printDialog: PhotoviewConfiguration = {
+    title: 'PRINT_QUESTION',
+    buttons: [{
+      text: 'YES',
+      icon: '',
+      callback: () => this.print(),
+    }, {
+      text: 'NO',
+      icon: '',
+      callback: () => this.exit(),
+    }],
+  };
   @ViewChild('imageComponent') collageComponent: CollageImageComponent;
   @ViewChild('countdown') countdown: CountdownComponent;
-
+  mainConfigurationState: Observable<fromMainConfiguration.State>;
   collageState: Observable<fromCollage.State>;
   photos: string[];
   currentPhoto: string;
+  usePhotoDialog: PhotoviewConfiguration = {
+    title: 'USE_QUESTION',
+    buttons: [{
+      text: 'YES',
+      icon: '',
+      callback: () => this.useCurrentPhoto(),
+    }, {
+      text: 'NO',
+      icon: '',
+      callback: () => (this.currentPhoto = null),
+    }],
+  };
   topMessage = 'LAYOUTS.READY_TAKE_PICTURE';
   bottomMessage = 'LAYOUTS.ABORT';
 
@@ -38,6 +71,7 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
     console.debug('Initialize collage component');
     this.reset();
     this.collageState = this.store.select('collageLayout');
+    this.mainConfigurationState = this.store.select('mainConfiguration');
     this.ipcRenderer.on(TOPICS.PHOTO, this.onNewPhoto);
   }
 
@@ -77,35 +111,19 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   }
 
   onCollageDone(collage: string) {
-    this.photoviewConfiguration = {
-      title: 'PRINT_QUESTION',
-      buttons: [{
-        text: 'YES',
-        icon: '',
-        callback: () => this.print(),
-      }, {
-        text: 'NO',
-        icon: '',
-        callback: () => this.exit(),
-      }],
-    };
-    this.currentPhoto = collage;
+    this.mainConfigurationState.pipe(take(1)).subscribe(({usePrinter}) => {
+      if (usePrinter) {
+        this.photoviewConfiguration = this.printDialog;
+      } else {
+        this.photoviewConfiguration = this.nextDialog;
+      }
+      this.currentPhoto = collage;
+    });
   }
 
   private onNewPhoto(event: Event, photoUrl: string) {
     console.info('Show photo and check if it should be added to collage: ' + photoUrl);
-    this.photoviewConfiguration = {
-      title: 'USE_QUESTION',
-      buttons: [{
-        text: 'YES',
-        icon: '',
-        callback: () => this.useCurrentPhoto(),
-      }, {
-        text: 'NO',
-        icon: '',
-        callback: () => (this.currentPhoto = null),
-      }],
-    };
+    this.photoviewConfiguration = this.usePhotoDialog;
     this.currentPhoto = photoUrl;
   }
 
