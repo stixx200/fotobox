@@ -1,5 +1,6 @@
-import * as path from 'path';
 import {protocol, RegisterFileProtocolRequest} from 'electron';
+import * as path from 'path';
+import {FotoboxError} from './error/fotoboxError';
 import {ShutdownHandler} from './shutdown.handler';
 
 const logger = require('logger-winston').getLogger('photoProtocol');
@@ -22,7 +23,7 @@ export class PhotoProtocol {
       (error) => {
         if (error) {
           logger.error('Failed to register protocol');
-          shutdownHandler.publishError(error);
+          shutdownHandler.publishError(new FotoboxError(error));
         }
         logger.log('photo protocol registered successfully.');
       });

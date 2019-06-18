@@ -4,6 +4,7 @@ import {flatMap} from 'rxjs/operators';
 import {promisify} from 'util';
 import * as wifi from 'wifi-control';
 import {ClientProxy} from '../../client.proxy';
+import {FotoboxError} from '../../error/fotoboxError';
 import {PhotoHandler} from '../../photo.handler';
 import {ShutdownHandler} from '../../shutdown.handler';
 import {CameraInitConfiguration, CameraInterface} from '../camera.interface';
@@ -34,6 +35,7 @@ export class SonyCamera implements CameraInterface {
   private abortSearching = false;
 
   private config: CameraInitConfiguration;
+  private wifiConnected = false;
 
   /**
    * Initializes camera
@@ -44,7 +46,8 @@ export class SonyCamera implements CameraInterface {
   async init(config: CameraInitConfiguration,
              externals: { clientProxy: ClientProxy, shutdownHandler: ShutdownHandler, photosaver: PhotoHandler }) {
     if (config.wifiControl && !config.sonyPassword) {
-      throw new Error('Can\'t start application, because WIFI Control is enabled, but no Sony WIFI Password is set.');
+      throw new FotoboxError('Can\'t start application, because WIFI Control is enabled, but no Sony WIFI Password is set.',
+        'MAIN.CAMERAS.SONY.PASSWORD_MISSING');
     }
 
     this.abortSearching = false;
@@ -83,11 +86,12 @@ export class SonyCamera implements CameraInterface {
     this.camera = null;
 
     // disconnect from camera
-    if (this.config.wifiControl) {
+    if (this.wifiConnected) {
       const {success, msg} = await promisify(wifi.resetWiFi)();
       if (!success) {
         logger.error(msg);
       }
+      this.wifiConnected = false;
     }
   }
 
@@ -171,6 +175,7 @@ export class SonyCamera implements CameraInterface {
       logger.error(connectMsg);
       throw new Error(connectMsg);
     }
+    this.wifiConnected = true;
   }
 
   /**

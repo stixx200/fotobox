@@ -2,6 +2,7 @@ import * as http from 'http';
 import {ClientRequest, IncomingMessage} from 'http';
 import * as _ from 'lodash';
 import {Observable, Observer, Subject} from 'rxjs';
+import {FotoboxError} from '../../error/fotoboxError';
 import {ShutdownHandler} from '../../shutdown.handler';
 import {CameraProxy} from './camera.proxy';
 import {LiveStreamParser} from './liveStream.parser';
@@ -116,7 +117,7 @@ export class SonyCameraCommunication {
         }
         logger.error(`An error occured while getEvent request to camera: ${JSON.stringify(error)}`);
         this.statusObservation = false;
-        this.shutdownHandler.publishError(error);
+        this.shutdownHandler.publishError(new FotoboxError(error));
       }
     } while (this.statusObservation);
   }

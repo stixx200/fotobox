@@ -1,4 +1,5 @@
 import {Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {MatSnackBar, MatSnackBarRef, SimpleSnackBar} from '@angular/material';
 import {SafeResourceUrl} from '@angular/platform-browser';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
@@ -21,6 +22,7 @@ import {SetCameraDrivers} from './store/mainConfiguration.actions';
 })
 export class AppComponent implements OnInit, OnDestroy {
   liveViewSubscription: Subscription;
+  snackBarRef: MatSnackBarRef<SimpleSnackBar>;
 
   @ViewChild('page')
   page: ElementRef;
@@ -31,7 +33,8 @@ export class AppComponent implements OnInit, OnDestroy {
               private store: Store<fromApp.AppState>,
               private router: Router,
               private liveViewService: LiveViewService,
-              private renderer: Renderer2) {
+              private renderer: Renderer2,
+              private snackBar: MatSnackBar) {
     this.onApplicationStopped = this.onApplicationStopped.bind(this);
 
     translate.setDefaultLang('de');
@@ -65,8 +68,14 @@ export class AppComponent implements OnInit, OnDestroy {
     this.ipcRenderer.removeListener(TOPICS.STOP_APPLICATION, this.onApplicationStopped);
   }
 
-  onApplicationStopped() {
-    console.warn('Application has stopped. Goto settings.');
+  onApplicationStopped(event, errorCode?: string) {
+    console.warn('Application has stopped. Goto settings. Error was: ' + JSON.stringify(errorCode));
     this.router.navigate(['/']).catch(console.error);
+    if (errorCode) {
+      if (this.snackBarRef) {
+        this.snackBarRef.dismiss();
+      }
+      this.snackBarRef = this.snackBar.open(errorCode, 'ok');
+    }
   }
 }

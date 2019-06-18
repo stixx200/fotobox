@@ -59,5 +59,6 @@
     "READY": "Bitte den Auslöser betätigen!",
     "READY_TAKE_PICTURE": "Bildschirm berühren um Foto aufzunehmen",
     "ABORT": "zurück"
-  }
+  },
+  "MAIN.CAMERAS.SONY.PASSWORD_MISSING": "Das Starten der Fotobox ist fehlgeschlagen, da kein WIFI Passwort für die Sony Kamera gesetzt ist."
 }

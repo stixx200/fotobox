@@ -6,6 +6,7 @@ import {ClientProxy} from './client.proxy';
 import {CollageMaker} from './collage-maker';
 import {ConfigurationProvider} from './configurationProvider';
 import {TOPICS} from './constants';
+import {FotoboxError} from './error/fotoboxError';
 import './initialize-logger';
 import {PhotoHandler} from './photo.handler';
 import {PhotoProtocol} from './photo.protocol';
@@ -77,7 +78,7 @@ export class FotoboxMain {
       }
       logger.error('Initialization of application failed: ', error);
       this.clientProxy.send(TOPICS.INIT_STATUSMESSAGE, `An error occured. Please try again. Error: ${error}`);
-      this.shutdownHandler.publishError(error);
+      this.shutdownHandler.publishError(new FotoboxError(error));
     }
   }
 

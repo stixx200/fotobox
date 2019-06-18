@@ -11,6 +11,7 @@ import {
   MatOptionModule,
   MatSelectModule,
   MatSlideToggleModule,
+  MatSnackBarModule,
   MatTabsModule,
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -29,6 +30,7 @@ const usedModules = [
   MatCardModule,
   MatGridListModule,
   MatTabsModule,
+  MatSnackBarModule,
 ];
 
 @NgModule({
