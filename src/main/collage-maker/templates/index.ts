@@ -1,7 +1,5 @@
-import defaultTemplate from './default';
-import defaultMoreTextTemplate from './default_moreText';
+import christina_martin_2019 from './christina_martin_2019/christina_martin_2019';
 
 export default {
-  default: defaultTemplate,
-  defaultMoreText: defaultMoreTextTemplate,
+  christina_martin_2019: christina_martin_2019,
 };

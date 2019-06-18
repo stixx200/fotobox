@@ -13,7 +13,6 @@
 <app-collage-image
   #imageComponent
   [hidden]="currentPhoto"
-  [collageTexts]="(collageState | async).text"
   [templateId]="(collageState | async).templateId"
   (done)="onCollageDone($event)"
   class="front">

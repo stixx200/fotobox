@@ -181,16 +181,16 @@ export class SetupComponent implements OnInit, OnDestroy {
         },
       });
 
-      this.setupConfigs.general.push({
-        title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEXT',
-        type: 'textsarea',
-        texts: this.collageLayoutState.pipe(
-          map((state: fromCollageLayout.State) => state.text.map(({lines}) => lines.join('\n'))),
-        ),
-        onChanged: (texts) => {
-          this.store.dispatch(new collageLayoutActions.SetText(texts.map(text => ({lines: text.split('\n')}))));
-        },
-      });
+      // this.setupConfigs.general.push({
+      //   title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEXT',
+      //   type: 'textsarea',
+      //   texts: this.collageLayoutState.pipe(
+      //     map((state: fromCollageLayout.State) => state.text.map(({lines}) => lines.join('\n'))),
+      //   ),
+      //   onChanged: (texts) => {
+      //     this.store.dispatch(new collageLayoutActions.SetText(texts.map(text => ({lines: text.split('\n')}))));
+      //   },
+      // });
     }
   }
 

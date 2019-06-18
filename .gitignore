@@ -3,7 +3,7 @@ photo_store
 
 # compiled output
 /renderer_dist
-/build-output
+/main_dist
 
 # dependencies
 /node_modules
@@ -15,7 +15,6 @@ photo_store
 .c9/
 *.launch
 .settings/
-*.sublime-workspace
 
 # IDE - VSCode
 .vscode/*
@@ -39,8 +38,8 @@ testem.log
 /e2e/*.map
 
 # System Files
-.DS_Store
 Thumbs.db
 
 /src/**/*.js
 /src/**/*.map
+/src/**/*.d.ts

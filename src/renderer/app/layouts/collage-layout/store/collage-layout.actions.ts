@@ -1,18 +1,10 @@
 import {Action} from '@ngrx/store';
-import {CollageText} from '../../../../../main/collage-maker/template.interface';
 
 export enum CollageLayoutActionTypes {
   SET_TEXT = '[CollageLayout] SetText',
   SET_ACTIVE = '[CollageLayout] SetActive',
   SET_TEMPLATES = '[CollageLayout] SetTemplates',
   SET_TEMPLATE = '[CollageLayout] SetTemplate',
-}
-
-export class SetText implements Action {
-  readonly type = CollageLayoutActionTypes.SET_TEXT;
-
-  constructor(public payload: CollageText[]) {
-  }
 }
 
 export class SetActive implements Action {
@@ -36,4 +28,4 @@ export class SetTemplate implements Action {
   }
 }
 
-export type CollageLayoutActions = SetText | SetActive | SetTemplates | SetTemplate;
+export type CollageLayoutActions = SetActive | SetTemplates | SetTemplate;

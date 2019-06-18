@@ -3,7 +3,7 @@ import {CameraProvider} from './cameras/camera.provider';
 import {CollageMaker} from './collage-maker';
 import {MainApplicationConfiguration, TOPICS} from './constants';
 
-interface ConfigurationProviderExternals {
+export interface ConfigurationProviderExternals {
   cameraProvider: CameraProvider;
   collageMaker: CollageMaker;
 }
