@@ -2,13 +2,13 @@ import {globalShortcut} from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import {Observable, Subject} from 'rxjs';
-import {flatMap} from 'rxjs/operators';
-const logger = require('logger-winston').getLogger('camera.demo');
-
+import {switchMap} from 'rxjs/operators';
 import {ClientProxy} from '../../client.proxy';
 import {PhotoHandler} from '../../photo.handler';
 import {ShutdownHandler} from '../../shutdown.handler';
 import {CameraInitConfiguration, CameraInterface} from '../camera.interface';
+
+const logger = require('logger-winston').getLogger('camera.demo');
 
 /**
  * Demo Camera
@@ -18,6 +18,11 @@ export class DemoCamera implements CameraInterface {
 
   private liveViewSubject = new Subject<Buffer>();
   private picturesSubject = new Subject<Buffer>();
+
+  private giraffe = fs.readFileSync(path.join(__dirname, 'giraffe.jpg'));
+  private rabbit = fs.readFileSync(path.join(__dirname, 'rabbit.jpg'));
+  private currentPicture = this.rabbit;
+  private liveViewTimer: any;
 
   constructor() {
     this.takePicture = this.takePicture.bind(this);
@@ -42,15 +47,15 @@ export class DemoCamera implements CameraInterface {
    */
   async deinit() {
     globalShortcut.unregister('CmdOrCtrl+N');
+    this.stopLiveView();
   }
 
   /**
    * Takes a picture. The new picture is published via picture observer
    */
   takePicture(): void {
-    logger.info('Send new picture!');
-    const dummyPictureContent = fs.readFileSync(path.join(__dirname, 'dummy.jpg'));
-    this.picturesSubject.next(dummyPictureContent);
+    logger.info('Take picture and send to client.');
+    this.picturesSubject.next(this.currentPicture);
   }
 
   /**
@@ -59,6 +64,16 @@ export class DemoCamera implements CameraInterface {
    */
   observeLiveView(): Observable<Buffer> {
     logger.info('Observe live view');
+    this.liveViewTimer = setInterval(() => {
+      if (this.currentPicture === this.rabbit) {
+        this.currentPicture = this.giraffe;
+      } else {
+        this.currentPicture = this.rabbit;
+      }
+      this.liveViewSubject.next(this.currentPicture);
+    }, 2000);
+
+    setImmediate(() => this.liveViewSubject.next(this.currentPicture));
     return this.liveViewSubject;
   }
 
@@ -69,7 +84,9 @@ export class DemoCamera implements CameraInterface {
   observePictures(): Observable<string> {
     logger.info('Observe pictures');
     return this.picturesSubject.pipe(
-      flatMap((buffer: Buffer) => this.photosaver.saveBinaryCollage(buffer, '.jpg')),
+      switchMap((buffer: Buffer) => {
+        return this.photosaver.saveBinaryCollage(buffer, '.jpg');
+      }),
     );
   }
 
@@ -79,5 +96,6 @@ export class DemoCamera implements CameraInterface {
    */
   stopLiveView() {
     logger.info('Stop live view');
+    clearInterval(this.liveViewTimer);
   }
 }
