@@ -15,9 +15,17 @@ const logger = require('logger-winston').getLogger('camera.sony');
 const {Client: SsdpClient} = require('node-ssdp');
 
 const M_SEARCH_CAMERA = 'urn:schemas-sony-com:service:ScalarWebAPI:1';
-const SUPPORTED_CAMERA_NETWORKS = ['DIRECT-IGE0:ILCE-6000'];
+const SUPPORTED_CAMERA_NETWORKS = ['ILCE-6000'];
 
-const findSupportedNetwork = (networks) => _.find(networks, network => _.includes(SUPPORTED_CAMERA_NETWORKS, network.ssid)) || null;
+const findSupportedNetwork = (networks) => {
+  let found = null;
+  networks.forEach(network => {
+    if (!!_.find(SUPPORTED_CAMERA_NETWORKS, supportedNetwork => _.includes(network.ssid, supportedNetwork))) {
+      found = network;
+    }
+  });
+  return found;
+};
 
 /**
  * Sony Camera
@@ -161,20 +169,25 @@ export class SonyCamera implements CameraInterface {
         this.clientProxy.sendStatus(msg);
       }
 
-      logger.debug(`Available networks: ${_.map(networks, network => network.ssid)}`);
+      logger.info(`Available networks: ${_.map(networks, network => network.ssid)}`);
       sonyWifiInterface = findSupportedNetwork(networks);
     } while (sonyWifiInterface === null);
 
-    // connect to found camera network
-    const {
-      success: connectSuccess,
-      msg: connectMsg,
-    } = await promisify(wifi.connectToAP)({ssid: sonyWifiInterface.ssid, password: this.config.sonyPassword});
+    // check if we have to connect to the network or if we are already connected
+    const ifaceState = wifi.getIfaceState();
+    if (!ifaceState.success || ifaceState.connection !== 'connected' || ifaceState.ssid !== sonyWifiInterface.ssid) {
+      // connect to found camera network
+      const {
+        success: connectSuccess,
+        msg: connectMsg,
+      } = await promisify(wifi.connectToAP)({ssid: sonyWifiInterface.ssid, password: this.config.sonyPassword});
 
-    if (!connectSuccess) {
-      logger.error(connectMsg);
-      throw new Error(connectMsg);
+      if (!connectSuccess) {
+        logger.error(connectMsg);
+        throw new Error(connectMsg);
+      }
     }
+
     this.wifiConnected = true;
   }
 

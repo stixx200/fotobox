@@ -22,7 +22,7 @@ export class CameraProxy {
         version,
       });
     if (body.error) {
-      throw new Error(`Error occured while requesting: '${service.url}' ${body.error}`);
+      throw new Error(`Error occured while requesting '${service.url} - method: ${method} - params: ${JSON.stringify(params)}': ${body.error}`);
     }
     return body.result;
   }

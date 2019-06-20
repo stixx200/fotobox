@@ -73,7 +73,7 @@ export class SetupComponent implements OnInit, OnDestroy {
         irfanViewPath: data.irfanViewPath,
         photoDir: data.photoDir,
         sonyPassword: data.sonyPassword,
-        wifiControl: true,
+        wifiControl: data.wifiControl,
       };
     });
 
@@ -224,13 +224,26 @@ export class SetupComponent implements OnInit, OnDestroy {
     const selectedDriver = this.getObservableValue(this.mainConfigurationState, 'selectedDriver');
     if (selectedDriver === 'sony') {
       this.setupConfigs.camera.push({
-        type: 'text',
-        title: 'PAGES.SETUP.SYSTEM.SONY.PASSWORD',
-        value: this.mainConfigurationState.pipe(map((state: fromMainConfiguration.State) => state.sonyPassword)),
-        onChanged: (password) => {
-          this.store.dispatch(new mainConfigurationActions.SetSonyPassword(password));
+        type: 'checkbox',
+        title: 'PAGES.SETUP.SYSTEM.SONY.AUTOCONNECT',
+        state: this.mainConfigurationState.pipe(map((state: fromMainConfiguration.State) => state.wifiControl)),
+        onChanged: (state) => {
+          this.store.dispatch(new mainConfigurationActions.SetWifiControl(state));
+          this.initConfigs();
         },
       });
+
+      const wifiControl = this.getObservableValue(this.mainConfigurationState, 'wifiControl');
+      if (wifiControl) {
+        this.setupConfigs.camera.push({
+          type: 'text',
+          title: 'PAGES.SETUP.SYSTEM.SONY.PASSWORD',
+          value: this.mainConfigurationState.pipe(map((state: fromMainConfiguration.State) => state.sonyPassword)),
+          onChanged: (password) => {
+            this.store.dispatch(new mainConfigurationActions.SetSonyPassword(password));
+          },
+        });
+      }
     }
   }
 

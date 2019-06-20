@@ -20,6 +20,11 @@ const logger = require('logger-winston').getLogger('app');
 
 export type ApplicationInitConfiguration = CameraProviderInitConfig & PrinterConfiguration & CollageMakerConfiguration;
 
+process.on('unhandledRejection', (error) => {
+  logger.error(`Catched unhandled Rejection: ${error.stack}`);
+  throw error;
+});
+
 export class FotoboxMain {
   private isInitialized = false;
   private cameraProvider = new CameraProvider();
@@ -73,7 +78,7 @@ export class FotoboxMain {
       this.isInitialized = true;
       this.clientProxy.send(TOPICS.START_APPLICATION);
     } catch (error) {
-      if (error.message.match(/searching for wifi aborted/)) {
+      if (error.message && error.message.match(/searching for wifi aborted/)) {
         logger.info('Initializing application aborted. ' + error);
       }
       logger.error('Initialization of application failed: ', error);

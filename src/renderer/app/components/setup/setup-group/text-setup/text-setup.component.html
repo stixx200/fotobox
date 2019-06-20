@@ -1,5 +1,5 @@
 <mat-form-field>
-  <input (ngModelChange)="config.onChanged($event.target.value)"
+  <input (ngModelChange)="config.onChanged($event)"
          [name]="config.title"
          [ngModel]="(config.value | async)"
          class="input"

@@ -21,7 +21,8 @@
         "TEMPLATES_DIRECTORY": "Pfad zu Collage-Templates",
         "UPDATE_TEMPLATES": "Templates erneut einlesen",
         "SONY": {
-          "PASSWORD": "Wifi Passwort der Sony Kamera"
+          "PASSWORD": "Wifi Passwort der Sony Kamera",
+          "AUTOCONNECT": "Wifi Verbindung automatisch herstellen"
         },
         "SHUTTER_TIMEOUT": "Auslösezeit"
       },

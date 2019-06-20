@@ -97,7 +97,14 @@ export class SonyCameraCommunication {
 
     // set shoot mode to still pictures (no movies)
     setTimeout(async () => {
-      await this.cameraProxy.call('camera', 'setShootMode', ['still'], '1.0');
+      try {
+        const shootmode = await this.cameraProxy.call('camera', 'getShootMode', [], '1.0');
+        if (shootmode[0] !== 'still') {
+          await this.cameraProxy.call('camera', 'setShootMode', ['still'], '1.0');
+        }
+      } catch (error) {
+        logger.error('failed to set shootmode to \'still\': ' + error.stack);
+      }
     }, 1000);
   }
 

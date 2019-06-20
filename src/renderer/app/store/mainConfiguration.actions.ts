@@ -7,6 +7,7 @@ export enum MainConfigurationActionTypes {
   SET_USE_PRINTER = '[MainConfiguration] SetUsePrinter',
   SET_PHOTO_DIR = '[MainConfiguration] SetPhotoDir',
   SET_SONYPASSWORD = '[MainConfiguration] SetSonyPassword',
+  SET_WIFICONTROL = '[MainConfiguration] SetWifiControl',
   SET_SHUTTERTIMEOUT = '[MainConfiguration] SetShutterTmeout',
 }
 
@@ -52,6 +53,13 @@ export class SetSonyPassword implements Action {
   }
 }
 
+export class SetWifiControl implements Action {
+  readonly type = MainConfigurationActionTypes.SET_WIFICONTROL;
+
+  constructor(public payload: boolean) {
+  }
+}
+
 export class SetShutterTimeout implements Action {
   readonly type = MainConfigurationActionTypes.SET_SHUTTERTIMEOUT;
 
@@ -66,4 +74,5 @@ export type MainConfigurationActions =
   SetUsePrinter |
   SetPhotoDir |
   SetSonyPassword |
+  SetWifiControl |
   SetShutterTimeout;

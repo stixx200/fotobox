@@ -6,6 +6,7 @@ export interface State {
   irfanViewPath: string;
   usePrinter: boolean;
   photoDir: string;
+  wifiControl: boolean;
   sonyPassword: string;
   shutterTimeout: number;
 }
@@ -16,6 +17,7 @@ const initialState: State = {
   irfanViewPath: '',
   usePrinter: true,
   photoDir: '',
+  wifiControl: true,
   sonyPassword: '',
   shutterTimeout: 3,
 };
@@ -51,6 +53,11 @@ export function mainConfigurationReducer(state = initialState, action: MainConfi
       return {
         ...state,
         sonyPassword: action.payload,
+      };
+    case MainConfigurationActionTypes.SET_WIFICONTROL:
+      return {
+        ...state,
+        wifiControl: action.payload,
       };
     case MainConfigurationActionTypes.SET_SHUTTERTIMEOUT:
       return {
