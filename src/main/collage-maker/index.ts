@@ -11,6 +11,8 @@ import builtInTemplates from './templates';
 
 const logger = require('logger-winston').getLogger('collage-maker');
 
+export {CollageMakerConfiguration} from './maker';
+
 export class CollageMaker {
   private clientProxy: ClientProxy;
   private maker: Maker = null;
@@ -36,21 +38,24 @@ export class CollageMaker {
   }
 
   deinit() {
+    logger.info('Deinitialize collage maker');
     ipcMain.removeListener(TOPICS.RESET_COLLAGE, this.resetCollage);
     ipcMain.removeListener(TOPICS.CREATE_COLLAGE, this.addPhotoToCollage);
     ipcMain.removeListener(TOPICS.INIT_COLLAGE, this.initCollage);
 
+    this.photosaver = null;
+    this.clientProxy = null;
     this.maker = null;
     this.resetCollage();
   }
 
   async initCollage(event, templateId: string, templateDirectory: string) {
+    logger.info(`Initialize collage: '${templateId}' (directory: '${templateDirectory}')`);
     try {
       this.cache = {
         template: this.resolveTemplate(templateId, templateDirectory),
         photos: [],
       };
-
       const collageBuffer = await this.maker.createCollage(this.cache.template, this.cache.photos);
       event.sender.send(TOPICS.CREATE_COLLAGE, collageBuffer);
     } catch (error) {
@@ -60,6 +65,7 @@ export class CollageMaker {
   }
 
   async addPhotoToCollage(event, photo: string) {
+    logger.info(`Add photo to collage: '${photo}'`);
     try {
       this.cache.photos.push(photo);
       const collageBuffer = await this.maker.createCollage(this.cache.template, this.cache.photos);

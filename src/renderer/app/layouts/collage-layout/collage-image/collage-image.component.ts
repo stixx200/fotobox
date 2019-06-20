@@ -38,6 +38,7 @@ export class CollageImageComponent implements OnInit, OnDestroy {
   }
 
   addPhoto(photo: string) {
+    console.log(`add photo to template: ${photo}`);
     this.ipcRenderer.send(TOPICS.CREATE_COLLAGE, photo);
   }
 

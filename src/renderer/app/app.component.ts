@@ -33,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private liveViewService: LiveViewService,
               private renderer: Renderer2,
               private snackBar: MatSnackBar) {
+    this.onErroMessage = this.onErroMessage.bind(this);
     this.onApplicationStopped = this.onApplicationStopped.bind(this);
 
     translate.setDefaultLang('de');
@@ -48,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.ipcRenderer.on(TOPICS.ERROR_MESSAGE, this.onErroMessage);
     this.ipcRenderer.on(TOPICS.STOP_APPLICATION, this.onApplicationStopped);
     this.liveViewSubscription = this.liveViewService.getLiveView().subscribe((data: SafeResourceUrl) => this.onLiveViewData(data));
   }
@@ -59,6 +61,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     this.removeBackground();
     this.ipcRenderer.removeListener(TOPICS.STOP_APPLICATION, this.onApplicationStopped);
+    this.ipcRenderer.removeListener(TOPICS.ERROR_MESSAGE, this.onErroMessage);
   }
 
   onApplicationStopped(event, errorCode?: string) {
@@ -66,8 +69,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.removeBackground();
     this.router.navigate(['/']).catch(console.error);
     if (errorCode) {
-      this.dismissSnackbar();
-      this.snackBarRef = this.snackBar.open(errorCode, 'ok');
+      this.showSnackbar(errorCode);
     }
   }
 
@@ -81,9 +83,19 @@ export class AppComponent implements OnInit, OnDestroy {
     this.renderer.removeStyle(this.page.nativeElement, 'background-image');
   }
 
+  private showSnackbar(message) {
+    this.dismissSnackbar();
+    this.snackBarRef = this.snackBar.open(message, 'ok');
+  }
+
   private dismissSnackbar() {
     if (this.snackBarRef) {
       this.snackBarRef.dismiss();
     }
+  }
+
+  private onErroMessage(event, message) {
+    console.error(message);
+    this.showSnackbar(message);
   }
 }

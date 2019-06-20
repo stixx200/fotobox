@@ -1,14 +1,14 @@
+require('./initialize-logger');
+
 import {ipcMain} from 'electron';
 
 import * as util from 'util';
 import {CameraProvider, CameraProviderInitConfig} from './cameras/camera.provider';
 import {ClientProxy} from './client.proxy';
-import {CollageMaker} from './collage-maker';
-import {CollageMakerConfiguration} from './collage-maker/maker';
+import {CollageMaker, CollageMakerConfiguration} from './collage-maker';
 import {ConfigurationProvider} from './configurationProvider';
 import {TOPICS} from './constants';
 import {FotoboxError} from './error/fotoboxError';
-import './initialize-logger';
 import {PhotoHandler} from './photo.handler';
 import {PhotoProtocol} from './photo.protocol';
 import {Printer, PrinterConfiguration} from './printer';
