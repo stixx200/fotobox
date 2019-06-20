@@ -45,6 +45,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.ipcRenderer.removeListener(TOPICS.GOTO_PHOTOLIST, this.gotoHome);
     this.ipcRenderer.removeListener(TOPICS.ALL_PHOTOS, this.receivePhotos);
   }
 

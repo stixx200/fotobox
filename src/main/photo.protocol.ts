@@ -36,7 +36,8 @@ export class PhotoProtocol {
   photoProtocol(request: RegisterFileProtocolRequest, callback: (filePath?: string) => void) {
     const url = request.url.substr(8); // photo://
     const filePath = path.normalize(`${this.photoDir}/${url}`);
-    logger.log('received photo protocol request ' + filePath);
+    logger.info('received photo protocol request ' + filePath);
     callback(filePath);
   }
 }
+

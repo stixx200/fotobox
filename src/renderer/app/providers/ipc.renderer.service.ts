@@ -21,6 +21,7 @@ export class IpcRendererService {
     }
 
     removeListener(channel: string, listener: Function) {
+      console.log('Unregistered from ' + channel);
         const onEvent = this.registeredFunctions.find((value) => (value.listener === listener)).registered;
         return this.electron.ipcRenderer.removeListener(channel, onEvent);
     }
