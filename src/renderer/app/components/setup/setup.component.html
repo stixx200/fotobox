@@ -31,15 +31,15 @@
       <app-setup-group [config]="setupConfigs.advanced"></app-setup-group>
     </mat-tab>
   </mat-tab-group>
-
-  <button (click)="startApplication()"
-          [routerLink]="['/']"
-          class="w-100"
-          color="primary"
-          mat-raised-button>
-    {{ 'PAGES.SETUP.BUTTON.NEXT' | translate }}
-  </button>
 </div>
+
+<button (click)="startApplication()"
+        [routerLink]="['/']"
+        class="w-100 start-btn"
+        color="primary"
+        mat-raised-button>
+  {{ 'PAGES.SETUP.BUTTON.NEXT' | translate }}
+</button>
 
 <!--Wait for application started modal-->
 
