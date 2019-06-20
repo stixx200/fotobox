@@ -1,4 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatSnackBar, MatSnackBarRef, SimpleSnackBar} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
@@ -44,11 +45,13 @@ export class SingleLayoutComponent implements OnInit, OnDestroy {
   collageLayoutState: Observable<fromCollageLayout.State> = this.store.select('collageLayout');
 
   @ViewChild('countdown') countdown: CountdownComponent;
+  private snackBarRef: MatSnackBarRef<SimpleSnackBar>;
 
   constructor(private router: Router,
               private ipcRenderer: IpcRendererService,
               private route: ActivatedRoute,
-              private store: Store<fromApp.AppState>) {
+              private store: Store<fromApp.AppState>,
+              private snackBar: MatSnackBar) {
     this.exit = this.exit.bind(this);
     this.print = this.print.bind(this);
     this.onNewPhoto = this.onNewPhoto.bind(this);
@@ -96,7 +99,10 @@ export class SingleLayoutComponent implements OnInit, OnDestroy {
 
   print() {
     this.abortCountdown();
-    this.ipcRenderer.sendSync(TOPICS.PRINT_SYNC, this.photo);
+    const errorMessage = this.ipcRenderer.sendSync(TOPICS.PRINT_SYNC, this.photo);
+    if (errorMessage) {
+      this.snackBarRef = this.snackBar.open(errorMessage, 'ok');
+    }
     this.router.navigate(['/home']);
   }
 

@@ -53,6 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.dismissSnackbar();
     if (this.liveViewSubscription) {
       this.liveViewSubscription.unsubscribe();
     }
@@ -65,9 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.removeBackground();
     this.router.navigate(['/']).catch(console.error);
     if (errorCode) {
-      if (this.snackBarRef) {
-        this.snackBarRef.dismiss();
-      }
+      this.dismissSnackbar();
       this.snackBarRef = this.snackBar.open(errorCode, 'ok');
     }
   }
@@ -80,5 +79,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private removeBackground() {
     this.renderer.removeStyle(this.page.nativeElement, 'background-size');
     this.renderer.removeStyle(this.page.nativeElement, 'background-image');
+  }
+
+  private dismissSnackbar() {
+    if (this.snackBarRef) {
+      this.snackBarRef.dismiss();
+    }
   }
 }

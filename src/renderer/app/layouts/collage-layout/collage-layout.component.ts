@@ -1,4 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatSnackBar, MatSnackBarRef, SimpleSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
@@ -61,9 +62,12 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   topMessage = 'LAYOUTS.READY_TAKE_PICTURE';
   bottomMessage = 'LAYOUTS.ABORT';
 
+  private snackBarRef: MatSnackBarRef<SimpleSnackBar>;
+
   constructor(private store: Store<fromApp.AppState>,
               private router: Router,
-              private ipcRenderer: IpcRendererService) {
+              private ipcRenderer: IpcRendererService,
+              private snackBar: MatSnackBar) {
     this.onNewPhoto = this.onNewPhoto.bind(this);
   }
 
@@ -103,8 +107,8 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   print() {
     const errorMessage = this.ipcRenderer.sendSync(TOPICS.PRINT_SYNC, this.currentPhoto);
     if (errorMessage) {
-      console.error(errorMessage);
-    } // todo: show toast message with success/fail message
+      this.snackBarRef = this.snackBar.open(errorMessage, 'ok');
+    }
     // exit collage view after printing
     this.exit();
   }
