@@ -2,8 +2,7 @@
 photo_store
 
 # compiled output
-/renderer_dist
-/main_dist
+/dist
 
 # dependencies
 /node_modules

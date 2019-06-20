@@ -7,6 +7,7 @@ export interface State {
   usePrinter: boolean;
   photoDir: string;
   sonyPassword: string;
+  shutterTimeout: number;
 }
 
 const initialState: State = {
@@ -16,6 +17,7 @@ const initialState: State = {
   usePrinter: true,
   photoDir: '',
   sonyPassword: '',
+  shutterTimeout: 3,
 };
 
 export function mainConfigurationReducer(state = initialState, action: MainConfigurationActions) {
@@ -49,6 +51,11 @@ export function mainConfigurationReducer(state = initialState, action: MainConfi
       return {
         ...state,
         sonyPassword: action.payload,
+      };
+    case MainConfigurationActionTypes.SET_SHUTTERTIMEOUT:
+      return {
+        ...state,
+        shutterTimeout: action.payload,
       };
 
     default:

@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {BasicSetupConfig} from '../basic-setup-config';
 
 export interface TextSetupConfig extends BasicSetupConfig {
+  type: string;
   onChanged: (text) => void;
   value: Observable<string>;
 }

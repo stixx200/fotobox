@@ -1,7 +1,7 @@
 {
   "productName": "fotobox",
   "directories": {
-    "output": "main_dist"
+    "output": "dist/main"
   },
   "asarUnpack": [
     "src/main/**/*.jpg",

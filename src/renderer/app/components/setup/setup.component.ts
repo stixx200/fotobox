@@ -30,7 +30,6 @@ export class SetupComponent implements OnInit, OnDestroy {
   mainConfigurationState: Observable<fromMainConfiguration.State>;
 
   setupConfigs: { [key: string]: SetupConfig[] } = {
-    general: [],
   };
 
   statusMessage = 'PAGES.SETUP.FOTOBOX.MODAL.STATUS_INITIALIZING';
@@ -162,6 +161,14 @@ export class SetupComponent implements OnInit, OnDestroy {
         ),
         onChanged: selection => this.onLayoutSelectionChanged(selection),
       },
+      {
+        type: 'number',
+        title: 'PAGES.SETUP.SYSTEM.SHUTTER_TIMEOUT',
+        onChanged: (timeout: number) => {
+          this.store.dispatch(new mainConfigurationActions.SetShutterTimeout(timeout));
+        },
+        value: this.mainConfigurationState.pipe(map((state) => state.shutterTimeout)),
+      },
     ];
 
     this.addCollageSetup();
@@ -180,17 +187,6 @@ export class SetupComponent implements OnInit, OnDestroy {
           this.store.dispatch(new collageLayoutActions.SetTemplate(template));
         },
       });
-
-      // this.setupConfigs.general.push({
-      //   title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEXT',
-      //   type: 'textsarea',
-      //   texts: this.collageLayoutState.pipe(
-      //     map((state: fromCollageLayout.State) => state.text.map(({lines}) => lines.join('\n'))),
-      //   ),
-      //   onChanged: (texts) => {
-      //     this.store.dispatch(new collageLayoutActions.SetText(texts.map(text => ({lines: text.split('\n')}))));
-      //   },
-      // });
     }
   }
 

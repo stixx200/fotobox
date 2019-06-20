@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
 import {TOPICS} from '../../../../main/constants';
 import {IpcRendererService} from '../../providers/ipc.renderer.service';
+import * as fromApp from '../../store/app.reducer';
+import * as fromMainConfiguration from '../../store/mainConfiguration.reducers';
 
 @Component({
   selector: 'app-countdown',
@@ -8,33 +12,42 @@ import {IpcRendererService} from '../../providers/ipc.renderer.service';
   styleUrls: ['./countdown.component.scss']
 })
 export class CountdownComponent implements OnInit {
-  private timeoutHandles: any[] = [];
+  private intervalHandle: any;
 
   public text = '';
   public running = false;
 
-  constructor(private ipcRenderer: IpcRendererService) { }
+  private mainConfigurationState: Observable<fromMainConfiguration.State> = this.store.select('mainConfiguration');
+
+  constructor(private ipcRenderer: IpcRendererService, private store: Store<fromApp.AppState>) {
+  }
 
   ngOnInit() {
   }
 
   start() {
-    console.log('countdown started');
+    let time = 3;
+    this.mainConfigurationState.subscribe((state) => {
+      time = state.shutterTimeout ? state.shutterTimeout : time;
+    });
+
+    console.log(`countdown started with ${time}ms`);
     this.abort();
     this.running = true;
-    this.text = '3';
-    this.timeoutHandles = [
-      setTimeout(() => this.text = '2', 1000),
-      setTimeout(() => this.text = '1', 2000),
-      setTimeout(() => {
+    this.text = `${time}`;
+    this.intervalHandle = setInterval(() => {
+      const curNumber = (+this.text) - 1;
+      if (!curNumber) {
         this.abort();
         this.takePicture();
-      }, 3000),
-    ];
+      } else {
+        this.text = `${curNumber}`;
+      }
+    }, 1000);
   }
 
   abort() {
-    this.timeoutHandles.forEach((handle) => clearTimeout(handle));
+    clearTimeout(this.intervalHandle);
     this.text = '';
     this.running = false;
   }

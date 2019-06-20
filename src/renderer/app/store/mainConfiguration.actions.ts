@@ -7,6 +7,7 @@ export enum MainConfigurationActionTypes {
   SET_USE_PRINTER = '[MainConfiguration] SetUsePrinter',
   SET_PHOTO_DIR = '[MainConfiguration] SetPhotoDir',
   SET_SONYPASSWORD = '[MainConfiguration] SetSonyPassword',
+  SET_SHUTTERTIMEOUT = '[MainConfiguration] SetShutterTmeout',
 }
 
 export class SetCameraDrivers implements Action {
@@ -51,10 +52,18 @@ export class SetSonyPassword implements Action {
   }
 }
 
+export class SetShutterTimeout implements Action {
+  readonly type = MainConfigurationActionTypes.SET_SHUTTERTIMEOUT;
+
+  constructor(public payload: number) {
+  }
+}
+
 export type MainConfigurationActions =
   SetCameraDrivers |
   SetSelectedDriver |
   SetIrfanViewPath |
   SetUsePrinter |
   SetPhotoDir |
-  SetSonyPassword;
+  SetSonyPassword |
+  SetShutterTimeout;

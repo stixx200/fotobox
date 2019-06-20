@@ -1,7 +1,6 @@
 import {Action} from '@ngrx/store';
 
 export enum CollageLayoutActionTypes {
-  SET_TEXT = '[CollageLayout] SetText',
   SET_ACTIVE = '[CollageLayout] SetActive',
   SET_TEMPLATES = '[CollageLayout] SetTemplates',
   SET_TEMPLATE = '[CollageLayout] SetTemplate',

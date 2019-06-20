@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {BasicSetupConfig} from '../basic-setup-config';
 
 export interface MultiSelectionSetupConfig extends BasicSetupConfig {
+  type: string;
   translationBase?: string;
   selection: Observable<string[]>;
   selected: Observable<string[]>;

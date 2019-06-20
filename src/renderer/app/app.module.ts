@@ -25,6 +25,7 @@ import {CheckboxSetupComponent} from './components/setup/setup-group/checkbox-se
 import {DirectorySetupComponent} from './components/setup/setup-group/directory-setup/directory-setup.component';
 import {FileSetupComponent} from './components/setup/setup-group/file-setup/file-setup.component';
 import {MultiSelectionSetupComponent} from './components/setup/setup-group/multi-selection-setup/multi-selection-setup.component';
+import {NumberSetupComponent} from './components/setup/setup-group/number-setup/number-setup.component';
 import {SelectionSetupComponent} from './components/setup/setup-group/selection-setup/selection-setup.component';
 import {SetupGroupComponent} from './components/setup/setup-group/setup-group.component';
 import {TextSetupComponent} from './components/setup/setup-group/text-setup/text-setup.component';
@@ -79,6 +80,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     MultiSelectionSetupComponent,
     TextsareaSetupComponent,
     TextSetupComponent,
+    NumberSetupComponent,
   ],
   imports: [
     CommonModule,

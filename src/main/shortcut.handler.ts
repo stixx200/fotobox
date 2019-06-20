@@ -1,5 +1,5 @@
 // import * as localShortcut from 'electron-localshortcut';
-import {globalShortcut, BrowserWindow} from 'electron';
+import {BrowserWindow, globalShortcut} from 'electron';
 
 import {ClientProxy} from './client.proxy';
 import {TOPICS} from './constants';
@@ -17,7 +17,7 @@ export class ShortcutHandler {
     globalShortcut.register('CmdOrCtrl+R', () => this.refreshContent());
     globalShortcut.register('F1', () => this.toggleDevTools());
     globalShortcut.register('CmdOrCtrl+Q', () => this.exitApplication());
-    globalShortcut.register('CmdOrCtrl+F', () => this.gotoPhotolist());
+    globalShortcut.register('CmdOrCtrl+L', () => this.gotoPhotolist());
   }
 
   deinit() {

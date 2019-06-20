@@ -4,6 +4,7 @@ import {FilePickerMode, FilepickerService} from '../../../../providers/filepicke
 import {BasicSetupConfig} from '../basic-setup-config';
 
 export interface FileSetupConfig extends BasicSetupConfig {
+  type: string;
   onChanged: (path) => void;
   value: Observable<string>;
 }

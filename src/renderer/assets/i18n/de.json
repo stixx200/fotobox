@@ -19,7 +19,8 @@
         "PHOTO_DIRECTORY": "Speicherort Fotos",
         "SONY": {
           "PASSWORD": "Wifi Passwort der Sony Kamera"
-        }
+        },
+        "SHUTTER_TIMEOUT": "Auslösezeit"
       },
       "FOTOBOX": {
         "TITLE": "Fotobox",
@@ -54,7 +55,7 @@
   "NO": "nein",
   "NEXT": "weiter",
   "PRINT_QUESTION": "Ausdrucken?",
-  "USE_QUESTION": "Für collage verwenden?",
+  "USE_QUESTION": "Für Collage verwenden?",
   "LAYOUTS": {
     "READY": "Bitte den Auslöser betätigen!",
     "READY_TAKE_PICTURE": "Bildschirm berühren um Foto aufzunehmen",

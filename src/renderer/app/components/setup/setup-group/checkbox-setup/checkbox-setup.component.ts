@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {BasicSetupConfig} from '../basic-setup-config';
 
 export interface CheckboxSetupConfig extends BasicSetupConfig {
+  type: string;
   onChanged: (state) => void;
   state: Observable<boolean>;
 }
