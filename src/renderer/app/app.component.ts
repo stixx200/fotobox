@@ -56,20 +56,20 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.ipcRenderer.on(TOPICS.STOP_APPLICATION, this.onApplicationStopped);
-
-    this.liveViewSubscription = this.liveViewService.getLiveView().subscribe((data: SafeResourceUrl) => {
-      this.renderer.setStyle(this.page.nativeElement, 'background-size', `cover`);
-      this.renderer.setStyle(this.page.nativeElement, 'background-image', `url(${data})`);
-    });
+    this.liveViewSubscription = this.liveViewService.getLiveView().subscribe((data: SafeResourceUrl) => this.onLiveViewData(data));
   }
 
   ngOnDestroy() {
-    this.liveViewService.stopLiveView();
+    if (this.liveViewSubscription) {
+      this.liveViewSubscription.unsubscribe();
+    }
+    this.removeBackground();
     this.ipcRenderer.removeListener(TOPICS.STOP_APPLICATION, this.onApplicationStopped);
   }
 
   onApplicationStopped(event, errorCode?: string) {
     console.warn('Application has stopped. Goto settings. Error was: ' + JSON.stringify(errorCode));
+    this.removeBackground();
     this.router.navigate(['/']).catch(console.error);
     if (errorCode) {
       if (this.snackBarRef) {
@@ -77,5 +77,15 @@ export class AppComponent implements OnInit, OnDestroy {
       }
       this.snackBarRef = this.snackBar.open(errorCode, 'ok');
     }
+  }
+
+  private onLiveViewData(data: SafeResourceUrl) {
+    this.renderer.setStyle(this.page.nativeElement, 'background-size', `cover`);
+    this.renderer.setStyle(this.page.nativeElement, 'background-image', `url(${data})`);
+  }
+
+  private removeBackground() {
+    this.renderer.removeStyle(this.page.nativeElement, 'background-size');
+    this.renderer.removeStyle(this.page.nativeElement, 'background-image');
   }
 }

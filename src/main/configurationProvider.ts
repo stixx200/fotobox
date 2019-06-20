@@ -21,7 +21,7 @@ export class ConfigurationProvider {
 
   sendConfiguration(event: { returnValue: MainApplicationConfiguration }) {
     event.returnValue = {
-      cameraDrivers: this.externals.cameraProvider.getCameraDriverNames(),
+      cameraDrivers: CameraProvider.getCameraDriverNames(),
       templates: this.externals.collageMaker.getTemplates(),
     };
   }

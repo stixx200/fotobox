@@ -33,7 +33,7 @@ export class ShutdownHandler {
         logger.error('Deinitialization of application failed: ', err);
       })
       .then(() => {
-        this.client.send(TOPICS.STOP_APPLICATION, error.message);
+        this.client.send(TOPICS.STOP_APPLICATION, error ? error.message : null);
       })
       .catch((err) => {
         logger.error('Sending stop event failed. ', err);

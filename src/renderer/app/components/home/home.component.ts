@@ -7,7 +7,6 @@ import {TOPICS} from '../../../../main/constants';
 import * as fromCollageLayout from '../../layouts/collage-layout/store/collage-layout.reducer';
 import * as fromSingleLayout from '../../layouts/single-layout/store/single-layout.reducer';
 import {IpcRendererService} from '../../providers/ipc.renderer.service';
-import {LiveViewService} from '../../providers/live-view.service';
 import * as fromApp from '../../store/app.reducer';
 
 @Component({
@@ -21,8 +20,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<fromApp.AppState>,
               private ipcRenderer: IpcRendererService,
-              private router: Router,
-              private liveViewService: LiveViewService) {
+              private router: Router) {
     this.onNewPhoto = this.onNewPhoto.bind(this);
     this.gotoPhotolist = this.gotoPhotolist.bind(this);
   }
@@ -33,8 +31,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.ipcRenderer.on(TOPICS.PHOTO, this.onNewPhoto);
     this.ipcRenderer.on(TOPICS.GOTO_PHOTOLIST, this.gotoPhotolist);
-
-    this.liveViewService.startLiveView();
 
     this.collageLayoutState.pipe(take(1)).subscribe(({active}) => {
       if (!active) {
@@ -53,7 +49,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onNewPhoto(event, photo) {
-    console.debug('Received photo. switch to single layout.');
     this.router.navigate(['/layouts/single', {photo}]);
   }
 }

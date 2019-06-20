@@ -68,7 +68,6 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('Initialize collage component');
     this.reset();
     this.collageState = this.store.select('collageLayout');
     this.mainConfigurationState = this.store.select('mainConfiguration');
@@ -77,7 +76,7 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.collageComponent.reset();
-    this.ipcRenderer.removeListener('photo', this.onNewPhoto);
+    this.ipcRenderer.removeListener(TOPICS.PHOTO, this.onNewPhoto);
   }
 
   reset() {
@@ -122,7 +121,6 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   }
 
   private onNewPhoto(event: Event, photoUrl: string) {
-    console.info('Show photo and check if it should be added to collage: ' + photoUrl);
     this.photoviewConfiguration = this.usePhotoDialog;
     this.currentPhoto = photoUrl;
   }

@@ -68,15 +68,15 @@ export class SingleLayoutComponent implements OnInit, OnDestroy {
   }
 
   onNewPhoto(event, photo) {
-    this.mainConfigurationState.pipe(take(1)).subscribe(({usePrinter}) => {
-      console.log('showing new photo');
-      if (usePrinter) {
-        this.photoviewConfiguration = this.printDialog;
-      } else {
-        this.photoviewConfiguration = this.nextDialog;
-      }
-      this.photo = photo;
-    });
+    let usePrinter = false;
+    this.mainConfigurationState.pipe(take(1)).subscribe((state) => (usePrinter = state.usePrinter));
+    console.log(`showing new photo: ${photo}`);
+    if (usePrinter) {
+      this.photoviewConfiguration = this.printDialog;
+    } else {
+      this.photoviewConfiguration = this.nextDialog;
+    }
+    this.photo = photo;
   }
 
   takePicture() {

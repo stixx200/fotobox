@@ -4,6 +4,7 @@ import * as util from 'util';
 import {CameraProvider, CameraProviderInitConfig} from './cameras/camera.provider';
 import {ClientProxy} from './client.proxy';
 import {CollageMaker} from './collage-maker';
+import {CollageMakerConfiguration} from './collage-maker/maker';
 import {ConfigurationProvider} from './configurationProvider';
 import {TOPICS} from './constants';
 import {FotoboxError} from './error/fotoboxError';
@@ -17,7 +18,7 @@ import BrowserWindow = Electron.BrowserWindow;
 
 const logger = require('logger-winston').getLogger('app');
 
-export type ApplicationInitConfiguration = CameraProviderInitConfig & PrinterConfiguration;
+export type ApplicationInitConfiguration = CameraProviderInitConfig & PrinterConfiguration & CollageMakerConfiguration;
 
 export class FotoboxMain {
   private isInitialized = false;

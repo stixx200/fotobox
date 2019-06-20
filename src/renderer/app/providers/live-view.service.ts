@@ -7,7 +7,6 @@ import {IpcRendererService} from './ipc.renderer.service';
   providedIn: 'root',
 })
 export class LiveViewService {
-  isStarted = false;
   liveViewSubject = new Subject<string>();
 
   constructor(private ipcRenderer: IpcRendererService) {
@@ -18,14 +17,6 @@ export class LiveViewService {
 
   getLiveView(): Observable<string> {
     return this.liveViewSubject;
-  }
-
-  startLiveView() {
-    this.ipcRenderer.send(TOPICS.START_LIVEVIEW);
-  }
-
-  stopLiveView() {
-    this.ipcRenderer.send(TOPICS.STOP_LIVEVIEW);
   }
 
   onLiveviewImage(event, data: Buffer) {

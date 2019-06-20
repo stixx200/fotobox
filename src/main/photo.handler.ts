@@ -1,18 +1,15 @@
-import * as _ from 'lodash';
-import {URL} from 'url';
-const path = require('path');
-const thumb = require('node-thumbnail').thumb;
-const download = require('download');
-import * as fs from 'fs-extra';
 import {ipcMain} from 'electron';
-const logger = require('logger-winston').getLogger('photohandler');
-
+import * as fs from 'fs-extra';
+import * as _ from 'lodash';
+import * as sharp from 'sharp';
+import {URL} from 'url';
+import {promisify} from 'util';
 import {TOPICS} from './constants';
 
-const thumbSettings = {
-  width: 400,
-  suffix: '',
-};
+const path = require('path');
+const download = require('download');
+const logger = require('logger-winston').getLogger('photohandler');
+
 const collageName = 'collage';
 
 export interface PhotoHandlerConfig {
@@ -62,15 +59,23 @@ export class PhotoHandler {
     const fileName = _.last(new URL(url).pathname.split('/'));
     logger.info(`Download file ${url} and save as ${path.join(this.photoDir, fileName)}`);
     await download(url, this.photoDir);
-    await thumb({...thumbSettings, source: path.join(this.photoDir, fileName), destination: this.thumbDir});
+    const downloadedFile = path.join(this.photoDir, fileName);
+    await this.createThumb(downloadedFile);
     return fileName;
   }
 
   async saveBinaryCollage(data: Buffer, extension: string): Promise<string> {
     const fileName = `${collageName}${this.lastCollageNumber++}${extension}`;
     const fullFileName = path.join(this.photoDir, fileName);
-    fs.writeFileSync(fullFileName, data);
-    await thumb({...thumbSettings, source: fullFileName, destination: this.thumbDir});
+
+    await promisify(fs.writeFile)(fullFileName, data);
+    await this.createThumb(fullFileName);
     return fileName;
+  }
+
+  private createThumb(file, options: { width?: number } = {}) {
+    const filename = path.basename(file);
+    const targetFile = path.join(this.thumbDir, filename);
+    return sharp(file).resize(options.width || 400).toFile(targetFile);
   }
 }

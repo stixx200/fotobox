@@ -3,7 +3,7 @@ import {ClientProxy} from '../client.proxy';
 import {TOPICS} from '../constants';
 import {FotoboxError} from '../error/fotoboxError';
 import {PhotoHandler} from '../photo.handler';
-import {Maker} from './maker';
+import {CollageMakerConfiguration, Maker} from './maker';
 import {TemplateInterface} from './template.interface';
 import templates from './templates';
 
@@ -12,6 +12,7 @@ const logger = require('logger-winston').getLogger('collage-maker');
 export class CollageMaker {
   private clientProxy: ClientProxy;
   private maker: Maker = null;
+  private photosaver: PhotoHandler;
 
   private cache: { template: TemplateInterface, photos: string[] } = null;
 
@@ -22,9 +23,10 @@ export class CollageMaker {
     this.getTemplates = this.getTemplates.bind(this);
   }
 
-  init(config: any, externals: { photosaver: PhotoHandler, clientProxy: ClientProxy }) {
-    this.maker = new Maker();
+  init(config: CollageMakerConfiguration, externals: { photosaver: PhotoHandler, clientProxy: ClientProxy }) {
+    this.maker = new Maker(config);
     this.clientProxy = externals.clientProxy;
+    this.photosaver = externals.photosaver;
 
     ipcMain.on(TOPICS.INIT_COLLAGE, this.initCollage);
     ipcMain.on(TOPICS.CREATE_COLLAGE, this.addPhotoToCollage);
@@ -59,7 +61,14 @@ export class CollageMaker {
     try {
       this.cache.photos.push(photo);
       const collageBuffer = await this.maker.createCollage(this.cache.template, this.cache.photos);
-      event.sender.send(TOPICS.CREATE_COLLAGE, collageBuffer, this.cache.photos.length === this.cache.template.spaces.length);
+
+      let collageName = null;
+      if (this.cache.photos.length === this.cache.template.spaces.length) {
+        collageName = await this.photosaver.saveBinaryCollage(collageBuffer, '.jpg');
+        this.resetCollage();
+      }
+
+      event.sender.send(TOPICS.CREATE_COLLAGE, collageBuffer, collageName);
     } catch (error) {
       logger.error('error occured while adding photo to collage', error);
       this.clientProxy.sendError(`Error occured while adding photo to collage: ${error.message}`);

@@ -3,10 +3,12 @@ import {Subscription} from 'rxjs';
 import {ClientProxy} from '../client.proxy';
 import {TOPICS} from '../constants';
 import {PhotoHandler} from '../photo.handler';
-import {CameraInitConfiguration, CameraInterface} from './camera.interface';
 import {ShutdownHandler} from '../shutdown.handler';
+import {CameraInitConfiguration, CameraInterface} from './camera.interface';
 import {DemoCamera} from './demo';
 import {SonyCamera} from './sony';
+
+const logger = require('logger-winston').getLogger('camera.provider');
 
 const cameras = {
   sony: SonyCamera,
@@ -27,61 +29,68 @@ export type CameraProviderInitConfig = CameraInitConfiguration & {
 export class CameraProvider {
   private camera: CameraInterface = null;
   private liveViewSubscription: Subscription;
+  private client: ClientProxy;
+  private picturesSubscription: Subscription;
 
   constructor() {
     this.takePicture = this.takePicture.bind(this);
-    this.startLiveViewObserving = this.startLiveViewObserving.bind(this);
-    this.stopLiveViewObserving = this.stopLiveViewObserving.bind(this);
   }
 
-  getCameraDriverNames() {
+  static getCameraDriverNames() {
     return Object.keys(cameras);
   }
 
   async init(config: CameraProviderInitConfig,
              externals: { clientProxy: ClientProxy, shutdownHandler: ShutdownHandler, photosaver: PhotoHandler }) {
+    this.client = externals.clientProxy;
+
     this.camera = getCamera(config.cameraDriver);
     await this.camera.init(config, externals);
 
-    ipcMain.on(TOPICS.START_LIVEVIEW, this.startLiveViewObserving);
-    ipcMain.on(TOPICS.STOP_LIVEVIEW, this.stopLiveViewObserving);
     ipcMain.on(TOPICS.TAKE_PICTURE, this.takePicture);
 
-    this.camera.observePictures()
-      .subscribe((fileName: string) => {
-        externals.clientProxy.send(TOPICS.PHOTO, fileName);
-      });
+    this.startLiveViewObserving();
+    this.picturesSubscription = this.camera.observePictures().subscribe((fileName: string) => this.onNewPhoto(fileName));
   }
 
   async deinit() {
+    if (this.liveViewSubscription) {
+      this.liveViewSubscription.unsubscribe();
+      this.liveViewSubscription = null;
+    }
+    if (this.picturesSubscription) {
+      this.picturesSubscription.unsubscribe();
+      this.picturesSubscription = null;
+    }
+
+    ipcMain.removeListener(TOPICS.TAKE_PICTURE, this.takePicture);
+
     if (this.camera) {
       await this.camera.deinit();
       this.camera = null;
     }
-    ipcMain.removeListener(TOPICS.TAKE_PICTURE, this.startLiveViewObserving);
-    ipcMain.removeListener(TOPICS.START_LIVEVIEW, this.startLiveViewObserving);
-    ipcMain.removeListener(TOPICS.STOP_LIVEVIEW, this.stopLiveViewObserving);
+
+    this.client = null;
   }
 
-  startLiveViewObserving(event: any) {
+  startLiveViewObserving() {
     // don't start live view twice
     if (this.liveViewSubscription) {
+      logger.warn('LiveViewObserving started twice. Ignore last call.');
       return;
     }
 
     this.liveViewSubscription = this.camera.observeLiveView()
       .subscribe((data: any) => {
-        event.sender.send(TOPICS.LIVEVIEW_DATA, data);
+        this.client.send(TOPICS.LIVEVIEW_DATA, data);
       });
-  }
-
-  stopLiveViewObserving() {
-    this.liveViewSubscription.unsubscribe();
-    this.liveViewSubscription = null;
-    this.camera.stopLiveView();
   }
 
   takePicture() {
     this.camera.takePicture();
+  }
+
+  private onNewPhoto(fileName: string) {
+    this.client.send(TOPICS.PHOTO, fileName);
   }
 }
