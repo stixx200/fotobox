@@ -1,11 +1,13 @@
 import {ipcMain} from 'electron';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import {ClientProxy} from '../client.proxy';
 import {TOPICS} from '../constants';
 import {FotoboxError} from '../error/fotoboxError';
 import {PhotoHandler} from '../photo.handler';
 import {CollageMakerConfiguration, Maker} from './maker';
 import {TemplateInterface} from './template.interface';
-import templates from './templates';
+import builtInTemplates from './templates';
 
 const logger = require('logger-winston').getLogger('collage-maker');
 
@@ -42,10 +44,10 @@ export class CollageMaker {
     this.resetCollage();
   }
 
-  async initCollage(event, templateId: string) {
+  async initCollage(event, templateId: string, templateDirectory: string) {
     try {
       this.cache = {
-        template: this.resolveTemplate(templateId),
+        template: this.resolveTemplate(templateId, templateDirectory),
         photos: [],
       };
 
@@ -57,7 +59,7 @@ export class CollageMaker {
     }
   }
 
-  async addPhotoToCollage(event, photo: string, index: number) {
+  async addPhotoToCollage(event, photo: string) {
     try {
       this.cache.photos.push(photo);
       const collageBuffer = await this.maker.createCollage(this.cache.template, this.cache.photos);
@@ -79,14 +81,26 @@ export class CollageMaker {
     this.cache = null;
   }
 
-  getTemplates(): string[] {
-    return Object.keys(templates);
+  getTemplates(directory: string): string[] {
+    let directoryTemplates = [];
+    if (directory) {
+      directoryTemplates = fs.readdirSync(directory).filter(template => fs.statSync(path.join(directory, template)).isDirectory());
+    }
+    return [
+      ...directoryTemplates,
+      ...Object.keys(builtInTemplates),
+    ];
   }
 
-  resolveTemplate(id: string) {
-    if (!templates[id]) {
-      throw new FotoboxError(`Template ${id} not found.`, 'MAIN.COLLAGE-MAKER.TEMPLATE_NOT_FOUND');
+  resolveTemplate(id: string, directory?: string) {
+    if (directory && fs.existsSync(path.join(directory, id))) {
+      return require(path.join(directory, id));
+    } else if (builtInTemplates[id]) {
+      return builtInTemplates[id];
     }
-    return templates[id];
+    throw new FotoboxError(
+      `Template '${id}' not found. Available are: '${this.getTemplates(directory)}'`,
+      'MAIN.COLLAGE-MAKER.TEMPLATE_NOT_FOUND',
+    );
   }
 }

@@ -13,11 +13,11 @@ let collagePhoto: string | SafeResourceUrl;
   styleUrls: ['./collage-image.component.scss']
 })
 export class CollageImageComponent implements OnInit, OnDestroy {
-  currentIndex = 0;
   collagePhoto: string | SafeResourceUrl;
 
   @Output() done = new EventEmitter<string>();
   @Input() templateId: string;
+  @Input() templateDirectory: string;
 
   constructor(private ipcRenderer: IpcRendererService,
               private _sanitizer: DomSanitizer,
@@ -29,7 +29,7 @@ export class CollageImageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log(`initializing template: ${this.templateId}`);
     this.ipcRenderer.on(TOPICS.CREATE_COLLAGE, this.onCollageRendered);
-    this.ipcRenderer.send(TOPICS.INIT_COLLAGE, this.templateId);
+    this.ipcRenderer.send(TOPICS.INIT_COLLAGE, this.templateId, this.templateDirectory);
     this.collagePhoto = collagePhoto;
   }
 
@@ -38,7 +38,7 @@ export class CollageImageComponent implements OnInit, OnDestroy {
   }
 
   addPhoto(photo: string) {
-    this.ipcRenderer.send(TOPICS.CREATE_COLLAGE, photo, this.currentIndex++);
+    this.ipcRenderer.send(TOPICS.CREATE_COLLAGE, photo);
   }
 
   reset() {

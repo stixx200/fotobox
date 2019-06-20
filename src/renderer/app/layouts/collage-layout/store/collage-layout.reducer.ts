@@ -6,6 +6,7 @@ export interface State {
   title: string;
   route: string;
   active: boolean;
+  templatesDirectory: string;
   templateId: string;
   templates: string[];
 }
@@ -15,8 +16,9 @@ const initialState: State = {
   title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE',
   route: '/layouts/collage',
   active: true,
-  templateId: 'christina_martin_2019.ts',
-  templates: ['christina_martin_2019.ts'],
+  templatesDirectory: '',
+  templateId: '',
+  templates: [],
 };
 
 export function collageLayoutReducer(state = initialState, action: CollageLayoutActions) {
@@ -31,6 +33,12 @@ export function collageLayoutReducer(state = initialState, action: CollageLayout
       return {
         ...state,
         templates: action.payload,
+      };
+
+    case CollageLayoutActionTypes.SET_TEMPLATES_DIR:
+      return {
+        ...state,
+        templatesDirectory: action.payload,
       };
 
     case CollageLayoutActionTypes.SET_TEMPLATE:

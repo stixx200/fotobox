@@ -6,19 +6,25 @@
   </div>
 
   <mat-tab-group dynamicHeight>
-    <mat-tab>
+    <mat-tab *ngIf="setupConfigs.general">
       <ng-template mat-tab-label>
         {{ 'PAGES.SETUP.GENERAL' | translate }}
       </ng-template>
       <app-setup-group [config]="setupConfigs.general"></app-setup-group>
     </mat-tab>
-    <mat-tab>
+    <mat-tab *ngIf="setupConfigs.collage">
+      <ng-template mat-tab-label>
+        {{ 'PAGES.SETUP.COLLAGE' | translate }}
+      </ng-template>
+      <app-setup-group [config]="setupConfigs.collage"></app-setup-group>
+    </mat-tab>
+    <mat-tab *ngIf="setupConfigs.camera">
       <ng-template mat-tab-label>
         {{ 'PAGES.SETUP.CAMERA' | translate }}
       </ng-template>
       <app-setup-group [config]="setupConfigs.camera"></app-setup-group>
     </mat-tab>
-    <mat-tab>
+    <mat-tab *ngIf="setupConfigs.advanced">
       <ng-template mat-tab-label>
         {{ 'PAGES.SETUP.ADVANCED' | translate }}
       </ng-template>

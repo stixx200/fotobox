@@ -3,6 +3,7 @@
     "SETUP": {
       "TITLE": "Einstellungen",
       "GENERAL": "General",
+      "COLLAGE": "Collage",
       "CAMERA": "Kamera",
       "ADVANCED": "Erweitert",
       "BUTTON": {
@@ -17,6 +18,8 @@
         "USE_PRINTER": "Fotodruck aktivieren",
         "IRFANVIEW_PATH": "Pfad zur IrfanView.exe",
         "PHOTO_DIRECTORY": "Speicherort Fotos",
+        "TEMPLATES_DIRECTORY": "Pfad zu Collage-Templates",
+        "UPDATE_TEMPLATES": "Templates erneut einlesen",
         "SONY": {
           "PASSWORD": "Wifi Passwort der Sony Kamera"
         },

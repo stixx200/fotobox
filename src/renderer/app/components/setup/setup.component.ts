@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import {Observable} from 'rxjs';
-import {map, withLatestFrom} from 'rxjs/operators';
+import {map, take, withLatestFrom} from 'rxjs/operators';
 import {ApplicationInitConfiguration} from '../../../../main/app';
 import {TOPICS} from '../../../../main/constants';
 import * as collageLayoutActions from '../../layouts/collage-layout/store/collage-layout.actions';
@@ -16,6 +16,7 @@ import {IpcRendererService} from '../../providers/ipc.renderer.service';
 import * as fromApp from '../../store/app.reducer';
 import * as globalActions from '../../store/global.actions';
 import * as mainConfigurationActions from '../../store/mainConfiguration.actions';
+import {SetCameraDrivers} from '../../store/mainConfiguration.actions';
 import * as fromMainConfiguration from '../../store/mainConfiguration.reducers';
 import {SetupConfig} from './setup-group/setup-group.component';
 
@@ -29,8 +30,7 @@ export class SetupComponent implements OnInit, OnDestroy {
   singleLayoutState: Observable<fromSingleLayout.State>;
   mainConfigurationState: Observable<fromMainConfiguration.State>;
 
-  setupConfigs: { [key: string]: SetupConfig[] } = {
-  };
+  setupConfigs: { [key: string]: SetupConfig[] } = {};
 
   statusMessage = 'PAGES.SETUP.FOTOBOX.MODAL.STATUS_INITIALIZING';
 
@@ -51,6 +51,7 @@ export class SetupComponent implements OnInit, OnDestroy {
     this.singleLayoutState = this.store.select('singleLayout');
     this.mainConfigurationState = this.store.select('mainConfiguration');
 
+    this.updateTemplates();
     this.initConfigs();
 
     this.store.dispatch(new globalActions.SetTitle('TITLES.SETUP'));
@@ -66,7 +67,7 @@ export class SetupComponent implements OnInit, OnDestroy {
 
   startApplication() {
     let applicationSettings: ApplicationInitConfiguration = null;
-    const subscription = this.mainConfigurationState.subscribe((data) => {
+    this.mainConfigurationState.pipe(take(1)).subscribe((data) => {
       applicationSettings = {
         cameraDriver: data.selectedDriver,
         irfanViewPath: data.irfanViewPath,
@@ -75,7 +76,6 @@ export class SetupComponent implements OnInit, OnDestroy {
         wifiControl: true,
       };
     });
-    subscription.unsubscribe();
 
     console.log('start application with settings: ', applicationSettings);
     this.modal.show();
@@ -120,17 +120,21 @@ export class SetupComponent implements OnInit, OnDestroy {
    */
 
   initConfigs() {
+    this.setupConfigs = {};
     this.addGeneralSetup();
     this.addCameraSetup();
     this.addAdvancedSetup();
   }
 
   private addGeneralSetup() {
+    const cameraDrivers = this.ipcRenderer.sendSync(TOPICS.GET_CAMERA_DRIVERS_SYNC);
+    this.store.dispatch(new SetCameraDrivers(cameraDrivers));
+
     this.setupConfigs.general = [
       {
         type: 'directory',
         title: 'PAGES.SETUP.SYSTEM.PHOTO_DIRECTORY',
-        onChanged: oldPath => this.store.dispatch(new mainConfigurationActions.SetPhotoDir(oldPath)),
+        onChanged: directory => this.store.dispatch(new mainConfigurationActions.SetPhotoDir(directory)),
         value: this.mainConfigurationState.pipe(map((state: fromMainConfiguration.State) => state.photoDir)),
       },
       {
@@ -138,6 +142,14 @@ export class SetupComponent implements OnInit, OnDestroy {
         title: 'PAGES.SETUP.SYSTEM.USE_PRINTER',
         onChanged: state => this.store.dispatch(new mainConfigurationActions.SetUsePrinter(state)),
         state: this.mainConfigurationState.pipe(map((state) => state.usePrinter)),
+      },
+      {
+        type: 'number',
+        title: 'PAGES.SETUP.SYSTEM.SHUTTER_TIMEOUT',
+        onChanged: (timeout: number) => {
+          this.store.dispatch(new mainConfigurationActions.SetShutterTimeout(timeout));
+        },
+        value: this.mainConfigurationState.pipe(map((state) => state.shutterTimeout)),
       },
       {
         type: 'multi-selection',
@@ -161,14 +173,6 @@ export class SetupComponent implements OnInit, OnDestroy {
         ),
         onChanged: selection => this.onLayoutSelectionChanged(selection),
       },
-      {
-        type: 'number',
-        title: 'PAGES.SETUP.SYSTEM.SHUTTER_TIMEOUT',
-        onChanged: (timeout: number) => {
-          this.store.dispatch(new mainConfigurationActions.SetShutterTimeout(timeout));
-        },
-        value: this.mainConfigurationState.pipe(map((state) => state.shutterTimeout)),
-      },
     ];
 
     this.addCollageSetup();
@@ -177,16 +181,28 @@ export class SetupComponent implements OnInit, OnDestroy {
   private addCollageSetup() {
     const collageLayoutActive = this.getObservableValue(this.collageLayoutState, 'active');
     if (collageLayoutActive) {
-      this.setupConfigs.general.push({
+      this.setupConfigs.collage = [{
+        type: 'directory',
+        title: 'PAGES.SETUP.SYSTEM.TEMPLATES_DIRECTORY',
+        onChanged: directory => {
+          this.store.dispatch(new collageLayoutActions.SetTemplatesDir(directory));
+          // get all templates from the new directory and update available templates
+          this.updateTemplates(directory);
+        },
+        value: this.collageLayoutState.pipe(map((state: fromCollageLayout.State) => state.templatesDirectory)),
+      }, {
+        type: 'button',
+        title: 'PAGES.SETUP.SYSTEM.UPDATE_TEMPLATES',
+        onClick: () => this.updateTemplates(),
+      }, {
         title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEMPLATE',
-        translationBase: 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEMPLATE-NAMES.',
         type: 'selection',
         selection: this.collageLayoutState.pipe(map((state: fromCollageLayout.State) => state.templates)),
         selected: this.collageLayoutState.pipe(map((state: fromCollageLayout.State) => state.templateId)),
         onChanged: (template) => {
           this.store.dispatch(new collageLayoutActions.SetTemplate(template));
         },
-      });
+      }];
     }
   }
 
@@ -236,6 +252,16 @@ export class SetupComponent implements OnInit, OnDestroy {
     });
     subscription.unsubscribe();
     return value;
+  }
+
+  // todo: move updateTemplates to collage-layout
+  private updateTemplates(templatesDir?: string) {
+    let dir = templatesDir;
+    if (!dir) {
+      dir = this.getObservableValue(this.collageLayoutState, 'templatesDir');
+    }
+    const templates = this.ipcRenderer.sendSync(TOPICS.GET_TEMPLATES_SYNC, dir);
+    this.store.dispatch(new collageLayoutActions.SetTemplates(templates));
   }
 }
 

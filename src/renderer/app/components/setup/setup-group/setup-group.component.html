@@ -8,8 +8,9 @@
     <app-textsarea-setup *ngSwitchCase="'textsarea'" [config]="element"></app-textsarea-setup>
     <app-text-setup *ngSwitchCase="'text'" [config]="element"></app-text-setup>
     <app-number-setup *ngSwitchCase="'number'" [config]="element"></app-number-setup>
+    <app-button-setup *ngSwitchCase="'button'" [config]="element"></app-button-setup>
     <!--default case when there are no matches -->
-    <div *ngSwitchDefault>unknown</div>
+    <div *ngSwitchDefault>unknown type of setup element. Forgot to extend setup-group.component.html?</div>
   </div>
 </div>
 

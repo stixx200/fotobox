@@ -3,6 +3,7 @@ import {Action} from '@ngrx/store';
 export enum CollageLayoutActionTypes {
   SET_ACTIVE = '[CollageLayout] SetActive',
   SET_TEMPLATES = '[CollageLayout] SetTemplates',
+  SET_TEMPLATES_DIR = '[CollageLayout] SetTemplatesDir',
   SET_TEMPLATE = '[CollageLayout] SetTemplate',
 }
 
@@ -20,6 +21,13 @@ export class SetTemplates implements Action {
   }
 }
 
+export class SetTemplatesDir implements Action {
+  readonly type = CollageLayoutActionTypes.SET_TEMPLATES_DIR;
+
+  constructor(public payload: string) {
+  }
+}
+
 export class SetTemplate implements Action {
   readonly type = CollageLayoutActionTypes.SET_TEMPLATE;
 
@@ -27,4 +35,7 @@ export class SetTemplate implements Action {
   }
 }
 
-export type CollageLayoutActions = SetActive | SetTemplates | SetTemplate;
+export type CollageLayoutActions = SetActive
+  | SetTemplates
+  | SetTemplatesDir
+  | SetTemplate;

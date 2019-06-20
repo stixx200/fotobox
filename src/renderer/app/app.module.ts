@@ -21,6 +21,7 @@ import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
 import {HomeComponent} from './components/home/home.component';
 import {PhotoListComponent} from './components/photo-list.ts/photo-list.component';
+import {ButtonSetupComponent} from './components/setup/setup-group/button-setup/button-setup.component';
 import {CheckboxSetupComponent} from './components/setup/setup-group/checkbox-setup/checkbox-setup.component';
 import {DirectorySetupComponent} from './components/setup/setup-group/directory-setup/directory-setup.component';
 import {FileSetupComponent} from './components/setup/setup-group/file-setup/file-setup.component';
@@ -81,6 +82,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     TextsareaSetupComponent,
     TextSetupComponent,
     NumberSetupComponent,
+    ButtonSetupComponent,
   ],
   imports: [
     CommonModule,

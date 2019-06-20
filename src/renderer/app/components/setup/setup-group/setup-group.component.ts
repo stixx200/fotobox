@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {ButtonSetupConfig} from './button-setup/button-setup.component';
 import {CheckboxSetupConfig} from './checkbox-setup/checkbox-setup.component';
 import {DirectorySetupConfig} from './directory-setup/directory-setup.component';
 import {FileSetupConfig} from './file-setup/file-setup.component';
@@ -14,7 +15,8 @@ export type SetupConfig =
   | CheckboxSetupConfig
   | MultiSelectionSetupConfig
   | TextsareaSetupConfig
-  | NumberSetupConfig;
+  | NumberSetupConfig
+  | ButtonSetupConfig;
 
 @Component({
   selector: 'app-setup-group',

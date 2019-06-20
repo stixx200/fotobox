@@ -31,7 +31,6 @@ export class FotoboxMain {
   private printer = new Printer();
   private photoHandler = new PhotoHandler();
   private configurationProvider = new ConfigurationProvider({
-    cameraProvider: this.cameraProvider,
     collageMaker: this.collageMaker,
   });
 

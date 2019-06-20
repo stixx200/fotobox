@@ -1,5 +1,5 @@
-import christina_martin_2019 from './christina_martin_2019/christina_martin_2019';
+import template2x2 from './2x2';
 
 export default {
-  christina_martin_2019: christina_martin_2019,
+  '2x2': template2x2,
 };

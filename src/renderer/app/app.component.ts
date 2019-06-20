@@ -8,12 +8,10 @@ import {Subscription} from 'rxjs';
 import {TOPICS} from '../../main/constants';
 
 import {AppConfig} from '../environments/environment';
-import * as collageLayoutActions from './layouts/collage-layout/store/collage-layout.actions';
 import {ElectronService} from './providers/electron.service';
 import {IpcRendererService} from './providers/ipc.renderer.service';
 import {LiveViewService} from './providers/live-view.service';
 import * as fromApp from './store/app.reducer';
-import {SetCameraDrivers} from './store/mainConfiguration.actions';
 
 @Component({
   selector: 'app-root',
@@ -47,11 +45,6 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       console.log('Mode web');
     }
-
-    // get camera drivers from main process
-    const mainConfiguration = this.ipcRenderer.sendSync(TOPICS.GET_APP_CONFIG_SYNC);
-    this.store.dispatch(new SetCameraDrivers(mainConfiguration.cameraDrivers));
-    this.store.dispatch(new collageLayoutActions.SetTemplates(mainConfiguration.templates));
   }
 
   ngOnInit() {
