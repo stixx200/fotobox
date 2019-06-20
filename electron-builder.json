@@ -5,12 +5,7 @@
   },
   "asarUnpack": [
     "src/main/**/*.jpg",
-    "src/main/**/*.png",
-    "./node_modules/collage-maker/dist/images/*.jpg",
-    "./node_modules/collage-maker/dist/images/*.png"
-  ],
-  "extraResources": [
-    "./node_modules/collage-maker/dist/images"
+    "src/main/**/*.png"
   ],
   "files": [
     "**/*",
@@ -31,19 +26,19 @@
     "!tools/"
   ],
   "win": {
-    "icon": "renderer_dist/assets/icon",
+    "icon": "dist/renderer/assets/icon",
     "target": [
       "nsis"
     ]
   },
   "mac": {
-    "icon": "renderer_dist/assets/icon",
+    "icon": "dist/renderer/assets/icon",
     "target": [
       "dmg"
     ]
   },
   "linux": {
-    "icon": "renderer_dist/assets/icon",
+    "icon": "dist/renderer/assets/icon",
     "target": [
       "AppImage"
     ]

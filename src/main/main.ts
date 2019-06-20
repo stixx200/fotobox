@@ -1,4 +1,4 @@
-import {app, BrowserWindow, globalShortcut, screen} from 'electron';
+import {app, BrowserWindow, screen} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import {FotoboxMain} from './app';
@@ -28,7 +28,7 @@ function createWindow() {
     win.loadURL('http://localhost:4200');
   } else {
     win.loadURL(url.format({
-      pathname: path.join(__dirname, '../../renderer_dist/index.html'),
+      pathname: path.join(__dirname, '../../dist/renderer/index.html'),
       protocol: 'file:',
       slashes: true
     }));
