@@ -30,8 +30,13 @@ export function collageLayoutReducer(state = initialState, action: CollageLayout
       };
 
     case CollageLayoutActionTypes.SET_TEMPLATES:
+      let templateId = state.templateId;
+      if (!action.payload.includes(templateId)) {
+        templateId = action.payload[0];
+      }
       return {
         ...state,
+        templateId,
         templates: action.payload,
       };
 

@@ -25,7 +25,7 @@ export class ConfigurationProvider {
     event.returnValue = CameraProvider.getCameraDriverNames();
   }
 
-  getTemplates(event: { returnValue: string[] }, directory: string) {
+  getTemplates(event: { returnValue: string[] }, directory?: string) {
     event.returnValue = this.externals.collageMaker.getTemplates(directory);
   }
 }

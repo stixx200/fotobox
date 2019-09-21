@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import {Observable} from 'rxjs';
-import {map, take, withLatestFrom} from 'rxjs/operators';
+import {first, map, withLatestFrom} from 'rxjs/operators';
 import {ApplicationInitConfiguration} from '../../../../main/app';
 import {TOPICS} from '../../../../main/constants';
 import * as collageLayoutActions from '../../layouts/collage-layout/store/collage-layout.actions';
@@ -67,7 +67,7 @@ export class SetupComponent implements OnInit, OnDestroy {
 
   startApplication() {
     let applicationSettings: ApplicationInitConfiguration = null;
-    this.mainConfigurationState.pipe(take(1)).subscribe((data) => {
+    this.mainConfigurationState.pipe(first()).subscribe((data) => {
       applicationSettings = {
         cameraDriver: data.selectedDriver,
         irfanViewPath: data.irfanViewPath,
@@ -260,7 +260,7 @@ export class SetupComponent implements OnInit, OnDestroy {
 
   private getObservableValue(observable: Observable<any>, key: string): any {
     let value = null;
-    const subscription = observable.subscribe((data) => {
+    const subscription = observable.pipe(first()).subscribe((data) => {
       value = data[key];
     });
     subscription.unsubscribe();
@@ -271,7 +271,7 @@ export class SetupComponent implements OnInit, OnDestroy {
   private updateTemplates(templatesDir?: string) {
     let dir = templatesDir;
     if (!dir) {
-      dir = this.getObservableValue(this.collageLayoutState, 'templatesDir');
+      dir = this.getObservableValue(this.collageLayoutState, 'templatesDirectory');
     }
     const templates = this.ipcRenderer.sendSync(TOPICS.GET_TEMPLATES_SYNC, dir);
     this.store.dispatch(new collageLayoutActions.SetTemplates(templates));

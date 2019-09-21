@@ -86,7 +86,7 @@ export class CollageMaker {
     this.cache = null;
   }
 
-  getTemplates(directory: string): string[] {
+  getTemplates(directory?: string): string[] {
     let directoryTemplates = [];
     if (directory) {
       directoryTemplates = fs.readdirSync(directory).filter(template => fs.statSync(path.join(directory, template)).isDirectory());
