@@ -20,7 +20,7 @@ const logger = require('logger-winston').getLogger('app');
 
 export type ApplicationInitConfiguration = CameraProviderInitConfig & PrinterConfiguration & CollageMakerConfiguration;
 
-process.on('unhandledRejection', (error) => {
+process.on('unhandledRejection', (error: any) => {
   logger.error(`Catched unhandled Rejection: ${error.stack}`);
   throw error;
 });

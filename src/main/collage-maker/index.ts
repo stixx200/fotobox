@@ -24,7 +24,6 @@ export class CollageMaker {
     this.addPhotoToCollage = this.addPhotoToCollage.bind(this);
     this.initCollage = this.initCollage.bind(this);
     this.resetCollage = this.resetCollage.bind(this);
-    this.getTemplates = this.getTemplates.bind(this);
   }
 
   init(config: CollageMakerConfiguration, externals: { photosaver: PhotoHandler, clientProxy: ClientProxy }) {

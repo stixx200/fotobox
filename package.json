@@ -30,18 +30,29 @@
     "ng:serve": "ng serve",
     "electron:tsc": "tsc --project ./src/main/tsconfig.json",
     "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:tsc && electron . --serve",
-    "electron:serve:debug": "4electron %NODE_DEBUG_OPTION% . --serve",
+    "electron:serve:debug": "electron %NODE_DEBUG_OPTION% . --serve",
     "electron:local": "npm run build:prod && electron .",
     "electron:linux": "npm run build:prod && npx electron-builder build --linux",
     "electron:windows": "npm run build:prod && npx electron-builder build --windows",
-    "electron:mac": "npm run build:prod && npx electron-builder build --mac"
+    "electron:mac": "npm run build:prod && npx electron-builder build --mac",
+    "collageMaker:cli": "npm run electron:tsc && electron src/main/tools/collageMaker-cli.js"
+  },
+  "pkg": {
+    "targets": [
+      "node8-win-x64"
+    ],
+    "assets": [
+      "src/main/collage-maker/images/**/*"
+    ]
+  },
+  "bin": {
+    "collageMaker": "src/main/tools/collageMaker-cli.js"
   },
   "dependencies": {
     "download": "^7.1.0",
     "electron-localshortcut": "^3.1.0",
     "fs-extra": "^7.0.0",
     "logger-winston": "0.0.11",
-    "node": "8.11.4",
     "node-ssdp": "^3.3.0",
     "rxjs": "6.1.0",
     "sharp": "^0.22.1",
@@ -92,12 +103,14 @@
     "ngx-bootstrap": "^3.0.1",
     "npm-run-all": "4.1.3",
     "npx": "10.2.0",
+    "pkg": "^4.4.0",
     "protractor": "5.3.2",
     "ts-node": "6.0.3",
     "tslint": "5.10.0",
     "typescript": "2.7.2",
     "wait-on": "2.1.0",
     "webdriver-manager": "12.0.6",
+    "yargs": "^13.2.4",
     "zone.js": "0.8.26"
   }
 }

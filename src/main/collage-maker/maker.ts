@@ -6,8 +6,8 @@ import {Space, TemplateInterface} from './template.interface';
 
 const logger = require('logger-winston').getLogger('collage-maker.maker');
 
-const questionmarkPhoto = path.resolve(__dirname, './images/questionmark.png');
-const defaultBackgroundPhoto = path.resolve(__dirname, './images/default-background.jpg');
+const questionmarkPhoto = path.join(__dirname, './images/questionmark.png');
+const defaultBackgroundPhoto = path.join(__dirname, './images/default-background.jpg');
 
 function convertPhotoPath(photoPath) {
   return photoPath.replace('app.asar', 'app.asar.unpacked');
