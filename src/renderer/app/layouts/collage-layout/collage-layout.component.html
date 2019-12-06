@@ -19,7 +19,9 @@
   class="front">
 </app-collage-image>
 
-<app-message-stripe *ngIf="!currentPhoto && !countdown.running" class="bottom-message front" [message]="bottomMessage | translate"
+<app-message-stripe *ngIf="!currentPhoto && !countdown.running && (singleLayoutState | async).active"
+                    [message]="bottomMessage | translate"
+                    class="bottom-message front"
                     (action)="exit()">
 </app-message-stripe>
 

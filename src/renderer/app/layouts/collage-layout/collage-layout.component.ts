@@ -11,6 +11,7 @@ import {PhotoviewConfiguration} from '../../shared/photo-view/photo-view.compone
 
 import * as fromApp from '../../store/app.reducer';
 import * as fromMainConfiguration from '../../store/mainConfiguration.reducers';
+import * as fromSingleLayout from '../single-layout/store/single-layout.reducer';
 import {CollageImageComponent} from './collage-image/collage-image.component';
 import * as fromCollage from './store/collage-layout.reducer';
 
@@ -45,6 +46,7 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   @ViewChild('countdown') countdown: CountdownComponent;
   mainConfigurationState: Observable<fromMainConfiguration.State>;
   collageState: Observable<fromCollage.State>;
+  singleLayoutState: Observable<fromSingleLayout.State>;
   photos: string[];
   currentPhoto: string;
   usePhotoDialog: PhotoviewConfiguration = {
@@ -74,6 +76,7 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.reset();
     this.collageState = this.store.select('collageLayout');
+    this.singleLayoutState = this.store.select('singleLayout');
     this.mainConfigurationState = this.store.select('mainConfiguration');
     this.ipcRenderer.on(TOPICS.PHOTO, this.onNewPhoto);
   }
@@ -125,8 +128,12 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   }
 
   private onNewPhoto(event: Event, photoUrl: string) {
-    this.photoviewConfiguration = this.usePhotoDialog;
     this.currentPhoto = photoUrl;
+    if (this.collageComponent.previewAvailable) {
+      this.photoviewConfiguration = this.usePhotoDialog;
+    } else {
+      this.useCurrentPhoto();
+    }
   }
 
   private useCurrentPhoto() {

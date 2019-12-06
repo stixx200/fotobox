@@ -55,6 +55,10 @@ export class Maker {
   constructor(private configuration: CollageMakerConfiguration) {
   }
 
+  getPhotoCount(template: TemplateInterface): number {
+    return (new TemplateLoader(template)).getComposites().length;
+  }
+
   /**
    * Creates a new collage and returns the buffer.
    * @param template The template used to create the collage.

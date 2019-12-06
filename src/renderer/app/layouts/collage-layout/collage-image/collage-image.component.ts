@@ -14,6 +14,7 @@ let collagePhoto: string | SafeResourceUrl;
 })
 export class CollageImageComponent implements OnInit, OnDestroy {
   collagePhoto: string | SafeResourceUrl;
+  previewAvailable = true;
 
   @Output() done = new EventEmitter<string>();
   @Input() templateId: string;
@@ -29,7 +30,8 @@ export class CollageImageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log(`initializing template: ${this.templateId}`);
     this.ipcRenderer.on(TOPICS.CREATE_COLLAGE, this.onCollageRendered);
-    this.ipcRenderer.send(TOPICS.INIT_COLLAGE, this.templateId, this.templateDirectory);
+    const photoCount = this.ipcRenderer.sendSync(TOPICS.INIT_COLLAGE, this.templateId, this.templateDirectory);
+    this.previewAvailable = photoCount > 1;
     this.collagePhoto = collagePhoto;
   }
 

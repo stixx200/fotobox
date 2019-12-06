@@ -32,11 +32,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.ipcRenderer.on(TOPICS.PHOTO, this.onNewPhoto);
     this.ipcRenderer.on(TOPICS.GOTO_PHOTOLIST, this.gotoPhotolist);
 
-    this.collageLayoutState.pipe(take(1)).subscribe(({active}) => {
-      if (!active) {
-        this.router.navigate(['/layouts/single']);
-      }
-    });
+    if (!this.isLayoutActive(this.collageLayoutState)) {
+      this.router.navigate(['/layouts/single']);
+    } else if (!this.isLayoutActive(this.singleLayoutState)) {
+      this.router.navigate(['/layouts/collage']);
+    }
   }
 
   ngOnDestroy() {
@@ -50,5 +50,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onNewPhoto(event, photo) {
     this.router.navigate(['/layouts/single', {photo}]);
+  }
+
+  isLayoutActive(state: Observable<fromCollageLayout.State | fromSingleLayout.State>) {
+    let isActive = true;
+    state.pipe(take(1)).subscribe(({active}) => {
+      isActive = active;
+    });
+    return isActive;
   }
 }

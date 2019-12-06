@@ -55,6 +55,7 @@ export class CollageMaker {
         template: this.resolveTemplate(templateId, templateDirectory),
         photos: [],
       };
+      event.returnValue = this.maker.getPhotoCount(this.cache.template);
       const collageBuffer = await this.maker.createCollage(this.cache.template, this.cache.photos);
       event.sender.send(TOPICS.CREATE_COLLAGE, collageBuffer);
     } catch (error) {
