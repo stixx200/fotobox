@@ -1,5 +1,5 @@
-import {SafeResourceUrl} from '@angular/platform-browser';
-import {SingleLayoutActions, SingleLayoutActionTypes} from './single-layout.actions';
+import { SafeResourceUrl } from "@angular/platform-browser";
+import { SingleLayoutActions, SingleLayoutActionTypes } from "./single-layout.actions";
 
 export interface State {
   previewUrl: SafeResourceUrl;
@@ -9,9 +9,9 @@ export interface State {
 }
 
 const initialState: State = {
-  previewUrl: '../../../assets/singlelayout.preview.jpg',
-  title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.SINGLE',
-  route: '/layouts/single',
+  previewUrl: "../../../assets/singlelayout.preview.jpg",
+  title: "PAGES.SETUP.FOTOBOX.LAYOUTS.SINGLE",
+  route: "/layouts/single",
   active: true,
 };
 

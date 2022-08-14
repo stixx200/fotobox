@@ -1,16 +1,15 @@
-import {ipcMain} from 'electron';
-import * as fs from 'fs-extra';
-import * as _ from 'lodash';
-import * as sharp from 'sharp';
-import {URL} from 'url';
-import {promisify} from 'util';
-import {TOPICS} from './constants';
+import { ipcMain } from "electron";
+import * as fs from "fs-extra";
+import * as _ from "lodash";
+import sharp from "sharp";
+import { URL } from "url";
+import { TOPICS } from "../shared/constants";
 
-const path = require('path');
-const download = require('download');
-const logger = require('logger-winston').getLogger('photohandler');
+const path = require("path");
+const download = require("download");
+const logger = require("logger-winston").getLogger("photohandler");
 
-const collageName = 'collage';
+const collageName = "collage";
 
 export interface PhotoHandlerConfig {
   photoDir: string;
@@ -29,7 +28,7 @@ export class PhotoHandler {
 
   init(config: PhotoHandlerConfig) {
     this.photoDir = config.photoDir;
-    this.thumbDir = path.join(this.photoDir, 'thumbs');
+    this.thumbDir = path.join(this.photoD'thumbs'mbs");
 
     fs.ensureDirSync(this.photoDir);
     fs.ensureDirSync(this.thumbDir);
@@ -41,7 +40,7 @@ export class PhotoHandler {
     if (allFiles.length > 0) {
       const lastCollage = _.last(allFiles);
       const lastCollageName = path.basename(lastCollage, path.extname(lastCollage));
-      this.lastCollageNumber = (+lastCollageName.replace(collageName, '')) + 1;
+      this.lastCollageNumber = +lastCollageName.replace(collageName, '') + 1;
     }
   }
 
@@ -68,7 +67,7 @@ export class PhotoHandler {
     const fileName = `${collageName}${this.lastCollageNumber++}${extension}`;
     const fullFileName = path.join(this.photoDir, fileName);
 
-    await promisify(fs.writeFile)(fullFileName, data);
+    await fs.writeFile(fullFileName, data);
     await this.createThumb(fullFileName);
     return fileName;
   }
@@ -76,6 +75,8 @@ export class PhotoHandler {
   private createThumb(file, options: { width?: number } = {}) {
     const filename = path.basename(file);
     const targetFile = path.join(this.thumbDir, filename);
-    return sharp(file).resize(options.width || 400).toFile(targetFile);
+    return sharp(file)
+      .resize(options.width || 400)
+      .toFile(targetFile);
   }
 }

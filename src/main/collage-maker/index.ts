@@ -1,24 +1,23 @@
-import {ipcMain} from 'electron';
-import * as fs from 'fs-extra';
-import * as path from 'path';
-import {ClientProxy} from '../client.proxy';
-import {TOPICS} from '../constants';
-import {FotoboxError} from '../error/fotoboxError';
-import {PhotoHandler} from '../photo.handler';
-import {CollageMakerConfiguration, Maker} from './maker';
-import {TemplateInterface} from './template.interface';
-import builtInTemplates from './templates';
+import { ipcMain } from "electron";
+import * as fs from "fs-extra";
+import * as path from "path";
+import { TOPICS } from "../../shared/constants";
+import { CollageMakerConfiguration } from "../../shared/init-configuration.interface";
+import { ClientProxy } from "../client.proxy";
+import { FotoboxError } from "../error/fotoboxError";
+import { PhotoHandler } from "../photo.handler";
+import { Maker } from "./maker";
+import { TemplateInterface } from "./template.interface";
+import builtInTemplates from "./templates";
 
-const logger = require('logger-winston').getLogger('collage-maker');
-
-export {CollageMakerConfiguration} from './maker';
+const logger = require("logger-winston").getLogger("collage-maker");
 
 export class CollageMaker {
   private clientProxy: ClientProxy;
   private maker: Maker = null;
   private photosaver: PhotoHandler;
 
-  private cache: { template: TemplateInterface, photos: string[] } = null;
+  private cache: { template: TemplateInterface; photos: string[] } = null;
 
   constructor() {
     this.addPhotoToCollage = this.addPhotoToCollage.bind(this);
@@ -26,7 +25,7 @@ export class CollageMaker {
     this.resetCollage = this.resetCollage.bind(this);
   }
 
-  init(config: CollageMakerConfiguration, externals: { photosaver: PhotoHandler, clientProxy: ClientProxy }) {
+  init(config: CollageMakerConfiguration, externals: { photosaver: PhotoHandler; clientProxy: ClientProxy }) {
     this.maker = new Maker(config);
     this.clientProxy = externals.clientProxy;
     this.photosaver = externals.photosaver;
@@ -37,7 +36,7 @@ export class CollageMaker {
   }
 
   deinit() {
-    logger.info('Deinitialize collage maker');
+    logger.info("Deinitialize collage maker");
     ipcMain.removeListener(TOPICS.RESET_COLLAGE, this.resetCollage);
     ipcMain.removeListener(TOPICS.CREATE_COLLAGE, this.addPhotoToCollage);
     ipcMain.removeListener(TOPICS.INIT_COLLAGE, this.initCollage);
@@ -59,7 +58,7 @@ export class CollageMaker {
       const collageBuffer = await this.maker.createCollage(this.cache.template, this.cache.photos);
       event.sender.send(TOPICS.CREATE_COLLAGE, collageBuffer);
     } catch (error) {
-      logger.error('error occured while initializing collage', error);
+      logger.error("error occured while initializing collage", error);
       this.clientProxy.sendError(`Error occured while adding photo to collage: ${error.message}`);
     }
   }
@@ -72,13 +71,13 @@ export class CollageMaker {
 
       let collageName = null;
       if (this.cache.photos.length === this.cache.template.spaces.length) {
-        collageName = await this.photosaver.saveBinaryCollage(collageBuffer, '.jpg');
+        collageName = await this.photosaver.saveBinaryCollage(collageBuffer, ".jpg");
         this.resetCollage();
       }
 
       event.sender.send(TOPICS.CREATE_COLLAGE, collageBuffer, collageName);
     } catch (error) {
-      logger.error('error occured while adding photo to collage', error);
+      logger.error("error occured while adding photo to collage", error);
       this.clientProxy.sendError(`Error occured while adding photo to collage: ${error.message}`);
     }
   }
@@ -90,12 +89,11 @@ export class CollageMaker {
   getTemplates(directory?: string): string[] {
     let directoryTemplates = [];
     if (directory) {
-      directoryTemplates = fs.readdirSync(directory).filter(template => fs.statSync(path.join(directory, template)).isDirectory());
+      directoryTemplates = fs
+        .readdirSync(directory)
+        .filter((template) => fs.statSync(path.join(directory, template)).isDirectory());
     }
-    return [
-      ...directoryTemplates,
-      ...Object.keys(builtInTemplates),
-    ];
+    return [...directoryTemplates, ...Object.keys(builtInTemplates)];
   }
 
   resolveTemplate(id: string, directory?: string) {
@@ -106,7 +104,7 @@ export class CollageMaker {
     }
     throw new FotoboxError(
       `Template '${id}' not found. Available are: '${this.getTemplates(directory)}'`,
-      'MAIN.COLLAGE-MAKER.TEMPLATE_NOT_FOUND',
+      "MAIN.COLLAGE-MAKER.TEMPLATE_NOT_FOUND",
     );
   }
 }

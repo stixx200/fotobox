@@ -1,5 +1,5 @@
 <mat-form-field>
-  <input (click)="openPicker($event.target.value)"
+  <input (click)="openPicker($event.target)"
          [name]="config.title"
          [ngModel]="(config.value | async)"
          class="input"

@@ -1,9 +1,9 @@
-import { ActionReducerMap } from '@ngrx/store';
+import { ActionReducerMap } from "@ngrx/store";
 
-import * as fromGlobal from './global.reducer';
-import * as fromMainConfiguration from './mainConfiguration.reducers';
-import * as fromCollageLayout from '../layouts/collage-layout/store/collage-layout.reducer';
-import * as fromSingleLayout from '../layouts/single-layout/store/single-layout.reducer';
+import * as fromGlobal from "./global.reducer";
+import * as fromMainConfiguration from "./mainConfiguration.reducers";
+import * as fromCollageLayout from "../layouts/collage-layout/store/collage-layout.reducer";
+import * as fromSingleLayout from "../layouts/single-layout/store/single-layout.reducer";
 
 export interface AppState {
   global: fromGlobal.State;

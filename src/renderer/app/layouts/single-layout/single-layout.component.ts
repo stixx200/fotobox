@@ -1,43 +1,48 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatSnackBar, MatSnackBarRef, SimpleSnackBar} from '@angular/material';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {take} from 'rxjs/operators';
-import {TOPICS} from '../../../../main/constants';
-import {IpcRendererService} from '../../providers/ipc.renderer.service';
-import {CountdownComponent} from '../../shared/countdown/countdown.component';
-import {PhotoviewConfiguration} from '../../shared/photo-view/photo-view.component';
-import * as fromApp from '../../store/app.reducer';
-import * as fromMainConfiguration from '../../store/mainConfiguration.reducers';
-import * as fromCollageLayout from '../collage-layout/store/collage-layout.reducer';
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from "@angular/material/snack-bar";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { Observable } from "rxjs";
+import {take}'rxjs/operators'ators";
+import {TOPICS}'../../../../shared/constants'tants";
+import {IpcRendererService}'../../providers/ipc.renderer.service'rvice";
+import { CountdownComponent } from "../../shared/countdown/countdown.component";
+import { PhotoviewConfiguration } from "../../shared/photo-view/photo-view.component";
+import * as fromApp from "../../store/app.reducer";
+import * as fromMainConfiguration from "../../store/mainConfiguration.reducers";
+import * as fromCollageLayout from "../collage-layout/store/collage-layout.reducer";
 
 @Component({
-  selector: 'app-single-layout',
-  templateUrl: './single-layout.component.html',
-  styleUrls: ['./single-layout.component.scss'],
+  selector: "app-single-layout",
+  templateUrl: "./single-layout.component.html",
+  styleUrls: ["./single-layout.component.scss"],
 })
 export class SingleLayoutComponent implements OnInit, OnDestroy {
   photoviewConfiguration: PhotoviewConfiguration;
   nextDialog: PhotoviewConfiguration = {
     title: '',
-    buttons: [{
-      text: 'NEXT',
-      icon: '',
-      callback: () => this.exit(),
-    }],
+    buttons: [
+      {
+        text: 'NEXT',
+        icon: '',
+        callback: () => this.exit(),
+      },
+    ],
   };
   printDialog: PhotoviewConfiguration = {
     title: 'PRINT_QUESTION',
-    buttons: [{
-      text: 'YES',
-      icon: '',
-      callback: () => this.print(),
-    }, {
-      text: 'NO',
-      icon: '',
-      callback: () => this.exit(),
-    }],
+    buttons: [
+      {
+        text: 'YES',
+        icon: '',
+        callback: () => this.print(),
+      },
+      {
+        text: 'NO',
+        icon: '',
+        callback: () => this.exit(),
+      },
+    ],
   };
 
   photo: string;
@@ -47,11 +52,13 @@ export class SingleLayoutComponent implements OnInit, OnDestroy {
   @ViewChild('countdown') countdown: CountdownComponent;
   private snackBarRef: MatSnackBarRef<SimpleSnackBar>;
 
-  constructor(private router: Router,
-              private ipcRenderer: IpcRendererService,
-              private route: ActivatedRoute,
-              private store: Store<fromApp.AppState>,
-              private snackBar: MatSnackBar) {
+  constructor(
+    private router: Router,
+    private ipcRenderer: IpcRendererService,
+    private route: ActivatedRoute,
+    private store: Store<fromApp.AppState>,
+    private snackBar: MatSnackBar,
+  ) {
     this.exit = this.exit.bind(this);
     this.print = this.print.bind(this);
     this.onNewPhoto = this.onNewPhoto.bind(this);

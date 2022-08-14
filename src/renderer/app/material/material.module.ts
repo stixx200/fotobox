@@ -1,20 +1,17 @@
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {
-  MatButtonModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatDividerModule,
-  MatFormFieldModule,
-  MatGridListModule,
-  MatInputModule,
-  MatOptionModule,
-  MatSelectModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatTabsModule,
-} from '@angular/material';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { NgModule } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatTabsModule } from "@angular/material/tabs";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 const usedModules = [
   MatButtonModule,
@@ -22,7 +19,6 @@ const usedModules = [
   BrowserAnimationsModule,
   MatFormFieldModule,
   MatInputModule,
-  MatOptionModule,
   MatSelectModule,
   MatSlideToggleModule,
   MatDividerModule,
@@ -38,4 +34,4 @@ const usedModules = [
   exports: usedModules,
   declarations: [],
 })
-export class MaterialModule { }
+export class MaterialModule {}

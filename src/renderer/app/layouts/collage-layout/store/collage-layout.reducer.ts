@@ -1,5 +1,5 @@
-import {SafeResourceUrl} from '@angular/platform-browser';
-import {CollageLayoutActions, CollageLayoutActionTypes} from './collage-layout.actions';
+import { SafeResourceUrl } from "@angular/platform-browser";
+import { CollageLayoutActions, CollageLayoutActionTypes } from "./collage-layout.actions";
 
 export interface State {
   previewUrl: SafeResourceUrl;
@@ -12,12 +12,12 @@ export interface State {
 }
 
 const initialState: State = {
-  previewUrl: '../../../assets/collagelayout.preview.jpg',
-  title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE',
-  route: '/layouts/collage',
+  previewUrl: "../../../assets/collagelayout.preview.jpg",
+  title: "PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE",
+  route: "/layouts/collage",
   active: true,
-  templatesDirectory: '',
-  templateId: '',
+  templatesDirectory: "",
+  templateId: "",
   templates: [],
 };
 

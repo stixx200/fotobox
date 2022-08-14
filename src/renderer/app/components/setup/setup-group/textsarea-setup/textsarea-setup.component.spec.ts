@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {TextsareaSetupComponent} from './textsarea-setup.component';
+import { TextsareaSetupComponent } from "./textsarea-setup.component";
 
-describe('SelectionSetupComponent', () => {
+describ'SelectionSetupComponent't", () => {
   let component: TextsareaSetupComponent;
   let fixture: ComponentFixture<TextsareaSetupComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-        declarations: [TextsareaSetupComponent],
-      })
-      .compileComponents();
+      declarations: [TextsareaSetupComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

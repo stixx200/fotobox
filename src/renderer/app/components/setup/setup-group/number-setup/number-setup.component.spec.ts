@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {NumberSetupComponent} from './number-setup.component';
+import { NumberSetupComponent } from "./number-setup.component";
 
-describe('SelectionSetupComponent', () => {
+describ'SelectionSetupComponent't", () => {
   let component: NumberSetupComponent;
   let fixture: ComponentFixture<NumberSetupComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-        declarations: [NumberSetupComponent],
-      })
-      .compileComponents();
+      declarations: [NumberSetupComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

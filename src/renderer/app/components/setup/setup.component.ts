@@ -1,29 +1,29 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
-import {Store} from '@ngrx/store';
-import {ModalDirective} from 'ngx-bootstrap/modal';
-import {Observable} from 'rxjs';
-import {first, map, withLatestFrom} from 'rxjs/operators';
-import {ApplicationInitConfiguration} from '../../../../main/app';
-import {TOPICS} from '../../../../main/constants';
-import * as collageLayoutActions from '../../layouts/collage-layout/store/collage-layout.actions';
-import * as fromCollageLayout from '../../layouts/collage-layout/store/collage-layout.reducer';
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { ModalDirective } from "ngx-bootstrap/modal";
+import { Observable } from "rxjs";
+import { first, map, withLatestFrom } from "rxjs/operators";
+import { TOPICS } from "../../../../shared/constants";
+import { ApplicationInitConfiguration } from "../../../../shared/init-configuration.interface";
+import * as collageLayoutActions from "../../layouts/collage-layout/store/collage-layout.actions";
+import * as fromCollageLayout from "../../layouts/collage-layout/store/collage-layout.reducer";
 
-import * as singleLayoutActions from '../../layouts/single-layout/store/single-layout.actions';
-import * as fromSingleLayout from '../../layouts/single-layout/store/single-layout.reducer';
-import {IpcRendererService} from '../../providers/ipc.renderer.service';
+import * as singleLayoutActions from "../../layouts/single-layout/store/single-layout.actions";
+import * as fromSingleLayout from "../../layouts/single-layout/store/single-layout.reducer";
+import { IpcRendererService } from "../../providers/ipc.renderer.service";
 
-import * as fromApp from '../../store/app.reducer';
-import * as globalActions from '../../store/global.actions';
-import * as mainConfigurationActions from '../../store/mainConfiguration.actions';
-import {SetCameraDrivers} from '../../store/mainConfiguration.actions';
-import * as fromMainConfiguration from '../../store/mainConfiguration.reducers';
-import {SetupConfig} from './setup-group/setup-group.component';
+import * as fromApp from "../../store/app.reducer";
+import * as globalActions from "../../store/global.actions";
+import * as mainConfigurationActions from "../../store/mainConfiguration.actions";
+import { SetCameraDrivers } from "../../store/mainConfiguration.actions";
+import * as fromMainConfiguration from "../../store/mainConfiguration.reducers";
+import { SetupConfig } from "./setup-group/setup-group.component";
 
 @Component({
-  selector: 'app-setup',
-  templateUrl: './setup.component.html',
-  styleUrls: ['./setup.component.scss'],
+  selector: "app-setup",
+  templateUrl: "./setup.component.html",
+  styleUrls: ["./setup.component.scss"],
 })
 export class SetupComponent implements OnInit, OnDestroy {
   collageLayoutState: Observable<fromCollageLayout.State>;
@@ -32,13 +32,15 @@ export class SetupComponent implements OnInit, OnDestroy {
 
   setupConfigs: { [key: string]: SetupConfig[] } = {};
 
-  statusMessage = 'PAGES.SETUP.FOTOBOX.MODAL.STATUS_INITIALIZING';
+  statusMessage = "PAGES.SETUP.FOTOBOX.MODAL.STATUS_INITIALIZING";
 
   @ViewChild(ModalDirective) modal: ModalDirective;
 
-  constructor(private store: Store<fromApp.AppState>,
-              private ipcRenderer: IpcRendererService,
-              private router: Router) {
+  constructor(
+    private store: Store<fromApp.AppState>,
+    private ipcRenderer: IpcRendererService,
+    private router: Router,
+  ) {
     this.onApplicationStarted = this.onApplicationStarted.bind(this);
     this.onStatusMessageReceived = this.onStatusMessageReceived.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -47,14 +49,14 @@ export class SetupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.closeModal();
 
-    this.collageLayoutState = this.store.select('collageLayout');
-    this.singleLayoutState = this.store.select('singleLayout');
-    this.mainConfigurationState = this.store.select('mainConfiguration');
+    this.collageLayoutState = this.store.select("collageLayout");
+    this.singleLayoutState = this.store.select("singleLayout");
+    this.mainConfigurationState = this.store.select("mainConfiguration");
 
     this.updateTemplates();
     this.initConfigs();
 
-    this.store.dispatch(new globalActions.SetTitle('TITLES.SETUP'));
+    this.store.dispatch(new globalActions.SetTitle("TITLES.SETUP"));
 
     this.ipcRenderer.on(TOPICS.INIT_STATUSMESSAGE, this.onStatusMessageReceived);
     this.ipcRenderer.on(TOPICS.STOP_APPLICATION, this.closeModal);
@@ -75,9 +77,7 @@ export class SetupComponent implements OnInit, OnDestroy {
         sonyPassword: data.sonyPassword,
         wifiControl: data.wifiControl,
       };
-    });
-
-    console.log('start application with settings: ', applicationSettings);
+    });'start application with settings: 'n with settings: ", applicationSettings);
     this.modal.show();
     this.ipcRenderer.on(TOPICS.START_APPLICATION, this.onApplicationStarted);
     this.ipcRenderer.send(TOPICS.START_APPLICATION, applicationSettings);
@@ -103,7 +103,7 @@ export class SetupComponent implements OnInit, OnDestroy {
   }
 
   closeModal() {
-    this.modal.hide();
+    this.modal?.hide();
   }
 
   onLayoutSelectionChanged(selection) {
@@ -134,13 +134,13 @@ export class SetupComponent implements OnInit, OnDestroy {
       {
         type: 'directory',
         title: 'PAGES.SETUP.SYSTEM.PHOTO_DIRECTORY',
-        onChanged: directory => this.store.dispatch(new mainConfigurationActions.SetPhotoDir(directory)),
+        onChanged: (directory) => this.store.dispatch(new mainConfigurationActions.SetPhotoDir(directory)),
         value: this.mainConfigurationState.pipe(map((state: fromMainConfiguration.State) => state.photoDir)),
       },
       {
         type: 'checkbox',
         title: 'PAGES.SETUP.SYSTEM.USE_PRINTER',
-        onChanged: state => this.store.dispatch(new mainConfigurationActions.SetUsePrinter(state)),
+        onChanged: (state) => this.store.dispatch(new mainConfigurationActions.SetUsePrinter(state)),
         state: this.mainConfigurationState.pipe(map((state) => state.usePrinter)),
       },
       {
@@ -156,7 +156,7 @@ export class SetupComponent implements OnInit, OnDestroy {
         title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.TITLE',
         selection: this.singleLayoutState.pipe(
           withLatestFrom(this.collageLayoutState),
-          map(([single, collage]) => ([single.title, collage.title])),
+          map(([single, collage]) => [single.title, collage.title]),
         ),
         selected: this.singleLayoutState.pipe(
           withLatestFrom(this.collageLayoutState),
@@ -171,7 +171,7 @@ export class SetupComponent implements OnInit, OnDestroy {
             return selected;
           }),
         ),
-        onChanged: selection => this.onLayoutSelectionChanged(selection),
+        onChanged: (selection) => this.onLayoutSelectionChanged(selection),
       },
     ];
 
@@ -181,28 +181,34 @@ export class SetupComponent implements OnInit, OnDestroy {
   private addCollageSetup() {
     const collageLayoutActive = this.getObservableValue(this.collageLayoutState, 'active');
     if (collageLayoutActive) {
-      this.setupConfigs.collage = [{
-        type: 'directory',
-        title: 'PAGES.SETUP.SYSTEM.TEMPLATES_DIRECTORY',
-        onChanged: directory => {
-          this.store.dispatch(new collageLayoutActions.SetTemplatesDir(directory));
-          // get all templates from the new directory and update available templates
-          this.updateTemplates(directory);
+      this.setupConfigs.collage = [
+        {
+          type: 'directory',
+          title: 'PAGES.SETUP.SYSTEM.TEMPLATES_DIRECTORY',
+          onChanged: (directory) => {
+            this.store.dispatch(new collageLayoutActions.SetTemplatesDir(directory));
+            // get all templates from the new directory and update available templates
+            this.updateTemplates(directory);
+          },
+          value: this.collageLayoutState.pipe(
+            map((state: fromCollageLayout.State) => state.templatesDirectory),
+          ),
         },
-        value: this.collageLayoutState.pipe(map((state: fromCollageLayout.State) => state.templatesDirectory)),
-      }, {
-        type: 'button',
-        title: 'PAGES.SETUP.SYSTEM.UPDATE_TEMPLATES',
-        onClick: () => this.updateTemplates(),
-      }, {
-        title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEMPLATE',
-        type: 'selection',
-        selection: this.collageLayoutState.pipe(map((state: fromCollageLayout.State) => state.templates)),
-        selected: this.collageLayoutState.pipe(map((state: fromCollageLayout.State) => state.templateId)),
-        onChanged: (template) => {
-          this.store.dispatch(new collageLayoutActions.SetTemplate(template));
+        {
+          type: 'button',
+          title: 'PAGES.SETUP.SYSTEM.UPDATE_TEMPLATES',
+          onClick: () => this.updateTemplates(),
         },
-      }];
+        {
+          title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEMPLATE',
+          type: 'selection',
+          selection: this.collageLayoutState.pipe(map((state: fromCollageLayout.State) => state.templates)),
+          selected: this.collageLayoutState.pipe(map((state: fromCollageLayout.State) => state.templateId)),
+          onChanged: (template) => {
+            this.store.dispatch(new collageLayoutActions.SetTemplate(template));
+          },
+        },
+      ];
     }
   }
 
@@ -211,8 +217,12 @@ export class SetupComponent implements OnInit, OnDestroy {
       {
         type: 'selection',
         title: 'PAGES.SETUP.SYSTEM.CAMERA_DRIVERS.TITLE',
-        selection: this.mainConfigurationState.pipe(map((state: fromMainConfiguration.State) => state.cameraDrivers)),
-        selected: this.mainConfigurationState.pipe(map((state: fromMainConfiguration.State) => state.selectedDriver)),
+        selection: this.mainConfigurationState.pipe(
+          map((state: fromMainConfiguration.State) => state.cameraDrivers),
+        ),
+        selected: this.mainConfigurationState.pipe(
+          map((state: fromMainConfiguration.State) => state.selectedDriver),
+        ),
         onChanged: (driver) => {
           this.store.dispatch(new mainConfigurationActions.SetSelectedDriver(driver));
           this.initConfigs();
@@ -226,7 +236,9 @@ export class SetupComponent implements OnInit, OnDestroy {
       this.setupConfigs.camera.push({
         type: 'checkbox',
         title: 'PAGES.SETUP.SYSTEM.SONY.AUTOCONNECT',
-        state: this.mainConfigurationState.pipe(map((state: fromMainConfiguration.State) => state.wifiControl)),
+        state: this.mainConfigurationState.pipe(
+          map((state: fromMainConfiguration.State) => state.wifiControl),
+        ),
         onChanged: (state) => {
           this.store.dispatch(new mainConfigurationActions.SetWifiControl(state));
           this.initConfigs();
@@ -238,7 +250,9 @@ export class SetupComponent implements OnInit, OnDestroy {
         this.setupConfigs.camera.push({
           type: 'text',
           title: 'PAGES.SETUP.SYSTEM.SONY.PASSWORD',
-          value: this.mainConfigurationState.pipe(map((state: fromMainConfiguration.State) => state.sonyPassword)),
+          value: this.mainConfigurationState.pipe(
+            map((state: fromMainConfiguration.State) => state.sonyPassword),
+          ),
           onChanged: (password) => {
             this.store.dispatch(new mainConfigurationActions.SetSonyPassword(password));
           },
@@ -252,7 +266,7 @@ export class SetupComponent implements OnInit, OnDestroy {
       {
         type: 'file',
         title: 'PAGES.SETUP.SYSTEM.IRFANVIEW_PATH',
-        onChanged: newPath => this.store.dispatch(new mainConfigurationActions.SetIrfanViewPath(newPath)),
+        onChanged: (newPath) => this.store.dispatch(new mainConfigurationActions.SetIrfanViewPath(newPath)),
         value: this.mainConfigurationState.pipe(map((state) => state.irfanViewPath)),
       },
     ];
@@ -277,4 +291,3 @@ export class SetupComponent implements OnInit, OnDestroy {
     this.store.dispatch(new collageLayoutActions.SetTemplates(templates));
   }
 }
-

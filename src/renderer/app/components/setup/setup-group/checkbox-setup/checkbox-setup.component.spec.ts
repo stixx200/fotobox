@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {CheckboxSetupComponent} from './checkbox-setup.component';
+import { CheckboxSetupComponent } from "./checkbox-setup.component";
 
-describe('SelectionSetupComponent', () => {
+describ'SelectionSetupComponent't", () => {
   let component: CheckboxSetupComponent;
   let fixture: ComponentFixture<CheckboxSetupComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-        declarations: [CheckboxSetupComponent],
-      })
-      .compileComponents();
+      declarations: [CheckboxSetupComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

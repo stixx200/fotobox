@@ -1,14 +1,15 @@
-import {ipcMain} from 'electron';
-import {Subscription} from 'rxjs';
-import {ClientProxy} from '../client.proxy';
-import {TOPICS} from '../constants';
-import {PhotoHandler} from '../photo.handler';
-import {ShutdownHandler} from '../shutdown.handler';
-import {CameraInitConfiguration, CameraInterface} from './camera.interface';
-import {DemoCamera} from './demo';
-import {SonyCamera} from './sony';
+import { ipcMain } from "electron";
+import { Subscription } from "rxjs";
+import { TOPICS } from "../../shared/constants";
+import { CameraProviderInitConfig } from "../../shared/init-configuration.interface";
+import { ClientProxy } from "../client.proxy";
+import { PhotoHandler } from "../photo.handler";
+import { ShutdownHandler } from "../shutdown.handler";
+import { CameraInterface } from "./camera.interface";
+import { DemoCamera } from "./demo";
+import { SonyCamera } from "./sony";
 
-const logger = require('logger-winston').getLogger('camera.provider');
+const logger = require("logger-winston").getLogger("camera.provider");
 
 const cameras = {
   sony: SonyCamera,
@@ -20,10 +21,6 @@ const getCamera = (cameraDriver: string): CameraInterface => {
     throw new Error(`Driver '${cameraDriver}' not available.`);
   }
   return new cameras[cameraDriver]();
-};
-
-export type CameraProviderInitConfig = CameraInitConfiguration & {
-  cameraDriver: string;
 };
 
 export class CameraProvider {
@@ -40,8 +37,10 @@ export class CameraProvider {
     return Object.keys(cameras);
   }
 
-  async init(config: CameraProviderInitConfig,
-             externals: { clientProxy: ClientProxy, shutdownHandler: ShutdownHandler, photosaver: PhotoHandler }) {
+  async init(
+    config: CameraProviderInitConfig,
+    externals: { clientProxy: ClientProxy; shutdownHandler: ShutdownHandler; photosaver: PhotoHandler },
+  ) {
     this.client = externals.clientProxy;
 
     this.camera = getCamera(config.cameraDriver);
@@ -50,7 +49,9 @@ export class CameraProvider {
     ipcMain.on(TOPICS.TAKE_PICTURE, this.takePicture);
 
     this.startLiveViewObserving();
-    this.picturesSubscription = this.camera.observePictures().subscribe((fileName: string) => this.onNewPhoto(fileName));
+    this.picturesSubscription = this.camera
+      .observePictures()
+      .subscribe((fileName: string) => this.onNewPhoto(fileName));
   }
 
   async deinit() {
@@ -76,14 +77,13 @@ export class CameraProvider {
   startLiveViewObserving() {
     // don't start live view twice
     if (this.liveViewSubscription) {
-      logger.warn('LiveViewObserving started twice. Ignore last call.');
+      logger.warn("LiveViewObserving started twice. Ignore last call.");
       return;
     }
 
-    this.liveViewSubscription = this.camera.observeLiveView()
-      .subscribe((data: any) => {
-        this.client.send(TOPICS.LIVEVIEW_DATA, data);
-      });
+    this.liveViewSubscription = this.camera.observeLiveView().subscribe((data: any) => {
+      this.client.send(TOPICS.LIVEVIEW_DATA, data);
+    });
   }
 
   takePicture() {

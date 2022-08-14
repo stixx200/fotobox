@@ -1,29 +1,16 @@
 {
   "productName": "fotobox",
   "directories": {
-    "output": "dist/main"
+    "output": "dist/builder-output"
   },
   "asarUnpack": [
     "src/main/**/*.jpg",
     "src/main/**/*.png"
   ],
   "files": [
-    "**/*",
+    "src/main/**/*",
     "!*.ts",
-    "!*.map",
-    "!*.code-workspace",
-    "!*.idea",
-    "!LICENSE.md",
-    "!package-lock.json",
-    "!src/renderer/*",
-    "!e2e/",
-    "!hooks/",
-    "!.angular-cli.json",
-    "!_config.yml",
-    "!karma.conf.js",
-    "!tsconfig.json",
-    "!tslint.json",
-    "!tools/"
+    "!*.map"
   ],
   "win": {
     "icon": "dist/renderer/assets/icon",

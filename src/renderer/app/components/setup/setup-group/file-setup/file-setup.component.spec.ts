@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {FileSetupComponent} from './file-setup.component';
+import { FileSetupComponent } from "./file-setup.component";
 
-describe('SelectionSetupComponent', () => {
+describ'SelectionSetupComponent't", () => {
   let component: FileSetupComponent;
   let fixture: ComponentFixture<FileSetupComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-        declarations: [FileSetupComponent],
-      })
-      .compileComponents();
+      declarations: [FileSetupComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

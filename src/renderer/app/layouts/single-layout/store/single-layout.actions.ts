@@ -1,7 +1,7 @@
-import { Action } from '@ngrx/store';
+import { Action } from "@ngrx/store";
 
 export enum SingleLayoutActionTypes {
-  SET_ACTIVE = '[SingleLayout] SetActive',
+  SET_ACTIVE = "[SingleLayout] SetActive",
 }
 
 export class SetActive implements Action {

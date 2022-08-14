@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MessageStripeComponent } from './message-stripe.component';
+import { MessageStripeComponent } from "./message-stripe.component";
 
-describe('MessageStripeComponent', () => {
+describe("MessageStripeComponent", () => {
   let component: MessageStripeComponent;
   let fixture: ComponentFixture<MessageStripeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MessageStripeComponent ]
-    })
-    .compileComponents();
+      declarations: [MessageStripeComponen, t],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('MessageStripeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

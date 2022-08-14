@@ -1,46 +1,51 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatSnackBar, MatSnackBarRef, SimpleSnackBar} from '@angular/material';
-import {Router} from '@angular/router';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {take} from 'rxjs/operators';
-import {TOPICS} from '../../../../main/constants';
-import {IpcRendererService} from '../../providers/ipc.renderer.service';
-import {CountdownComponent} from '../../shared/countdown/countdown.component';
-import {PhotoviewConfiguration} from '../../shared/photo-view/photo-view.component';
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { Observable } from "rxjs";
+import {take}'rxjs/operators'ators";
+import {TOPICS}'../../../../shared/constants'tants";
+import {IpcRendererService}'../../providers/ipc.renderer.service'rvice";
+import { CountdownComponent } from "../../shared/countdown/countdown.component";
+import { PhotoviewConfiguration } from "../../shared/photo-view/photo-view.component";
 
-import * as fromApp from '../../store/app.reducer';
-import * as fromMainConfiguration from '../../store/mainConfiguration.reducers';
-import * as fromSingleLayout from '../single-layout/store/single-layout.reducer';
-import {CollageImageComponent} from './collage-image/collage-image.component';
-import * as fromCollage from './store/collage-layout.reducer';
+import * as fromApp from "../../store/app.reducer";
+import * as fromMainConfiguration from "../../store/mainConfiguration.reducers";
+import * as fromSingleLayout from "../single-layout/store/single-layout.reducer";
+import { CollageImageComponent } from "./collage-image/collage-image.component";
+import * as fromCollage from "./store/collage-layout.reducer";
 
 @Component({
-  selector: 'app-collage-layout',
-  templateUrl: './collage-layout.component.html',
-  styleUrls: ['./collage-layout.component.scss'],
+  selector: "app-collage-layout",
+  templateUrl: "./collage-layout.component.html",
+  styleUrls: ["./collage-layout.component.scss"],
 })
 export class CollageLayoutComponent implements OnInit, OnDestroy {
   photoviewConfiguration: PhotoviewConfiguration;
   nextDialog: PhotoviewConfiguration = {
     title: '',
-    buttons: [{
-      text: 'NEXT',
-      icon: '',
-      callback: () => this.exit(),
-    }],
+    buttons: [
+      {
+        text: 'NEXT',
+        icon: '',
+        callback: () => this.exit(),
+      },
+    ],
   };
   printDialog: PhotoviewConfiguration = {
     title: 'PRINT_QUESTION',
-    buttons: [{
-      text: 'YES',
-      icon: '',
-      callback: () => this.print(),
-    }, {
-      text: 'NO',
-      icon: '',
-      callback: () => this.exit(),
-    }],
+    buttons: [
+      {
+        text: 'YES',
+        icon: '',
+        callback: () => this.print(),
+      },
+      {
+        text: 'NO',
+        icon: '',
+        callback: () => this.exit(),
+      },
+    ],
   };
   @ViewChild('imageComponent') collageComponent: CollageImageComponent;
   @ViewChild('countdown') countdown: CountdownComponent;
@@ -51,25 +56,30 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   currentPhoto: string;
   usePhotoDialog: PhotoviewConfiguration = {
     title: 'USE_QUESTION',
-    buttons: [{
-      text: 'YES',
-      icon: '',
-      callback: () => this.useCurrentPhoto(),
-    }, {
-      text: 'NO',
-      icon: '',
-      callback: () => (this.currentPhoto = null),
-    }],
+    buttons: [
+      {
+        text: 'YES',
+        icon: '',
+        callback: () => this.useCurrentPhoto(),
+      },
+      {
+        text: 'NO',
+        icon: '',
+        callback: () => (this.currentPhoto = null),
+      },
+    ],
   };
   topMessage = 'LAYOUTS.READY_TAKE_PICTURE';
   bottomMessage = 'LAYOUTS.ABORT';
 
   private snackBarRef: MatSnackBarRef<SimpleSnackBar>;
 
-  constructor(private store: Store<fromApp.AppState>,
-              private router: Router,
-              private ipcRenderer: IpcRendererService,
-              private snackBar: MatSnackBar) {
+  constructor(
+    private store: Store<fromApp.AppState>,
+    private router: Router,
+    private ipcRenderer: IpcRendererService,
+    private snackBar: MatSnackBar,
+  ) {
     this.onNewPhoto = this.onNewPhoto.bind(this);
   }
 
@@ -117,7 +127,7 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
   }
 
   onCollageDone(collage: string) {
-    this.mainConfigurationState.pipe(take(1)).subscribe(({usePrinter}) => {
+    this.mainConfigurationState.pipe(take(1)).subscribe(({ usePrinter }) => {
       if (usePrinter) {
         this.photoviewConfiguration = this.printDialog;
       } else {

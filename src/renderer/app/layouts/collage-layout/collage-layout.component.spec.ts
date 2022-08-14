@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { CollageLayoutComponent } from './collage-layout.component';
+import { CollageLayoutComponent } from "./collage-layout.component";
 
-describe('CollageLayoutComponent', () => {
+describe("CollageLayoutComponent", () => {
   let component: CollageLayoutComponent;
   let fixture: ComponentFixture<CollageLayoutComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CollageLayoutComponent ]
-    })
-    .compileComponents();
+      declarations: [CollageLayoutComponen, t],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('CollageLayoutComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

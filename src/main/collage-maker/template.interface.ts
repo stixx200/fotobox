@@ -14,7 +14,7 @@ export interface Border {
 }
 
 export interface PhotoSpace {
-  type: 'photo';
+  type: "photo";
   width: number;
   height: number;
   x: number;

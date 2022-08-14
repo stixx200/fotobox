@@ -1,7 +1,7 @@
-import * as _ from 'lodash';
-import {Observer} from 'rxjs';
+import * as _ from "lodash";
+import { Observer } from "rxjs";
 
-const logger = require('logger-winston').getLogger('camera.sony.livestreamparser');
+const logger = require("logger-winston").getLogger("camera.sony.livestreamparser");
 
 enum RECEIVING_TYPE {
   commonHeader,
@@ -24,7 +24,15 @@ class ReceivingInfo {
   frameCount = -1;
   frameSize = -1;
 
-  constructor(data: { payloadType?: number, paddingSize?: number, payloadSize?: number, frameCount?: number, frameSize?: number } = {}) {
+  constructor(
+    data: {
+      payloadType?: number;
+      paddingSize?: number;
+      payloadSize?: number;
+      frameCount?: number;
+      frameSize?: number;
+    } = {},
+  ) {
     this.payloadType = _.isNil(data.payloadType) ? this.payloadType : data.payloadType;
     this.paddingSize = _.isNil(data.paddingSize) ? this.paddingSize : data.paddingSize;
     this.payloadSize = _.isNil(data.payloadSize) ? this.payloadSize : data.payloadSize;
@@ -38,8 +46,7 @@ export class LiveStreamParser {
   private receivingInfo: ReceivingInfo = new ReceivingInfo();
   private buffer: Buffer = Buffer.alloc(0);
 
-  constructor(private observer: Observer<Buffer>) {
-  }
+  constructor(private observer: Observer<Buffer>) {}
 
   private reset(receivingType: RECEIVING_TYPE, bufferOverlap: Buffer, receivingInfo?: ReceivingInfo) {
     this.receivingType = receivingType;
@@ -48,14 +55,17 @@ export class LiveStreamParser {
   }
 
   onNewChunk(data?: Buffer) {
-    logger.silly('\nreceived new chunk:');
+    logger.silly("\nreceived new chunk:");
 
     // if new data is provided, add it to buffer
     if (data) {
       this.buffer = Buffer.concat([this.buffer, data], this.buffer.length + data.length);
     }
     // skip if not enough data are available
-    if (this.buffer.length < typeToLength[this.receivingType](this.receivingInfo.paddingSize, this.receivingInfo.payloadSize)) {
+    if (
+      this.buffer.length <
+      typeToLength[this.receivingType](this.receivingInfo.paddingSize, this.receivingInfo.payloadSize)
+    ) {
       return;
     }
     // trigger action
@@ -74,7 +84,10 @@ export class LiveStreamParser {
         break;
     }
 
-    if (this.buffer.length >= typeToLength[this.receivingType](this.receivingInfo.paddingSize, this.receivingInfo.payloadSize)) {
+    if (
+      this.buffer.length >=
+      typeToLength[this.receivingType](this.receivingInfo.paddingSize, this.receivingInfo.payloadSize)
+    ) {
       this.onNewChunk();
     }
   }
@@ -86,11 +99,15 @@ export class LiveStreamParser {
 
   private parsePayloadHeader() {
     // check verification point
-    if (!(this.buffer.readInt8(8).toString(16) !== '0x24' &&
-      this.buffer.readInt8(9).toString(16) !== '0x35' &&
-      this.buffer.readInt8(10).toString(16) !== '0x68' &&
-      this.buffer.readInt8(11).toString(16) !== '0x79')) {
-      throw new Error('Payload header start not detected');
+    if (
+      !(
+        this.buffer.readInt8(8).toString(16) !== "0x24" &&
+        this.buffer.readInt8(9).toString(16) !== "0x35" &&
+        this.buffer.readInt8(10).toString(16) !== "0x68" &&
+        this.buffer.readInt8(11).toString(16) !== "0x79"
+      )
+    ) {
+      throw new Error("Payload header start not detected");
     }
 
     const receivingInfo = new ReceivingInfo({
@@ -112,7 +129,11 @@ export class LiveStreamParser {
 
   private parseJpegData() {
     this.observer.next(this.buffer.slice(0, this.receivingInfo.payloadSize));
-    this.reset(RECEIVING_TYPE.commonHeader, this.buffer.slice(this.receivingInfo.payloadSize + this.receivingInfo.paddingSize), null);
+    this.reset(
+      RECEIVING_TYPE.commonHeader,
+      this.buffer.slice(this.receivingInfo.payloadSize + this.receivingInfo.paddingSize),
+      null,
+    );
   }
 
   private parseFrameData() {
