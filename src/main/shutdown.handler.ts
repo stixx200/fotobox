@@ -1,14 +1,13 @@
-import {ipcMain} from 'electron';
-import {FotoboxMain} from './app';
-import {ClientProxy} from './client.proxy';
-import {TOPICS} from './constants';
-import {FotoboxError} from './error/fotoboxError';
+import { ipcMain, IpcMainEvent } from "electron";
+import { TOPICS } from "../shared/constants";
+import { FotoboxMain } from "./app";
+import { ClientProxy } from "./client.proxy";
+import { FotoboxError } from "./error/fotoboxError";
 
-const logger = require('logger-winston').getLogger('shutdownHandler');
+const logger = require("logger-winston").getLogger("shutdownHandler");
 
 export class ShutdownHandler {
-  constructor(private client: ClientProxy,
-              private app: FotoboxMain) {
+  constructor(private client: ClientProxy, private app: FotoboxMain) {
     this.exitApplication = this.exitApplication.bind(this);
 
     ipcMain.on(TOPICS.STOP_APPLICATION, this.exitApplication);
@@ -19,24 +18,24 @@ export class ShutdownHandler {
   }
 
   publishError(error: FotoboxError) {
-    logger.error('Error occured. Deinit application. Restart required.', error.stack);
-    this.exitApplication(error);
+    logger.error("Error occured. Deinit application. Restart required.", error.stack);
+    this.exitApplication(null, error);
   }
 
-  exitApplication(error?: FotoboxError) {
+  exitApplication(event: IpcMainEvent, error?: FotoboxError) {
     Promise.resolve()
       .then(() => {
-        logger.warn('Deinitialize Application.');
+        logger.warn("Deinitialize Application.");
         return this.app.deinitApplication();
       })
       .catch((err) => {
-        logger.error('Deinitialization of application failed: ', err);
+        logger.error("Deinitialization of application failed: ", err);
       })
       .then(() => {
         this.client.send(TOPICS.STOP_APPLICATION, error ? error.message : null);
       })
       .catch((err) => {
-        logger.error('Sending stop event failed. ', err);
+        logger.error("Sending stop event failed. ", err);
       });
   }
 }

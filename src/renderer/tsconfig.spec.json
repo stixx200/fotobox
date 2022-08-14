@@ -1,15 +1,14 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../out-tsc/spec",
-    "module": "commonjs",
+    "outDir": "../../dist/renderer-spec",
     "types": [
       "jasmine",
       "node"
     ]
   },
   "files": [
-    "renderer/test.ts",
+    "test.ts",
     "polyfills-test.ts"
   ],
   "include": [
@@ -18,7 +17,7 @@
   ],
   "exclude": [
     "dist",
-    "app-builds",
+    "release",
     "node_modules"
   ]
 }

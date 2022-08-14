@@ -1,7 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
-import {FilePickerMode, FilepickerService} from '../../../../providers/filepicker.service';
-import {BasicSetupConfig} from '../basic-setup-config';
+import { Component, Input, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
+import { FilePickerMode, FilepickerService } from "../../../../providers/filepicker.service";
+import { BasicSetupConfig } from "../basic-setup-config";
 
 export interface DirectorySetupConfig extends BasicSetupConfig {
   type: string;
@@ -10,21 +10,22 @@ export interface DirectorySetupConfig extends BasicSetupConfig {
 }
 
 @Component({
-  selector: 'app-directory-setup',
-  templateUrl: './directory-setup.component.html',
-  styleUrls: ['./directory-setup.component.scss'],
+  selector: "app-directory-setup",
+  templateUrl: "./directory-setup.component.html",
+  styleUrls: ["./directory-setup.component.scss"],
 })
 export class DirectorySetupComponent implements OnInit {
   @Input() config: DirectorySetupConfig;
 
-  constructor(private filePickerService: FilepickerService) {
-  }
+  constructor(private filePickerService: FilepickerService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  openPicker(oldPath) {
-    const dirPath = this.filePickerService.filePicker(FilePickerMode.DIRECTORY, oldPath);
+  async openPicker(event: EventTarget) {
+    const dirPath = await this.filePickerService.filePicker(
+      FilePickerMode.DIRECTORY,
+      (event as HTMLInputElement).value,
+    );
     this.config.onChanged(dirPath);
   }
 }

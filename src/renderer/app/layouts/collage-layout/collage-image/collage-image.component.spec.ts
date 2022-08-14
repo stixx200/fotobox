@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { CollageImageComponent } from './collage-image.component';
+import { CollageImageComponent } from "./collage-image.component";
 
-describe('CollageImageComponent', () => {
+describe("CollageImageComponent", () => {
   let component: CollageImageComponent;
   let fixture: ComponentFixture<CollageImageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CollageImageComponent ]
-    })
-    .compileComponents();
+      declarations: [CollageImageComponen, t],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('CollageImageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

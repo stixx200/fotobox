@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
-import {TOPICS} from '../../../main/constants';
-import {IpcRendererService} from './ipc.renderer.service';
+import { Injectable } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import { TOPICS } from "../../../shared/constants";
+import { IpcRendererService } from "./ipc.renderer.service";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class LiveViewService {
   liveViewSubject = new Subject<string>();
@@ -20,6 +20,6 @@ export class LiveViewService {
   }
 
   onLiveviewImage(event, data: Buffer) {
-    this.liveViewSubject.next('data:image/jpg;base64,' + data.toString('base64'));
+    this.liveViewSubject.next("data:image/jpg;base64," + Buffer.from(data).toString("base64"));
   }
 }

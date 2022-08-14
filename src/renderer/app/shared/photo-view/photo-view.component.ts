@@ -1,7 +1,6 @@
-import * as _ from 'lodash';
-import {Component, ElementRef, Input, Renderer2, ViewChild} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
-import {SafeResourceUrl} from '@angular/platform-browser/src/security/dom_sanitization_service';
+import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } from "@angular/core";
+import { SafeResourceUrl } from "@angular/platform-browser";
+import * as _ from "lodash";
 
 export interface PhotoviewConfiguration {
   title?: string;
@@ -13,27 +12,37 @@ export interface PhotoviewConfiguration {
 }
 
 @Component({
-  selector: 'app-photo-view',
-  templateUrl: './photo-view.component.html',
-  styleUrls: ['./photo-view.component.scss'],
+  selector: "app-photo-view",
+  templateUrl: "./photo-view.component.html",
+  styleUrls: ["./photo-view.component.scss"],
 })
-export class PhotoViewComponent {
+export class PhotoViewComponent implements AfterViewInit {
   @Input() config: PhotoviewConfiguration;
-  @ViewChild('photo') photoChild: ElementRef;
+  @ViewChild("photo")
+  photoChild: ElementRef;
 
-  constructor(private renderer: Renderer2) {
-  }
+  private photo: string | SafeResourceUrl;
+
+  constructor(private renderer: Renderer2) {}
 
   @Input()
-  set photoUrl(photo: string) {
-    if (_.isString(photo)) {
-      this.showPhoto(`photo://${photo}`);
-    }
+  set photoUrl(photo: string | SafeResourceUrl) {
+    this.photo = photo;
+    this.showPhoto();
   }
 
-  showPhoto(url: string | SafeResourceUrl) {
-    if (url) {
-      this.renderer.setStyle(this.photoChild.nativeElement, 'background', `url(${url}) center center no-repeat`);
+  ngAfterViewInit() {
+    this.showPhoto();
+  }
+
+  private showPhoto() {
+    if (!_.isString(this.photo) || !this.photoChild) {
+      return;
     }
+    this.renderer.setStyle(
+      this.photoChild.nativeElement,
+      "background",
+      `url(photo://${this.photo}) center center no-repeat`,
+    );
   }
 }

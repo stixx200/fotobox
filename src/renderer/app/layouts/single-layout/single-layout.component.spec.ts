@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { SingleLayoutComponent } from './single-layout.component';
+import { SingleLayoutComponent } from "./single-layout.component";
 
-describe('SingleLayoutComponent', () => {
+describe("SingleLayoutComponent", () => {
   let component: SingleLayoutComponent;
   let fixture: ComponentFixture<SingleLayoutComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SingleLayoutComponent ]
-    })
-    .compileComponents();
+      declarations: [SingleLayoutComponen, t],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('SingleLayoutComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

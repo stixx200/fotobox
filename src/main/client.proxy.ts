@@ -1,10 +1,8 @@
-import { WebContents } from 'electron';
-import {TOPICS} from './constants';
-
+import { WebContents } from "electron";
+import { TOPICS } from "../shared/constants";
 
 export class ClientProxy {
-  constructor(private webContents: WebContents) {
-  }
+  constructor(private webContents: WebContents) {}
 
   sendError(message) {
     this.send(TOPICS.ERROR_MESSAGE, message);

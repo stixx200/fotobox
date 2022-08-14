@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {SetupGroupComponent} from './setup-group.component';
+import { SetupGroupComponent } from "./setup-group.component";
 
-describe('SetupGroupComponent', () => {
+describ'SetupGroupComponent't", () => {
   let component: SetupGroupComponent;
   let fixture: ComponentFixture<SetupGroupComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-        declarations: [SetupGroupComponent],
-      })
-      .compileComponents();
+      declarations: [SetupGroupComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

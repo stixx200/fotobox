@@ -1,7 +1,7 @@
-import {ipcMain} from 'electron';
-import {CameraProvider} from './cameras/camera.provider';
-import {CollageMaker} from './collage-maker';
-import {TOPICS} from './constants';
+import { ipcMain } from "electron";
+import { TOPICS } from "../shared/constants";
+import { CameraProvider } from "./cameras/camera.provider";
+import { CollageMaker } from "./collage-maker";
 
 export interface ConfigurationProviderExternals {
   collageMaker: CollageMaker;

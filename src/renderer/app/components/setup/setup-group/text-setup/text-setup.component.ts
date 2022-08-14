@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
-import {BasicSetupConfig} from '../basic-setup-config';
+import { Component, Input, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
+import { BasicSetupConfig } from "../basic-setup-config";
 
 export interface TextSetupConfig extends BasicSetupConfig {
   type: string;
@@ -9,16 +9,14 @@ export interface TextSetupConfig extends BasicSetupConfig {
 }
 
 @Component({
-  selector: 'app-text-setup',
-  templateUrl: './text-setup.component.html',
-  styleUrls: ['./text-setup.component.scss'],
+  selector: "app-text-setup",
+  templateUrl: "./text-setup.component.html",
+  styleUrls: ["./text-setup.component.scss"],
 })
 export class TextSetupComponent implements OnInit {
   @Input() config: TextSetupConfig;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

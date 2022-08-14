@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {DirectorySetupComponent} from './directory-setup.component';
+import { DirectorySetupComponent } from "./directory-setup.component";
 
-describe('SelectionSetupComponent', () => {
+describ'SelectionSetupComponent't", () => {
   let component: DirectorySetupComponent;
   let fixture: ComponentFixture<DirectorySetupComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-        declarations: [DirectorySetupComponent],
-      })
-      .compileComponents();
+      declarations: [DirectorySetupComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

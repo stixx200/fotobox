@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
-import {Observable} from 'rxjs';
-import {BasicSetupConfig} from '../basic-setup-config';
+import { Component, Input } from "@angular/core";
+import { Observable } from "rxjs";
+import { BasicSetupConfig } from "../basic-setup-config";
 
 export interface TextsareaSetupConfig extends BasicSetupConfig {
   type: string;
@@ -9,19 +9,18 @@ export interface TextsareaSetupConfig extends BasicSetupConfig {
 }
 
 @Component({
-  selector: 'app-textsarea-setup',
-  templateUrl: './textsarea-setup.component.html',
-  styleUrls: ['./textsarea-setup.component.scss'],
+  selector: "app-textsarea-setup",
+  templateUrl: "./textsarea-setup.component.html",
+  styleUrls: ["./textsarea-setup.component.scss"],
 })
 export class TextsareaSetupComponent {
   @Input() config: TextsareaSetupConfig;
 
-  constructor() {
-  }
+  constructor() {}
 
-  onTextChanged(index, text) {
+  onTextChanged(index, target: EventTarget) {
     const texts = this.getObservableValue(this.config.texts);
-    texts.splice(index, 1, text);
+    texts.splice(index, 1, (target as HTMLInputElement).value);
     this.config.onChanged(texts);
   }
 

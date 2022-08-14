@@ -39,6 +39,13 @@ testem.log
 # System Files
 Thumbs.db
 
-/src/**/*.js
-/src/**/*.map
-/src/**/*.d.ts
+# yarn
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+.angular/cache/

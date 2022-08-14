@@ -1,5 +1,6 @@
 <div class="w-100 h-100 back" (click)="takePicture()">
-  <app-message-stripe *ngIf="!photo && !countdown.running" class="top-message" [message]="'LAYOUTS.READY_TAKE_PICTURE' | translate">
+  <app-message-stripe *ngIf="!photo && !countdown.running" [message]="'LAYOUTS.READY_TAKE_PICTURE' | translate"
+                      class="top-message">
   </app-message-stripe>
 
   <app-photo-view *ngIf="photo"
@@ -7,8 +8,9 @@
                   [photoUrl]="photo">
   </app-photo-view>
 
-  <app-message-stripe *ngIf="!photo && !countdown.running && (collageLayoutState | async).active"
-                      class="bottom-message front" [message]="'LAYOUTS.ABORT' | translate" (action)="exit()">
+  <app-message-stripe (action)="exit()"
+                      *ngIf="!photo && !countdown.running && (collageLayoutState | async).active"
+                      [message]="'LAYOUTS.ABORT' | translate" class="bottom-message front">
   </app-message-stripe>
 
   <app-countdown #countdown class="w-100 h-100"></app-countdown>

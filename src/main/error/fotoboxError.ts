@@ -2,7 +2,7 @@ export class FotoboxError extends Error {
   public code: string;
 
   constructor(message: string | Error | FotoboxError, code?: string) {
-    if (typeof message === 'string') {
+    if (typeof message === "string") {
       super(message);
       this.code = code;
     } else if (message instanceof FotoboxError) {

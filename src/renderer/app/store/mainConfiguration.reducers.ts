@@ -1,4 +1,4 @@
-import {MainConfigurationActions, MainConfigurationActionTypes} from './mainConfiguration.actions';
+import { MainConfigurationActions, MainConfigurationActionTypes } from "./mainConfiguration.actions";
 
 export interface State {
   cameraDrivers: string[];
@@ -14,11 +14,11 @@ export interface State {
 const initialState: State = {
   cameraDrivers: [],
   selectedDriver: null,
-  irfanViewPath: '',
+  irfanViewPath: "",
   usePrinter: true,
-  photoDir: '',
+  photoDir: "",
   wifiControl: true,
-  sonyPassword: '',
+  sonyPassword: "",
   shutterTimeout: 3,
 };
 

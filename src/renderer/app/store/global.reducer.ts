@@ -1,11 +1,11 @@
-import {GlobalActions, GlobalActionTypes} from './global.actions';
+import { GlobalActions, GlobalActionTypes } from "./global.actions";
 
 export interface State {
   title: string;
 }
 
 const initialState: State = {
-  title: 'TITLES.FOTOBOX',
+  title: "TITLES.FOTOBOX",
 };
 
 export function globalReducer(state = initialState, action: GlobalActions) {

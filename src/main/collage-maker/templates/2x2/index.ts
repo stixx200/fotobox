@@ -1,15 +1,15 @@
-import * as path from 'path';
+import * as path from "path";
 
 const aspectRatio = 3 / 2;
 const photoBorder = {
-  background: {r: 255, g: 255, b: 255},
+  background: { r: 255, g: 255, b: 255 },
   top: 4,
   bottom: 4,
   left: 4,
   right: 4,
 };
 const total_border = {
-  background: {r: 255, g: 255, b: 255, alpha: 1},
+  background: { r: 255, g: 255, b: 255, alpha: 1 },
   top: 0,
   bottom: 0,
   left: 0,
@@ -27,23 +27,26 @@ const photoHeight = Math.floor(
   (height - photoBorder.top - photoBorder.bottom - 2 * borderDistance.vertical - verticalDistance) / 2,
 );
 const photo = {
-  type: 'photo',
+  type: "photo",
   width: Math.floor(photoHeight * aspectRatio),
   height: photoHeight,
   border: photoBorder,
   x: null,
   y: null,
 };
-const horizontalDistance = width - total_border.left - total_border.right - 2 * borderDistance.horizontal - 2 * photo.width;
-const calculateX = (i) => Math.floor(total_border.left + borderDistance.horizontal + i * (photo.width + horizontalDistance));
-const calculateY = (i) => Math.floor(total_border.top + borderDistance.vertical + i * (photo.height + verticalDistance));
+const horizontalDistance =
+  width - total_border.left - total_border.right - 2 * borderDistance.horizontal - 2 * photo.width;
+const calculateX = (i) =>
+  Math.floor(total_border.left + borderDistance.horizontal + i * (photo.width + horizontalDistance));
+const calculateY = (i) =>
+  Math.floor(total_border.top + borderDistance.vertical + i * (photo.height + verticalDistance));
 
 const template = {
-  id: '2x2 Template',
+  id: "2x2 Template",
   width: width,
   height: height,
   border: total_border,
-  background: path.join(__dirname, 'background.jpg'),
+  background: path.join(__dirname, "background.jpg"),
   spaces: [
     {
       ...photo,
