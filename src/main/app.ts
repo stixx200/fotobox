@@ -1,6 +1,6 @@
 require("./initialize-logger");
 
-import { dialog, ipcMain, OpenDialogOptions } from "electron";
+import { dialog, ipcMain, IpcMainEvent, OpenDialogOptions } from "electron";
 
 import * as util from "util";
 import { TOPICS } from "../shared/constants";
@@ -45,7 +45,7 @@ export class FotoboxMain {
 
     ipcMain.on(TOPICS.START_APPLICATION, this.initApplication);
     ipcMain.on(TOPICS.STOP_APPLICATION, this.deinitApplication);
-    ipcMain.on(TOPICS.OPEN_DIALOG, this.showOpenDialog);
+    ipcMain.on(TOPICS.OPEN_DIALOG_SYNC, this.showOpenDialog);
 
     logger.info("Application ready to start.");
   }
@@ -103,8 +103,7 @@ export class FotoboxMain {
     }
   }
 
-  async showOpenDialog(event: any, options: OpenDialogOptions) {
-    const result = await dialog.showOpenDialog(this.window, options);
-    ipcMain.emit(TOPICS.OPEN_DIALOG_RESULT, result);
+  async showOpenDialog(event: IpcMainEvent, options: OpenDialogOptions) {
+    event.returnValue = await dialog.showOpenDialog(this.window, options);
   }
 }

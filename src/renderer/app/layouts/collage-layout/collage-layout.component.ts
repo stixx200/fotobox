@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from "@angular/material/snack-bar";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
@@ -79,12 +79,14 @@ export class CollageLayoutComponent implements OnInit, OnDestroy {
     private router: Router,
     private ipcRenderer: IpcRendererService,
     private snackBar: MatSnackBar,
+    public route: ActivatedRoute,
   ) {
     this.onNewPhoto = this.onNewPhoto.bind(this);
   }
 
   ngOnInit() {
     this.reset();
+
     this.collageState = this.store.select("collageLayout");
     this.singleLayoutState = this.store.select("singleLayout");
     this.mainConfigurationState = this.store.select("mainConfiguration");

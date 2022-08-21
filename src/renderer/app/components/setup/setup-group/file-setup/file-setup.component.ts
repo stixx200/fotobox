@@ -21,11 +21,8 @@ export class FileSetupComponent implements OnInit {
 
   ngOnInit() {}
 
-  async openPicker(event: EventTarget) {
-    const dirPath = await this.filePickerService.filePicker(
-      FilePickerMode.FILE,
-      (event as HTMLInputElement).value,
-    );
+  openPicker(event: EventTarget) {
+    const dirPath = this.filePickerService.filePicker(FilePickerMode.FILE, (event as HTMLInputElement).value);
     this.config.onChanged(dirPath);
   }
 }

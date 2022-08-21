@@ -14,7 +14,7 @@ const routes: Routes = [
     path: "layouts",
     children: [
       { path: "single", component: SingleLayoutComponent },
-      { path: "collage", component: CollageLayoutComponent },
+      { path: "collage/:id", component: CollageLayoutComponent },
     ],
   },
 ];

@@ -13,7 +13,7 @@
 <app-collage-image
   #imageComponent
   [hidden]="currentPhoto"
-  [templateId]="(collageState | async).templateId"
+  [templateId]="(this.route.params | async).id"
   [templateDirectory]="(collageState | async).templatesDirectory"
   (done)="onCollageDone($event)"
   class="front">

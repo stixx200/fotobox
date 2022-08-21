@@ -201,12 +201,14 @@ export class SetupComponent implements OnInit, OnDestroy {
           onClick: () => this.updateTemplates(),
         },
         {
-          title: 'PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEMPLATE',
-          type: 'selection',
+          title: "PAGES.SETUP.FOTOBOX.LAYOUTS.COLLAGE-TEMPLATES",
+          type: "multi-selection",
           selection: this.collageLayoutState.pipe(map((state: fromCollageLayout.State) => state.templates)),
-          selected: this.collageLayoutState.pipe(map((state: fromCollageLayout.State) => state.templateId)),
-          onChanged: (template) => {
-            this.store.dispatch(new collageLayoutActions.SetTemplate(template));
+          selected: this.collageLayoutState.pipe(
+            map((state: fromCollageLayout.State) => state.selectedTemplates),
+          ),
+          onChanged: (selection) => {
+            this.store.dispatch(new collageLayoutActions.SetSelectedTemplates(selection));
           },
         },
       ];

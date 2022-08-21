@@ -1,4 +1,5 @@
 import { SafeResourceUrl } from "@angular/platform-browser";
+import * as _ from "lodash";
 import { CollageLayoutActions, CollageLayoutActionTypes } from "./collage-layout.actions";
 
 export interface State {
@@ -7,7 +8,7 @@ export interface State {
   route: string;
   active: boolean;
   templatesDirectory: string;
-  templateId: string;
+  selectedTemplates: string[];
   templates: string[];
 }
 
@@ -17,11 +18,11 @@ const initialState: State = {
   route: "/layouts/collage",
   active: true,
   templatesDirectory: "",
-  templateId: "",
+  selectedTemplates: [],
   templates: [],
 };
 
-export function collageLayoutReducer(state = initialState, action: CollageLayoutActions) {
+export function collageLayoutReducer(state = initialState, action: CollageLayoutActions): State {
   switch (action.type) {
     case CollageLayoutActionTypes.SET_ACTIVE:
       return {
@@ -30,13 +31,10 @@ export function collageLayoutReducer(state = initialState, action: CollageLayout
       };
 
     case CollageLayoutActionTypes.SET_TEMPLATES:
-      let templateId = state.templateId;
-      if (!action.payload.includes(templateId)) {
-        templateId = action.payload[0];
-      }
       return {
         ...state,
-        templateId,
+        // maybe shrink the selected templates if the new available templates don't contain an already selected one
+        selectedTemplates: _.intersection(action.payload[0], state.selectedTemplates),
         templates: action.payload,
       };
 
@@ -46,10 +44,10 @@ export function collageLayoutReducer(state = initialState, action: CollageLayout
         templatesDirectory: action.payload,
       };
 
-    case CollageLayoutActionTypes.SET_TEMPLATE:
+    case CollageLayoutActionTypes.SET_SELECTED_TEMPLATES:
       return {
         ...state,
-        templateId: action.payload,
+        selectedTemplates: action.payload,
       };
 
     default:

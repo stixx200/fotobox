@@ -1,4 +1,4 @@
-<div #page class="h-100">
+<div class="panelcontainer">
   <div class="panel firstpanel" *ngIf="(singleLayoutState | async).active">
     <mat-card class="container" [routerLink]="[(singleLayoutState | async).route]">
       <mat-card-header>
@@ -11,10 +11,11 @@
     </mat-card>
   </div>
 
-  <div class="panel secondpanel" *ngIf="(collageLayoutState | async).active">
-    <mat-card class="container" [routerLink]="[(collageLayoutState | async).route]">
+  <div class="panel secondpanel" *ngFor="let templateId of (collageLayoutState | async).selectedTemplates">
+    <mat-card class="container" [routerLink]="[(collageLayoutState | async).route, templateId]">
       <mat-card-header>
-        <mat-card-title><h3>{{ (collageLayoutState | async).title | translate }}</h3></mat-card-title>
+        <!-- todo: let user select layout title -->
+        <mat-card-title><h3>{{ templateId || (collageLayoutState | async).title | translate }}</h3></mat-card-title>
       </mat-card-header>
 
       <mat-card-content>

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { take } from "rxjs/operators";
+import { first, take } from "rxjs/operators";
 import { TOPICS } from "../../../../shared/constants";
 import * as fromCollageLayout from "../../layouts/collage-layout/store/collage-layout.reducer";
 import * as fromSingleLayout from "../../layouts/single-layout/store/single-layout.reducer";
@@ -37,7 +37,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (!this.isLayoutActive(this.collageLayoutState)) {
       this.router.navigate(["/layouts/single"]);
     } else if (!this.isLayoutActive(this.singleLayoutState)) {
-      this.router.navigate(["/layouts/collage"]);
+      const selectedTemplates = this.getObservableValue(this.collageLayoutState, "selectedTemplates");
+      if (selectedTemplates.length === 1) {
+        this.router.navigate(["/layouts/collage", selectedTemplates[0]]);
+      }
     }
   }
 
@@ -60,5 +63,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       isActive = active;
     });
     return isActive;
+  }
+
+  private getObservableValue(observable: Observable<any>, key: string): any {
+    let value = null;
+    const subscription = observable.pipe(first()).subscribe((data) => {
+      value = data[key];
+    });
+    subscription.unsubscribe();
+    return value;
   }
 }

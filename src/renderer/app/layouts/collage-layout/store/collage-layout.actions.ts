@@ -4,7 +4,7 @@ export enum CollageLayoutActionTypes {
   SET_ACTIVE = "[CollageLayout] SetActive",
   SET_TEMPLATES = "[CollageLayout] SetTemplates",
   SET_TEMPLATES_DIR = "[CollageLayout] SetTemplatesDir",
-  SET_TEMPLATE = "[CollageLayout] SetTemplate",
+  SET_SELECTED_TEMPLATES = "[CollageLayout] SetSelectedTemplates",
 }
 
 export class SetActive implements Action {
@@ -25,10 +25,10 @@ export class SetTemplatesDir implements Action {
   constructor(public payload: string) {}
 }
 
-export class SetTemplate implements Action {
-  readonly type = CollageLayoutActionTypes.SET_TEMPLATE;
+export class SetSelectedTemplates implements Action {
+  readonly type = CollageLayoutActionTypes.SET_SELECTED_TEMPLATES;
 
-  constructor(public payload: string) {}
+  constructor(public payload: string[]) {}
 }
 
-export type CollageLayoutActions = SetActive | SetTemplates | SetTemplatesDir | SetTemplate;
+export type CollageLayoutActions = SetActive | SetTemplates | SetTemplatesDir | SetSelectedTemplates;

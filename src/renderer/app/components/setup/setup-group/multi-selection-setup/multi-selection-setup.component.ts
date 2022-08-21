@@ -28,7 +28,7 @@ export class MultiSelectionSetupComponent implements OnInit {
   }
 
   selectionChanged(value: string, isSelected: boolean) {
-    const selected = this.getSelected();
+    const selected = [...this.getSelected()]; // copy selection
     if (isSelected && !selected.includes(value)) {
       selected.push(value);
     } else if (!isSelected && selected.includes(value)) {

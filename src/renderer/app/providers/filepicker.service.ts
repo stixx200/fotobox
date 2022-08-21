@@ -10,8 +10,8 @@ export enum FilePickerMode {
 export class FilepickerService {
   constructor(private electron: ElectronService) {}
 
-  async filePicker(mode: FilePickerMode, defaultPath?: string): Promise<string> {
-    const { filePaths } = await this.electron.showOpenDialog({ properties: [mode], defaultPath });
+  filePicker(mode: FilePickerMode, defaultPath?: string): string {
+    const { filePaths } = this.electron.showOpenDialog({ properties: [mode], defaultPath });
     // nothing selected
     if (!filePaths) {
       return defaultPath;

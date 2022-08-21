@@ -21,8 +21,8 @@ export class DirectorySetupComponent implements OnInit {
 
   ngOnInit() {}
 
-  async openPicker(event: EventTarget) {
-    const dirPath = await this.filePickerService.filePicker(
+  openPicker(event: EventTarget) {
+    const dirPath = this.filePickerService.filePicker(
       FilePickerMode.DIRECTORY,
       (event as HTMLInputElement).value,
     );

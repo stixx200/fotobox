@@ -87,11 +87,13 @@ export class CollageMaker {
   }
 
   getTemplates(directory?: string): string[] {
+    logger.info(`Read templates from directory '${directory}'`);
     let directoryTemplates = [];
     if (directory) {
       directoryTemplates = fs
         .readdirSync(directory)
-        .filter((template) => fs.statSync(path.join(directory, template)).isDirectory());
+        .filter((template) => fs.statSync(path.join(directory, template)).isDirectory())
+        .filter((template) => fs.pathExistsSync(path.join(directory, template, "index.js")));
     }
     return [...directoryTemplates, ...Object.keys(builtInTemplates)];
   }

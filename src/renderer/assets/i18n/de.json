@@ -33,7 +33,7 @@
           "SINGLE": "Einzelbild",
           "COLLAGE": "Collage",
           "COLLAGE-TEXT": "Collage-Text",
-          "COLLAGE-TEMPLATE": "Collage Template",
+          "COLLAGE-TEMPLATES": "Collage Templates",
           "COLLAGE-TEMPLATE-NAMES": {
             "default": "Standard",
             "christina_martin_2019": "Christina & Martin"

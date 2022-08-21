@@ -1,9 +1,7 @@
 import { Injectable } from "@angular/core";
-import { webFrame, ipcRenderer, OpenDialogOptions, OpenDialogReturnValue } from "electron";
+import { ipcRenderer, OpenDialogOptions, OpenDialogReturnValue, webFrame } from "electron";
 import * as fs from "fs";
 import { TOPICS } from "../../../shared/constants";
-import { pEvent } from "p-event";
-
 import IpcRenderer = Electron.IpcRenderer;
 import WebFrame = Electron.WebFrame;
 
@@ -32,8 +30,7 @@ export class ElectronService {
     this.fs = window.electronAPI?.fs || require("fs");
   }
 
-  async showOpenDialog(options: OpenDialogOptions): Promise<OpenDialogReturnValue> {
-    this.ipcRenderer.send(TOPICS.OPEN_DIALOG, options);
-    return pEvent(this.ipcRenderer, TOPICS.OPEN_DIALOG_RESULT);
+  showOpenDialog(options: OpenDialogOptions): OpenDialogReturnValue {
+    return this.ipcRenderer.sendSync(TOPICS.OPEN_DIALOG_SYNC, options);
   }
 }

@@ -17,8 +17,7 @@ export const TOPICS = {
   RECEIVING: "receiving",
   TAKE_PICTURE: "take-picture",
   PREPARE_PICTURE: "prepare-picture",
-  OPEN_DIALOG: "open-dialog",
-  OPEN_DIALOG_RESULT: "open-dialog-result",
+  OPEN_DIALOG_SYNC: "open-dialog-sync",
 };
 
 export interface MainApplicationConfiguration {
