@@ -2,11 +2,11 @@
   <div class="panel firstpanel" *ngIf="(singleLayoutState | async).active">
     <mat-card class="container" [routerLink]="[(singleLayoutState | async).route]">
       <mat-card-header>
-        <mat-card-title><h3>{{ (singleLayoutState | async).title | translate }}</h3></mat-card-title>
+        <mat-card-title class="w-100"><h3 class="w-100">{{ (singleLayoutState | async).title | translate }}</h3></mat-card-title>
       </mat-card-header>
 
       <mat-card-content class="h-100">
-        <div class="image singleimg img-fluid">&nbsp;</div>
+        <layout-preview class="image img-fluid">&nbsp;</layout-preview>
       </mat-card-content>
     </mat-card>
   </div>
@@ -15,11 +15,11 @@
     <mat-card class="container" [routerLink]="[(collageLayoutState | async).route, templateId]">
       <mat-card-header>
         <!-- todo: let user select layout title -->
-        <mat-card-title><h3>{{ templateId || (collageLayoutState | async).title | translate }}</h3></mat-card-title>
+        <mat-card-title class="w-100"><h3 class="w-100">{{ templateId || (collageLayoutState | async).title | translate }}</h3></mat-card-title>
       </mat-card-header>
 
       <mat-card-content>
-        <div class="image collageimg img-fluid">&nbsp;</div>
+        <layout-preview class="image img-fluid" [templateId]="templateId">&nbsp;</layout-preview>
       </mat-card-content>
     </mat-card>
   </div>

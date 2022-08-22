@@ -19,6 +19,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { HeaderComponent } from "./components/header/header.component";
 import { HomeComponent } from "./components/home/home.component";
+import { LayoutPreviewComponent } from "./components/layout.preview/layout.preview.component";
 import { PhotoListComponent } from "./components/photo-list.ts/photo-list.component";
 import { ButtonSetupComponent } from "./components/setup/setup-group/button-setup/button-setup.component";
 import { CheckboxSetupComponent } from "./components/setup/setup-group/checkbox-setup/checkbox-setup.component";
@@ -63,6 +64,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
   declarations: [
     AppComponent,
     HomeComponent,
+    LayoutPreviewComponent,
     SetupComponent,
     HeaderComponent,
     SingleLayoutComponent,

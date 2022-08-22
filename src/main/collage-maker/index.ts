@@ -1,5 +1,6 @@
 import { ipcMain } from "electron";
 import * as fs from "fs-extra";
+import * as _ from "lodash";
 import * as path from "path";
 import { TOPICS } from "../../shared/constants";
 import { CollageMakerConfiguration } from "../../shared/init-configuration.interface";
@@ -13,6 +14,21 @@ import builtInTemplates from "./templates";
 const logger = require("logger-winston").getLogger("collage-maker");
 
 export class CollageMaker {
+  private static getPreviewPhoto = (function* () {
+    const previewPhotos = [
+      path.join(__dirname, "./images/party_0.jpg"),
+      path.join(__dirname, "./images/party_1.jpg"),
+      path.join(__dirname, "./images/party_2.jpg"),
+      path.join(__dirname, "./images/party_3.jpg"),
+      path.join(__dirname, "./images/party_4.jpg"),
+    ];
+    let idx = 0;
+    do {
+      yield previewPhotos[idx];
+      idx = idx + 1 >= previewPhotos.length ? 0 : idx + 1;
+    } while (true);
+  })();
+
   private clientProxy: ClientProxy;
   private maker: Maker = null;
   private photosaver: PhotoHandler;
@@ -23,6 +39,7 @@ export class CollageMaker {
     this.addPhotoToCollage = this.addPhotoToCollage.bind(this);
     this.initCollage = this.initCollage.bind(this);
     this.resetCollage = this.resetCollage.bind(this);
+    this.createCollagePreview = this.createCollagePreview.bind(this);
   }
 
   init(config: CollageMakerConfiguration, externals: { photosaver: PhotoHandler; clientProxy: ClientProxy }) {
@@ -33,6 +50,7 @@ export class CollageMaker {
     ipcMain.on(TOPICS.INIT_COLLAGE, this.initCollage);
     ipcMain.on(TOPICS.CREATE_COLLAGE, this.addPhotoToCollage);
     ipcMain.on(TOPICS.RESET_COLLAGE, this.resetCollage);
+    ipcMain.on(TOPICS.CREATE_COLLAGE_PREVIEW_SYNC, this.createCollagePreview);
   }
 
   deinit() {
@@ -40,11 +58,27 @@ export class CollageMaker {
     ipcMain.removeListener(TOPICS.RESET_COLLAGE, this.resetCollage);
     ipcMain.removeListener(TOPICS.CREATE_COLLAGE, this.addPhotoToCollage);
     ipcMain.removeListener(TOPICS.INIT_COLLAGE, this.initCollage);
+    ipcMain.removeListener(TOPICS.CREATE_COLLAGE_PREVIEW_SYNC, this.createCollagePreview);
 
     this.photosaver = null;
     this.clientProxy = null;
     this.maker = null;
     this.resetCollage();
+  }
+
+  async createCollagePreview(event, templateId: string, templateDirectory: string) {
+    logger.info(`Create collage preview: '${templateId}' (directory: '${templateDirectory}')`);
+    try {
+      const template = this.resolveTemplate(templateId, templateDirectory);
+      const photoCount = this.maker.getPhotoCount(template);
+      event.returnValue = await this.maker.createCollage(
+        template,
+        _.times(photoCount, () => CollageMaker.getPreviewPhoto.next().value),
+      );
+    } catch (error) {
+      logger.error("error occured while creating preview collage", error);
+      this.clientProxy.sendError(`Error occured while creating preview collage: ${error.message}`);
+    }
   }
 
   async initCollage(event, templateId: string, templateDirectory: string) {

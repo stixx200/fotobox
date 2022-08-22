@@ -4,26 +4,22 @@ h3 {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  color: brown;
+  color: white;
   font: italic bold 1.8em 'trebuchet MS', Arial, helvetica;
 }
 
 .container {
   background-color: $field-background-color;
-  //padding-top: 60px;
+}
+
+::ng-deep .mat-card-header-text {
+  width: 100%;
 }
 
 .image {
   background-size: contain !important;
   height: 200px;
   margin: auto;
-}
-
-.singleimg {
-  background: url('../../../assets/singlelayout.preview.jpg') center center no-repeat;
-}
-.collageimg {
-  background: url('../../../assets/collagelayout.preview.jpg') center center no-repeat;
 }
 
 .panelcontainer {

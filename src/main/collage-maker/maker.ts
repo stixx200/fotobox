@@ -76,9 +76,13 @@ export class Maker {
   private createComposites(templateLoader: TemplateLoader, photos: string[]) {
     return Promise.all(
       templateLoader.getComposites().map(async (space: Space, index: number) => {
-        const photoToAdd = photos[index]
-          ? path.join(this.configuration.photoDir, photos[index])
-          : questionmarkPhoto;
+        let photoToAdd = questionmarkPhoto;
+        if (photos[index]) {
+          photoToAdd = path.join(this.configuration.photoDir, photos[index]);
+        }
+        if (photos[index] && path.isAbsolute(photos[index])) {
+          photoToAdd = photos[index];
+        }
         try {
           return createComposite(photoToAdd, space);
         } catch (error) {

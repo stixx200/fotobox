@@ -13,6 +13,7 @@ export const TOPICS = {
   ERROR_MESSAGE: "error-message",
   GET_CAMERA_DRIVERS_SYNC: "get-camera-drivers-sync",
   GET_TEMPLATES_SYNC: "get-templates-sync",
+  CREATE_COLLAGE_PREVIEW_SYNC: "create-collage-preview-sync",
 
   RECEIVING: "receiving",
   TAKE_PICTURE: "take-picture",
