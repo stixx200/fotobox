@@ -5,7 +5,6 @@
       "GENERAL": "General",
       "COLLAGE": "Collage",
       "CAMERA": "Kamera",
-      "ADVANCED": "Erweitert",
       "BUTTON": {
         "NEXT": "Fotobox starten"
       },
@@ -16,7 +15,7 @@
           "demo": "Demo Kamera"
         },
         "USE_PRINTER": "Fotodruck aktivieren",
-        "IRFANVIEW_PATH": "Pfad zur IrfanView.exe",
+        "SELECTED_PRINTER": "gewählter Drucker",
         "PHOTO_DIRECTORY": "Speicherort Fotos",
         "TEMPLATES_DIRECTORY": "Pfad zu Collage-Templates",
         "UPDATE_TEMPLATES": "Templates erneut einlesen",

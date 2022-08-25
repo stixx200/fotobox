@@ -35,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     private snackBar: MatSnackBar,
   ) {
-    this.onErroMessage = this.onErroMessage.bind(this);
+    this.onErrorMessage = this.onErrorMessage.bind(this);
     this.onApplicationStopped = this.onApplicationStopped.bind(this);
 
     translate.setDefaultLang("de");
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.ipcRenderer.on(TOPICS.ERROR_MESSAGE, this.onErroMessage);
+    this.ipcRenderer.on(TOPICS.ERROR_MESSAGE, this.onErrorMessage);
     this.ipcRenderer.on(TOPICS.STOP_APPLICATION, this.onApplicationStopped);
     this.liveViewSubscription = this.liveViewService
       .getLiveView()
@@ -59,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     this.removeBackground();
     this.ipcRenderer.removeListener(TOPICS.STOP_APPLICATION, this.onApplicationStopped);
-    this.ipcRenderer.removeListener(TOPICS.ERROR_MESSAGE, this.onErroMessage);
+    this.ipcRenderer.removeListener(TOPICS.ERROR_MESSAGE, this.onErrorMessage);
   }
 
   onApplicationStopped(event, errorCode?: string) {
@@ -92,7 +92,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onErroMessage(event, message) {
+  private onErrorMessage(event, message) {
     console.error(message);
     this.showSnackbar(message);
   }

@@ -1,14 +1,13 @@
 import { app, BrowserWindow, screen } from "electron";
 import fs from "fs-extra";
 import * as path from "path";
-import * as url from "url";
 import { FotoboxMain } from "./app";
 
-let win;
+let win: BrowserWindow;
 
 let fotoboxApplication: FotoboxMain = null;
 
-function createWindow() {
+async function createWindow() {
   const size = screen.getPrimaryDisplay().workAreaSize;
 
   // Create the browser window.
@@ -30,15 +29,8 @@ function createWindow() {
     pathToHtml = path.join(__dirname, "../renderer/index.html");
   }
 
-  win.loadURL(
-    url.format({
-      pathname: pathToHtml,
-      protocol: "file:",
-      slashes: true,
-    }),
-  );
-
   fotoboxApplication = new FotoboxMain(win);
+  await win.loadFile(pathToHtml);
 
   // Emitted when the window is closed.
   win.on("closed", async () => {

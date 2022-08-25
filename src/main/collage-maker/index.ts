@@ -77,7 +77,10 @@ export class CollageMaker {
       );
     } catch (error) {
       logger.error("error occured while creating preview collage", error);
-      this.clientProxy.sendError(`Error occured while creating preview collage: ${error.message}`);
+      this.clientProxy.sendError(
+        `Error occured while creating preview collage: ${error.message}`,
+        "collage-maker",
+      );
     }
   }
 
@@ -93,7 +96,10 @@ export class CollageMaker {
       event.sender.send(TOPICS.CREATE_COLLAGE, collageBuffer);
     } catch (error) {
       logger.error("error occured while initializing collage", error);
-      this.clientProxy.sendError(`Error occured while adding photo to collage: ${error.message}`);
+      this.clientProxy.sendError(
+        `Error occured while adding photo to collage: ${error.message}`,
+        "collage-maker",
+      );
     }
   }
 
@@ -112,7 +118,10 @@ export class CollageMaker {
       event.sender.send(TOPICS.CREATE_COLLAGE, collageBuffer, collageName);
     } catch (error) {
       logger.error("error occured while adding photo to collage", error);
-      this.clientProxy.sendError(`Error occured while adding photo to collage: ${error.message}`);
+      this.clientProxy.sendError(
+        `Error occured while adding photo to collage: ${error.message}`,
+        "collage-maker",
+      );
     }
   }
 

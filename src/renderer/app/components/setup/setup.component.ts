@@ -12,11 +12,11 @@ import * as fromCollageLayout from "../../layouts/collage-layout/store/collage-l
 import * as singleLayoutActions from "../../layouts/single-layout/store/single-layout.actions";
 import * as fromSingleLayout from "../../layouts/single-layout/store/single-layout.reducer";
 import { IpcRendererService } from "../../providers/ipc.renderer.service";
+import { getObservableValue } from "../../shared/observable.helpers";
 
 import * as fromApp from "../../store/app.reducer";
 import * as globalActions from "../../store/global.actions";
 import * as mainConfigurationActions from "../../store/mainConfiguration.actions";
-import { SetCameraDrivers } from "../../store/mainConfiguration.actions";
 import * as fromMainConfiguration from "../../store/mainConfiguration.reducers";
 import { SetupConfig } from "./setup-group/setup-group.component";
 
@@ -72,7 +72,7 @@ export class SetupComponent implements OnInit, OnDestroy {
     this.mainConfigurationState.pipe(first()).subscribe((data) => {
       applicationSettings = {
         cameraDriver: data.selectedDriver,
-        irfanViewPath: data.irfanViewPath,
+        printer: data.selectedPrinter,
         photoDir: data.photoDir,
         sonyPassword: data.sonyPassword,
         wifiControl: data.wifiControl,
@@ -124,12 +124,13 @@ export class SetupComponent implements OnInit, OnDestroy {
     this.setupConfigs = {};
     this.addGeneralSetup();
     this.addCameraSetup();
-    this.addAdvancedSetup();
   }
 
   private addGeneralSetup() {
     const cameraDrivers = this.ipcRenderer.sendSync(TOPICS.GET_CAMERA_DRIVERS_SYNC);
-    this.store.dispatch(new SetCameraDrivers(cameraDrivers));
+    this.store.dispatch(new mainConfigurationActions.SetCameraDrivers(cameraDrivers));
+    const availablePrinters = this.ipcRenderer.sendSync(TOPICS.GET_AVAILABLE_PRINTERS_SYNC);
+    this.store.dispatch(new mainConfigurationActions.SetAvailablePrinters(availablePrinters));
 
     this.setupConfigs.general = [
       {
@@ -141,40 +142,62 @@ export class SetupComponent implements OnInit, OnDestroy {
       {
         type: "checkbox",
         title: "PAGES.SETUP.SYSTEM.USE_PRINTER",
-        onChanged: (state) => this.store.dispatch(new mainConfigurationActions.SetUsePrinter(state)),
+        onChanged: (state) => {
+          this.store.dispatch(new mainConfigurationActions.SetUsePrinter(state));
+          this.initConfigs();
+        },
         state: this.mainConfigurationState.pipe(map((state) => state.usePrinter)),
       },
-      {
-        type: "number",
-        title: "PAGES.SETUP.SYSTEM.SHUTTER_TIMEOUT",
-        onChanged: (timeout: number) => {
-          this.store.dispatch(new mainConfigurationActions.SetShutterTimeout(timeout));
-        },
-        value: this.mainConfigurationState.pipe(map((state) => state.shutterTimeout)),
-      },
-      {
-        type: "multi-selection",
-        title: "PAGES.SETUP.FOTOBOX.LAYOUTS.TITLE",
-        selection: this.singleLayoutState.pipe(
-          withLatestFrom(this.collageLayoutState),
-          map(([single, collage]) => [single.title, collage.title]),
-        ),
-        selected: this.singleLayoutState.pipe(
-          withLatestFrom(this.collageLayoutState),
-          map(([single, collage]) => {
-            const selected = [];
-            if (single.active) {
-              selected.push(single.title);
-            }
-            if (collage.active) {
-              selected.push(collage.title);
-            }
-            return selected;
-          }),
-        ),
-        onChanged: (selection) => this.onLayoutSelectionChanged(selection),
-      },
     ];
+
+    const usePrinter = getObservableValue(this.mainConfigurationState).usePrinter;
+    if (usePrinter) {
+      this.setupConfigs.general.push({
+        type: "selection",
+        title: "PAGES.SETUP.SYSTEM.SELECTED_PRINTER",
+        selection: this.mainConfigurationState.pipe(
+          map((state: fromMainConfiguration.State) => state.availablePrinters),
+        ),
+        selected: this.mainConfigurationState.pipe(
+          map((state: fromMainConfiguration.State) => state.selectedPrinter),
+        ),
+        onChanged: (printer) => this.store.dispatch(new mainConfigurationActions.SetSelectedPrinter(printer)),
+      });
+    }
+    this.setupConfigs.general.push(
+      ...[
+        {
+          type: "number",
+          title: "PAGES.SETUP.SYSTEM.SHUTTER_TIMEOUT",
+          onChanged: (timeout: number) => {
+            this.store.dispatch(new mainConfigurationActions.SetShutterTimeout(timeout));
+          },
+          value: this.mainConfigurationState.pipe(map((state) => state.shutterTimeout)),
+        },
+        {
+          type: "multi-selection",
+          title: "PAGES.SETUP.FOTOBOX.LAYOUTS.TITLE",
+          selection: this.singleLayoutState.pipe(
+            withLatestFrom(this.collageLayoutState),
+            map(([single, collage]) => [single.title, collage.title]),
+          ),
+          selected: this.singleLayoutState.pipe(
+            withLatestFrom(this.collageLayoutState),
+            map(([single, collage]) => {
+              const selected = [];
+              if (single.active) {
+                selected.push(single.title);
+              }
+              if (collage.active) {
+                selected.push(collage.title);
+              }
+              return selected;
+            }),
+          ),
+          onChanged: (selection) => this.onLayoutSelectionChanged(selection),
+        },
+      ],
+    );
 
     this.addCollageSetup();
   }
@@ -262,17 +285,6 @@ export class SetupComponent implements OnInit, OnDestroy {
         });
       }
     }
-  }
-
-  private addAdvancedSetup() {
-    this.setupConfigs.advanced = [
-      {
-        type: "file",
-        title: "PAGES.SETUP.SYSTEM.IRFANVIEW_PATH",
-        onChanged: (newPath) => this.store.dispatch(new mainConfigurationActions.SetIrfanViewPath(newPath)),
-        value: this.mainConfigurationState.pipe(map((state) => state.irfanViewPath)),
-      },
-    ];
   }
 
   private getObservableValue(observable: Observable<any>, key: string): any {

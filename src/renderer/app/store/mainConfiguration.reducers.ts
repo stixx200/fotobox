@@ -3,7 +3,8 @@ import { MainConfigurationActions, MainConfigurationActionTypes } from "./mainCo
 export interface State {
   cameraDrivers: string[];
   selectedDriver: string;
-  irfanViewPath: string;
+  selectedPrinter: string;
+  availablePrinters: string[];
   usePrinter: boolean;
   photoDir: string;
   wifiControl: boolean;
@@ -14,7 +15,8 @@ export interface State {
 const initialState: State = {
   cameraDrivers: [],
   selectedDriver: null,
-  irfanViewPath: "",
+  selectedPrinter: null,
+  availablePrinters: [],
   usePrinter: true,
   photoDir: "",
   wifiControl: true,
@@ -22,7 +24,7 @@ const initialState: State = {
   shutterTimeout: 3,
 };
 
-export function mainConfigurationReducer(state = initialState, action: MainConfigurationActions) {
+export function mainConfigurationReducer(state = initialState, action: MainConfigurationActions): State {
   switch (action.type) {
     case MainConfigurationActionTypes.SET_CAMERA_DRIVERS:
       return {
@@ -34,10 +36,15 @@ export function mainConfigurationReducer(state = initialState, action: MainConfi
         ...state,
         selectedDriver: action.payload,
       };
-    case MainConfigurationActionTypes.SET_IRFANVIEW_PATH:
+    case MainConfigurationActionTypes.SET_AVAILABLE_PRINTERS:
       return {
         ...state,
-        irfanViewPath: action.payload,
+        availablePrinters: action.payload,
+      };
+    case MainConfigurationActionTypes.SET_SELECTED_PRINTER:
+      return {
+        ...state,
+        selectedPrinter: action.payload,
       };
     case MainConfigurationActionTypes.SET_USE_PRINTER:
       return {

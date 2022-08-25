@@ -100,10 +100,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
   }
 
   private print() {
-    const errorMessage = this.ipcRenderer.sendSync(TOPICS.PRINT_SYNC, this.selectedPhoto);
-    if (errorMessage) {
-      console.error(errorMessage);
-    }
+    this.ipcRenderer.send(TOPICS.PRINT, this.selectedPhoto);
     this.unsetSelectedPhoto();
   }
 }

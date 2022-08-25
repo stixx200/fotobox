@@ -26,8 +26,10 @@ export class PhotoProtocol {
   }
 
   deinit() {
-    protocol.unregisterProtocol(protocolId);
-    logger.info(`'${protocolId}' protocol unregistered.`);
+    if (protocol.isProtocolIntercepted(protocolId)) {
+      protocol.uninterceptProtocol(protocolId);
+      logger.info(`'${protocolId}' protocol unregistered.`);
+    }
   }
 
   photoProtocol(request: ProtocolRequest, callback: (reponse: string) => void) {

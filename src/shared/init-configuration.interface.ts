@@ -10,7 +10,7 @@ export type CameraProviderInitConfig = CameraInitConfiguration & {
 
 export interface PrinterConfiguration {
   photoDir: string;
-  irfanViewPath: string;
+  printer: string;
 }
 
 export interface CollageMakerConfiguration {

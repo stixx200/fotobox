@@ -118,7 +118,7 @@ export class SonyCamera implements CameraInterface {
       this.camera.takePicture();
     } else {
       logger.error("Can't take a picture. No camera connected");
-      this.clientProxy.sendError("Can't take a picture. No camera connected");
+      this.clientProxy.sendError("Can't take a picture. No camera connected", "camera.sony");
     }
   }
 

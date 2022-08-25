@@ -32,10 +32,11 @@ export class FotoboxMain {
   private photoProtocol = new PhotoProtocol();
   private collageMaker = new CollageMaker();
   private shortcutHandler = new ShortcutHandler(this.window, this.shutdownHandler, this.clientProxy);
-  private printer = new Printer();
+  private printer = new Printer(this.window, this.clientProxy);
   private photoHandler = new PhotoHandler();
   private configurationProvider = new ConfigurationProvider({
     collageMaker: this.collageMaker,
+    printer: this.printer,
   });
 
   constructor(private window: BrowserWindow) {
