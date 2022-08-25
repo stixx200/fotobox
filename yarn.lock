@@ -4632,7 +4632,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.0.0, chokidar@npm:^3.5.1, chokidar@npm:^3.5.2, chokidar@npm:^3.5.3":
+"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.0.0, chokidar@npm:^3.5.1, chokidar@npm:^3.5.3":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
@@ -6401,15 +6401,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-reload@npm:2.0.0-alpha.1":
-  version: 2.0.0-alpha.1
-  resolution: "electron-reload@npm:2.0.0-alpha.1"
-  dependencies:
-    chokidar: ^3.5.2
-  checksum: d21cf22ad8af2695e960444f18800db2fc29aa3fd4be304fd55894186559a9f64d590aac19dbe492887a962ab7aaf0be93f8b3b2226926654f6010c65e9bd9dc
-  languageName: node
-  linkType: hard
-
 "electron-to-chromium@npm:^1.4.202":
   version: 1.4.221
   resolution: "electron-to-chromium@npm:1.4.221"
@@ -7745,7 +7736,6 @@ __metadata:
     electron: 20.0.2
     electron-builder: 23.3.3
     electron-localshortcut: ^3.2.1
-    electron-reload: 2.0.0-alpha.1
     eslint: ^8.22.0
     eslint-plugin-prettier: ^4.2.1
     font-awesome: ^4.7.0
@@ -7762,7 +7752,7 @@ __metadata:
     ngrx-store-localstorage: ^14.0.0
     ngx-bootstrap: ^9.0.0
     node-polyfill-webpack-plugin: ^2.0.1
-    node-ssdp: ^4.0.1
+    node-ssdp: ^3.3.0
     npm-run-all: 4.1.5
     npx: 10.2.2
     p-event: ^5.0.1
@@ -11508,16 +11498,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-ssdp@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "node-ssdp@npm:4.0.1"
+"node-ssdp@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "node-ssdp@npm:3.3.0"
   dependencies:
     async: ^2.6.0
     bluebird: ^3.5.1
     debug: ^3.1.0
     extend: ^3.0.1
     ip: ^1.1.5
-  checksum: cea27267abfe0aace143326cd0080950539021bbf924d1effa139cf48418c70f63ca3b5e909fa829e71a090a4a1e99a60ef1afd932ea0eb38de17cf7b0e481f1
+  checksum: 0079d538f7506ed08b78202f768199fd2f4cbc4c79abcb97d516fe79d94baf7c1233c8cfd4129cf9a5801f868dda301e42b2f3dd2a76dbd22035b88b995af89d
   languageName: node
   linkType: hard
 

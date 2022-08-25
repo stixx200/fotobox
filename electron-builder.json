@@ -1,31 +1,32 @@
 {
   "productName": "fotobox",
   "directories": {
+    "app": "dist",
     "output": "dist/builder-output"
   },
   "asarUnpack": [
-    "src/main/**/*.jpg",
-    "src/main/**/*.png"
+    "**/*.jpg",
+    "**/*.png"
   ],
   "files": [
-    "src/main/**/*",
-    "!*.ts",
-    "!*.map"
+    "**/*",
+    "!*.map",
+    "!builder-output"
   ],
   "win": {
-    "icon": "dist/renderer/assets/icon",
+    "icon": "renderer/assets/icon",
     "target": [
       "nsis"
     ]
   },
   "mac": {
-    "icon": "dist/renderer/assets/icon",
+    "icon": "renderer/assets/icon",
     "target": [
       "dmg"
     ]
   },
   "linux": {
-    "icon": "dist/renderer/assets/icon",
+    "icon": "renderer/assets/icon",
     "target": [
       "AppImage"
     ]

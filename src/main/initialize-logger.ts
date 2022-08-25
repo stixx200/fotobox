@@ -3,9 +3,8 @@ import * as logging from "logger-winston";
 import { homedir } from "os";
 import * as path from "path";
 
-const pkg = require("../../package");
 const logdir = process.env.LOG_DIR || homedir() || process.cwd();
-const logfilePath = path.join(logdir, `${pkg.name}_${pkg.version}`, "application.log");
+const logfilePath = path.join(logdir, "fotobox", "application.log");
 fs.ensureDirSync(path.dirname(logfilePath));
 logging.init({
   logging: {

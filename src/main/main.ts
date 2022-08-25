@@ -1,4 +1,5 @@
 import { app, BrowserWindow, screen } from "electron";
+import fs from "fs-extra";
 import * as path from "path";
 import * as url from "url";
 import { FotoboxMain } from "./app";
@@ -24,9 +25,14 @@ function createWindow() {
   });
   win.setMenu(null);
 
+  let pathToHtml = path.join(__dirname, "../../dist/renderer/index.html");
+  if (!fs.pathExistsSync(pathToHtml)) {
+    pathToHtml = path.join(__dirname, "../renderer/index.html");
+  }
+
   win.loadURL(
     url.format({
-      pathname: path.join(__dirname, "../../dist/renderer/index.html"),
+      pathname: pathToHtml,
       protocol: "file:",
       slashes: true,
     }),

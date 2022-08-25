@@ -1,6 +1,6 @@
 {
   "name": "fotobox",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "Fotobox application",
   "homepage": "",
   "author": {
@@ -16,7 +16,7 @@
     "fotobox",
     "photobooth"
   ],
-  "main": "./main.js",
+  "main": "./main/main.js",
   "private": true,
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
@@ -28,8 +28,8 @@
     "build:watch": "yarn run build:dev --watch",
     "build:prod": "yarn run build -c production",
     "electron:tsc": "echo 'run electron:tsc' && tsc -p src/main/tsconfig.json && yarn copy-assets && echo 'finished electron:tsc'",
-    "copy-assets": "cpy package.json dist/main && touch dist/main/yarn.lock && cd src/main && cpy **/*.jpg **/*.png ../../dist/main",
-    "electron:local": "yarn run electron:tsc && electron dist/main",
+    "copy-assets": "cpy package.json dist && touch dist/yarn.lock && cd src/main && cpy **/*.jpg **/*.png ../../dist/main",
+    "electron:local": "yarn run electron:tsc && electron dist",
     "electron:build": "yarn run build:prod && electron-builder build --publish=never",
     "test": "ng test --watch=false",
     "test:watch": "ng test",
@@ -55,7 +55,7 @@
     "electron-localshortcut": "^3.2.1",
     "fs-extra": "^10.1.0",
     "logger-winston": "0.0.11",
-    "node-ssdp": "^4.0.1",
+    "node-ssdp": "^3.3.0",
     "rxjs": "7.5.6",
     "sharp": "^0.30.7",
     "superagent": "^8.0.0",
