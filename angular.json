@@ -112,7 +112,7 @@
               "src/renderer/styles.scss"
             ],
             "assets": [
-              "src/renderer/favicon.ico",
+              "src/renderer/icon.ico",
               "src/renderer/assets"
             ],
             "customWebpackConfig": {

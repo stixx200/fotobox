@@ -14,19 +14,19 @@
     "!builder-output"
   ],
   "win": {
-    "icon": "renderer/assets/icon",
+    "icon": "dist/renderer/assets/icon/icon.ico",
     "target": [
       "nsis"
     ]
   },
   "mac": {
-    "icon": "renderer/assets/icon",
+    "icon": "dist/renderer/assets/icon/icon.ico",
     "target": [
       "dmg"
     ]
   },
   "linux": {
-    "icon": "renderer/assets/icon",
+    "icon": "dist/renderer/assets/icon/icon.ico",
     "target": [
       "AppImage"
     ]

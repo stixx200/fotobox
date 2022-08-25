@@ -21,6 +21,7 @@ async function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
     },
+    icon: path.join(__dirname, "assets/icon.png"),
   });
   win.setMenu(null);
 
