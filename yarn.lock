@@ -4632,7 +4632,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.0.0, chokidar@npm:^3.5.1, chokidar@npm:^3.5.2, chokidar@npm:^3.5.3":
+"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.0.0, chokidar@npm:^3.5.1, chokidar@npm:^3.5.3":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
@@ -6401,15 +6401,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-reload@npm:2.0.0-alpha.1":
-  version: 2.0.0-alpha.1
-  resolution: "electron-reload@npm:2.0.0-alpha.1"
-  dependencies:
-    chokidar: ^3.5.2
-  checksum: d21cf22ad8af2695e960444f18800db2fc29aa3fd4be304fd55894186559a9f64d590aac19dbe492887a962ab7aaf0be93f8b3b2226926654f6010c65e9bd9dc
-  languageName: node
-  linkType: hard
-
 "electron-to-chromium@npm:^1.4.202":
   version: 1.4.221
   resolution: "electron-to-chromium@npm:1.4.221"
@@ -6492,8 +6483,8 @@ __metadata:
   linkType: hard
 
 "engine.io@npm:~6.2.0":
-  version: 6.2.0
-  resolution: "engine.io@npm:6.2.0"
+  version: 6.2.1
+  resolution: "engine.io@npm:6.2.1"
   dependencies:
     "@types/cookie": ^0.4.1
     "@types/cors": ^2.8.12
@@ -6505,7 +6496,7 @@ __metadata:
     debug: ~4.3.1
     engine.io-parser: ~5.0.3
     ws: ~8.2.3
-  checksum: cc485c5ba2e0c4f6ca02dcafd192b22f9dad89d01dc815005298780d3fb910db4cebab4696e8615290c473c2eeb259e8bee2a1fb7ab594d9c80f9f3485771911
+  checksum: 626d7a77f2f6d3e1f888c43932e2f34222201b6c0bc4bcbb0ead054cc170a1df3bf0d6f8b34432e68d7223346b7aa5ed34fbda1e706ef02b7801789465e34f40
   languageName: node
   linkType: hard
 
@@ -7745,7 +7736,6 @@ __metadata:
     electron: 20.0.2
     electron-builder: 23.3.3
     electron-localshortcut: ^3.2.1
-    electron-reload: 2.0.0-alpha.1
     eslint: ^8.22.0
     eslint-plugin-prettier: ^4.2.1
     font-awesome: ^4.7.0
