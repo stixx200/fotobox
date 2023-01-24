@@ -4632,7 +4632,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.0.0, chokidar@npm:^3.5.1, chokidar@npm:^3.5.2, chokidar@npm:^3.5.3":
+"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.0.0, chokidar@npm:^3.5.1, chokidar@npm:^3.5.3":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
@@ -5226,9 +5226,9 @@ __metadata:
   linkType: hard
 
 "cookiejar@npm:^2.1.3":
-  version: 2.1.3
-  resolution: "cookiejar@npm:2.1.3"
-  checksum: 88259983ebc52ceb23cdacfa48762b6a518a57872eff1c7ed01d214fff5cf492e2660d7d5c04700a28f1787a76811df39e8639f8e17670b3cf94ecd86e161f07
+  version: 2.1.4
+  resolution: "cookiejar@npm:2.1.4"
+  checksum: c4442111963077dc0e5672359956d6556a195d31cbb35b528356ce5f184922b99ac48245ac05ed86cf993f7df157c56da10ab3efdadfed79778a0d9b1b092d5b
   languageName: node
   linkType: hard
 
@@ -6398,15 +6398,6 @@ __metadata:
     lazy-val: ^1.0.5
     mime: ^2.5.2
   checksum: d236cc347ca4972676fa78818f8890af72ef418d9b0662fd2a84215f39ac08ebe82b5406c7c577816e5e087859f61f768dd7c916d69ad2c5cf4bdbe94d497466
-  languageName: node
-  linkType: hard
-
-"electron-reload@npm:2.0.0-alpha.1":
-  version: 2.0.0-alpha.1
-  resolution: "electron-reload@npm:2.0.0-alpha.1"
-  dependencies:
-    chokidar: ^3.5.2
-  checksum: d21cf22ad8af2695e960444f18800db2fc29aa3fd4be304fd55894186559a9f64d590aac19dbe492887a962ab7aaf0be93f8b3b2226926654f6010c65e9bd9dc
   languageName: node
   linkType: hard
 
@@ -7745,7 +7736,6 @@ __metadata:
     electron: 20.0.2
     electron-builder: 23.3.3
     electron-localshortcut: ^3.2.1
-    electron-reload: 2.0.0-alpha.1
     eslint: ^8.22.0
     eslint-plugin-prettier: ^4.2.1
     font-awesome: ^4.7.0
