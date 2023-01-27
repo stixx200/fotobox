@@ -4632,7 +4632,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.0.0, chokidar@npm:^3.5.1, chokidar@npm:^3.5.2, chokidar@npm:^3.5.3":
+"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.0.0, chokidar@npm:^3.5.1, chokidar@npm:^3.5.3":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
@@ -6401,15 +6401,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-reload@npm:2.0.0-alpha.1":
-  version: 2.0.0-alpha.1
-  resolution: "electron-reload@npm:2.0.0-alpha.1"
-  dependencies:
-    chokidar: ^3.5.2
-  checksum: d21cf22ad8af2695e960444f18800db2fc29aa3fd4be304fd55894186559a9f64d590aac19dbe492887a962ab7aaf0be93f8b3b2226926654f6010c65e9bd9dc
-  languageName: node
-  linkType: hard
-
 "electron-to-chromium@npm:^1.4.202":
   version: 1.4.221
   resolution: "electron-to-chromium@npm:1.4.221"
@@ -7745,7 +7736,6 @@ __metadata:
     electron: 20.0.2
     electron-builder: 23.3.3
     electron-localshortcut: ^3.2.1
-    electron-reload: 2.0.0-alpha.1
     eslint: ^8.22.0
     eslint-plugin-prettier: ^4.2.1
     font-awesome: ^4.7.0
@@ -16376,9 +16366,9 @@ __metadata:
   linkType: hard
 
 "ua-parser-js@npm:^0.7.30":
-  version: 0.7.31
-  resolution: "ua-parser-js@npm:0.7.31"
-  checksum: e2f8324a83d1715601576af85b2b6c03890699aaa7272950fc77ea925c70c5e4f75060ae147dc92124e49f7f0e3d6dd2b0a91e7f40d267e92df8894be967ba8b
+  version: 0.7.33
+  resolution: "ua-parser-js@npm:0.7.33"
+  checksum: 1510e9ec26fcaf0d8c6ae8f1078a8230e8816f083e1b5f453ea19d06b8ef2b8a596601c92148fd41899e8b3e5f83fa69c42332bd5729b931a721040339831696
   languageName: node
   linkType: hard
 
